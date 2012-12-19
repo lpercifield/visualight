@@ -4087,7 +4087,7 @@ Standard 6 pin header for AVR programming</description>
 <part name="P+11" library="SparkFun" deviceset="3.3V" device="" value="VCC"/>
 <part name="P+12" library="SparkFun-Aesthetics" deviceset="5V" device="" value="VCC"/>
 <part name="GND4" library="SparkFun" deviceset="GND" device=""/>
-<part name="U3" library="SparkFun-DigitalIC" deviceset="ATMEGA32U4" device="TQFP" value="ATMEGA32U4"/>
+<part name="ATMEGA32U4" library="SparkFun-DigitalIC" deviceset="ATMEGA32U4" device="TQFP" value="ATMEGA32U4"/>
 <part name="Y1" library="SparkFun" deviceset="CRYSTAL" device="5X3" value="16MHz"/>
 <part name="C2" library="SparkFun" deviceset="CAP" device="0402-CAP" value="22pF"/>
 <part name="C4" library="SparkFun" deviceset="CAP" device="0402-CAP" value="22pF"/>
@@ -4100,7 +4100,7 @@ Standard 6 pin header for AVR programming</description>
 <part name="R7" library="SparkFun" deviceset="RESISTOR" device="0402-RES" value="22"/>
 <part name="GND3" library="SparkFun" deviceset="GND" device=""/>
 <part name="F1" library="SparkFun" deviceset="PTC" device="SMD" value="500mA"/>
-<part name="U1" library="SparkFun-PowerIC" deviceset="V_REG_MIC5219" device="3.3V" value="MIC5219 3.3V"/>
+<part name="3.3VRREG" library="SparkFun-PowerIC" deviceset="V_REG_MIC5219" device="3.3V" value="MIC5219 3.3V"/>
 <part name="GND5" library="SparkFun" deviceset="GND" device=""/>
 <part name="X2" library="SparkFun-Connectors" deviceset="USB" device="PCB"/>
 <part name="U$1" library="SparkFun-RF" deviceset="XBEE-1" device="B3"/>
@@ -4131,6 +4131,14 @@ Standard 6 pin header for AVR programming</description>
 <text x="228.6" y="58.42" size="1.778" layer="91">Not used</text>
 <text x="35.56" y="86.36" size="1.778" layer="91">Based on Sparkfun Pro Micro Board</text>
 <text x="35.56" y="83.82" size="1.778" layer="91">https://www.sparkfun.com/products/11098</text>
+<text x="99.06" y="-7.62" size="1.778" layer="94">USB INTERFACE</text>
+<text x="104.14" y="-35.56" size="1.778" layer="94">ICSP SOCKET</text>
+<text x="93.98" y="5.08" size="1.778" layer="94">3.3v REGULATOR</text>
+<text x="99.06" y="81.28" size="1.778" layer="94">POWER DECOUPLING</text>
+<text x="175.26" y="-25.4" size="1.778" layer="94">ATMEGA 32U4 CIRCUIT</text>
+<text x="261.62" y="-25.4" size="1.778" layer="94">WIFI RESET SWITCH</text>
+<text x="266.7" y="17.78" size="1.778" layer="94">BREAKOUT HEADER</text>
+<text x="289.56" y="71.12" size="1.778" layer="94">WIFI</text>
 </plain>
 <instances>
 <instance part="C10" gate="G$1" x="78.74" y="63.5"/>
@@ -4156,12 +4164,11 @@ Standard 6 pin header for AVR programming</description>
 </instance>
 <instance part="P+12" gate="G$1" x="99.06" y="73.66"/>
 <instance part="GND4" gate="1" x="149.86" y="20.32" rot="R270"/>
-<instance part="U3" gate="G$1" x="190.5" y="33.02" smashed="yes">
+<instance part="ATMEGA32U4" gate="G$1" x="190.5" y="33.02" smashed="yes">
 <attribute name="NAME" x="176.53" y="72.136" size="1.778" layer="95"/>
 <attribute name="VALUE" x="175.26" y="-10.16" size="1.778" layer="96"/>
 </instance>
 <instance part="Y1" gate="G$1" x="167.64" y="20.32" smashed="yes" rot="R90">
-<attribute name="NAME" x="166.116" y="25.908" size="1.778" layer="95"/>
 <attribute name="VALUE" x="163.322" y="13.97" size="1.778" layer="96"/>
 </instance>
 <instance part="C2" gate="G$1" x="160.02" y="22.86" smashed="yes" rot="R270">
@@ -4182,20 +4189,20 @@ Standard 6 pin header for AVR programming</description>
 </instance>
 <instance part="GND6" gate="1" x="139.7" y="20.32"/>
 <instance part="UVCC" gate="G$1" x="170.18" y="48.26"/>
-<instance part="R5" gate="G$1" x="132.08" y="-12.7" smashed="yes" rot="R180">
-<attribute name="NAME" x="128.016" y="-10.922" size="1.778" layer="95"/>
-<attribute name="VALUE" x="133.35" y="-10.922" size="1.778" layer="96"/>
+<instance part="R5" gate="G$1" x="88.9" y="-20.32" smashed="yes" rot="R180">
+<attribute name="NAME" x="84.836" y="-18.542" size="1.778" layer="95"/>
+<attribute name="VALUE" x="90.17" y="-18.542" size="1.778" layer="96"/>
 </instance>
-<instance part="R7" gate="G$1" x="132.08" y="-7.62" smashed="yes" rot="R180">
-<attribute name="NAME" x="128.27" y="-5.842" size="1.778" layer="95"/>
-<attribute name="VALUE" x="133.35" y="-5.842" size="1.778" layer="96"/>
+<instance part="R7" gate="G$1" x="88.9" y="-15.24" smashed="yes" rot="R180">
+<attribute name="NAME" x="85.09" y="-13.462" size="1.778" layer="95"/>
+<attribute name="VALUE" x="90.17" y="-13.462" size="1.778" layer="96"/>
 </instance>
-<instance part="GND3" gate="1" x="119.38" y="2.54" rot="R180"/>
+<instance part="GND3" gate="1" x="76.2" y="-5.08" rot="R180"/>
 <instance part="F1" gate="G$1" x="45.72" y="71.12"/>
-<instance part="U1" gate="G$1" x="73.66" y="25.4"/>
+<instance part="3.3VRREG" gate="G$1" x="73.66" y="25.4"/>
 <instance part="GND5" gate="1" x="58.42" y="12.7"/>
-<instance part="X2" gate="G$1" x="109.22" y="-2.54" rot="R180"/>
-<instance part="U$1" gate="G$1" x="289.56" y="38.1"/>
+<instance part="X2" gate="G$1" x="66.04" y="-10.16" rot="R180"/>
+<instance part="U$1" gate="G$1" x="289.56" y="53.34"/>
 <instance part="C8" gate="G$1" x="96.52" y="22.86"/>
 <instance part="GND8" gate="1" x="96.52" y="12.7"/>
 <instance part="C9" gate="G$1" x="106.68" y="22.86" smashed="yes" rot="R180">
@@ -4203,22 +4210,22 @@ Standard 6 pin header for AVR programming</description>
 <attribute name="VALUE" x="107.696" y="18.669" size="1.778" layer="96"/>
 </instance>
 <instance part="GND11" gate="1" x="106.68" y="12.7"/>
-<instance part="GND10" gate="1" x="264.16" y="17.78"/>
-<instance part="C6" gate="G$1" x="134.62" y="58.42" smashed="yes" rot="R180">
-<attribute name="NAME" x="135.636" y="58.547" size="1.778" layer="95"/>
-<attribute name="VALUE" x="135.636" y="53.721" size="1.778" layer="96"/>
+<instance part="GND10" gate="1" x="264.16" y="33.02"/>
+<instance part="C6" gate="G$1" x="116.84" y="60.96" smashed="yes" rot="R180">
+<attribute name="NAME" x="117.856" y="61.087" size="1.778" layer="95"/>
+<attribute name="VALUE" x="117.856" y="56.261" size="1.778" layer="96"/>
 </instance>
-<instance part="UVCC1" gate="G$1" x="134.62" y="63.5" smashed="yes">
-<attribute name="VALUE" x="131.572" y="66.548" size="1.778" layer="96"/>
+<instance part="UVCC1" gate="G$1" x="116.84" y="66.04" smashed="yes">
+<attribute name="VALUE" x="113.792" y="69.088" size="1.778" layer="96"/>
 </instance>
-<instance part="GND9" gate="1" x="134.62" y="48.26"/>
-<instance part="JP1" gate="G$1" x="254" y="-27.94" rot="R180"/>
-<instance part="SW1" gate="G$1" x="287.02" y="-5.08" rot="R270"/>
-<instance part="GND1" gate="1" x="294.64" y="-15.24"/>
-<instance part="ISP1" gate="G$1" x="139.7" y="-27.94"/>
-<instance part="R1" gate="G$1" x="246.38" y="63.5" rot="R90"/>
-<instance part="R3" gate="G$1" x="254" y="71.12" rot="R180"/>
-<instance part="GND12" gate="1" x="261.62" y="66.04"/>
+<instance part="GND9" gate="1" x="116.84" y="50.8"/>
+<instance part="JP1" gate="G$1" x="297.18" y="-2.54" rot="R180"/>
+<instance part="SW1" gate="G$1" x="281.94" y="-35.56" rot="R270"/>
+<instance part="GND1" gate="1" x="289.56" y="-45.72"/>
+<instance part="ISP1" gate="G$1" x="76.2" y="-40.64" smashed="yes"/>
+<instance part="R1" gate="G$1" x="279.4" y="83.82" rot="R90"/>
+<instance part="R3" gate="G$1" x="287.02" y="91.44" rot="R180"/>
+<instance part="GND12" gate="1" x="294.64" y="86.36"/>
 </instances>
 <busses>
 </busses>
@@ -4273,13 +4280,13 @@ Standard 6 pin header for AVR programming</description>
 <junction x="170.18" y="0"/>
 <junction x="170.18" y="2.54"/>
 <junction x="170.18" y="5.08"/>
-<pinref part="U3" gate="G$1" pin="GND@15"/>
-<pinref part="U3" gate="G$1" pin="GND@43"/>
-<pinref part="U3" gate="G$1" pin="GND@35"/>
-<pinref part="U3" gate="G$1" pin="GND@23"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="GND@15"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="GND@43"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="GND@35"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="GND@23"/>
 <pinref part="GND2" gate="1" pin="GND"/>
-<pinref part="U3" gate="G$1" pin="UGND"/>
-<pinref part="U3" gate="G$1" pin="PE2/!HWB"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="UGND"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PE2/!HWB"/>
 </segment>
 <segment>
 <wire x1="139.7" y1="22.86" x2="139.7" y2="25.4" width="0.1524" layer="91"/>
@@ -4287,7 +4294,7 @@ Standard 6 pin header for AVR programming</description>
 <pinref part="GND6" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="U1" gate="G$1" pin="GND"/>
+<pinref part="3.3VRREG" gate="G$1" pin="GND"/>
 <pinref part="GND5" gate="1" pin="GND"/>
 <wire x1="63.5" y1="25.4" x2="58.42" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="58.42" y1="25.4" x2="58.42" y2="15.24" width="0.1524" layer="91"/>
@@ -4305,46 +4312,46 @@ Standard 6 pin header for AVR programming</description>
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND"/>
 <pinref part="GND10" gate="1" pin="GND"/>
-<wire x1="269.24" y1="25.4" x2="264.16" y2="25.4" width="0.1524" layer="91"/>
-<wire x1="264.16" y1="25.4" x2="264.16" y2="20.32" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="40.64" x2="264.16" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="264.16" y1="40.64" x2="264.16" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="X2" gate="G$1" pin="GND"/>
 <pinref part="GND3" gate="1" pin="GND"/>
-<wire x1="111.76" y1="-2.54" x2="119.38" y2="-2.54" width="0.1524" layer="91"/>
-<wire x1="119.38" y1="-2.54" x2="119.38" y2="0" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="-10.16" x2="76.2" y2="-10.16" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="-10.16" x2="76.2" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="134.62" y1="53.34" x2="134.62" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="55.88" x2="116.84" y2="53.34" width="0.1524" layer="91"/>
 <pinref part="C6" gate="G$1" pin="1"/>
 <pinref part="GND9" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="10"/>
-<wire x1="243.84" y1="-33.02" x2="236.22" y2="-33.02" width="0.1524" layer="91"/>
-<label x="236.22" y="-33.02" size="1.778" layer="95"/>
+<wire x1="287.02" y1="-7.62" x2="279.4" y2="-7.62" width="0.1524" layer="91"/>
+<label x="279.4" y="-7.62" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="2"/>
-<wire x1="243.84" y1="-12.7" x2="236.22" y2="-12.7" width="0.1524" layer="91"/>
-<label x="236.22" y="-12.7" size="1.778" layer="95"/>
+<wire x1="287.02" y1="12.7" x2="279.4" y2="12.7" width="0.1524" layer="91"/>
+<label x="279.4" y="12.7" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="SW1" gate="G$1" pin="S1"/>
 <pinref part="GND1" gate="1" pin="GND"/>
-<wire x1="292.1" y1="-7.62" x2="294.64" y2="-7.62" width="0.1524" layer="91"/>
-<wire x1="294.64" y1="-7.62" x2="294.64" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="287.02" y1="-38.1" x2="289.56" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="289.56" y1="-38.1" x2="289.56" y2="-43.18" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="ISP1" gate="G$1" pin="GND"/>
-<wire x1="154.94" y1="-30.48" x2="160.02" y2="-30.48" width="0.1524" layer="91"/>
-<label x="157.48" y="-30.48" size="1.778" layer="95"/>
+<wire x1="91.44" y1="-43.18" x2="96.52" y2="-43.18" width="0.1524" layer="91"/>
+<label x="93.98" y="-43.18" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R3" gate="G$1" pin="1"/>
 <pinref part="GND12" gate="1" pin="GND"/>
-<wire x1="259.08" y1="71.12" x2="261.62" y2="71.12" width="0.1524" layer="91"/>
-<wire x1="261.62" y1="71.12" x2="261.62" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="292.1" y1="91.44" x2="294.64" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="294.64" y1="91.44" x2="294.64" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="AREF" class="0">
@@ -4353,7 +4360,7 @@ Standard 6 pin header for AVR programming</description>
 <wire x1="172.72" y1="55.88" x2="157.48" y2="55.88" width="0.1524" layer="91"/>
 <label x="157.48" y="55.88" size="1.778" layer="95"/>
 <pinref part="C1" gate="G$1" pin="2"/>
-<pinref part="U3" gate="G$1" pin="AREF"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="AREF"/>
 </segment>
 </net>
 <net name="RESET" class="0">
@@ -4361,24 +4368,24 @@ Standard 6 pin header for AVR programming</description>
 <wire x1="162.56" y1="71.12" x2="162.56" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="172.72" y1="68.58" x2="162.56" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="R2" gate="G$1" pin="1"/>
-<pinref part="U3" gate="G$1" pin="!RESET"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="!RESET"/>
 </segment>
 <segment>
 <pinref part="ISP1" gate="G$1" pin="RST"/>
-<wire x1="127" y1="-30.48" x2="121.92" y2="-30.48" width="0.1524" layer="91"/>
-<label x="119.38" y="-30.48" size="1.778" layer="95"/>
+<wire x1="63.5" y1="-43.18" x2="58.42" y2="-43.18" width="0.1524" layer="91"/>
+<label x="55.88" y="-43.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SCK" class="0">
 <segment>
 <wire x1="208.28" y1="7.62" x2="215.9" y2="7.62" width="0.1524" layer="91"/>
 <label x="210.82" y="7.62" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB1(SCK)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB1(SCK)"/>
 </segment>
 <segment>
 <pinref part="ISP1" gate="G$1" pin="SCK"/>
-<wire x1="127" y1="-27.94" x2="121.92" y2="-27.94" width="0.1524" layer="91"/>
-<label x="121.92" y="-27.94" size="1.778" layer="95"/>
+<wire x1="63.5" y1="-40.64" x2="58.42" y2="-40.64" width="0.1524" layer="91"/>
+<label x="58.42" y="-40.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$38" class="0">
@@ -4392,24 +4399,24 @@ Standard 6 pin header for AVR programming</description>
 <segment>
 <wire x1="208.28" y1="2.54" x2="215.9" y2="2.54" width="0.1524" layer="91"/>
 <label x="210.82" y="2.54" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB3(MISO)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB3(MISO)"/>
 </segment>
 <segment>
 <pinref part="ISP1" gate="G$1" pin="MISO"/>
-<wire x1="127" y1="-25.4" x2="121.92" y2="-25.4" width="0.1524" layer="91"/>
-<label x="121.92" y="-25.4" size="1.778" layer="95"/>
+<wire x1="63.5" y1="-38.1" x2="58.42" y2="-38.1" width="0.1524" layer="91"/>
+<label x="58.42" y="-38.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="MOSI" class="0">
 <segment>
 <wire x1="208.28" y1="5.08" x2="215.9" y2="5.08" width="0.1524" layer="91"/>
 <label x="210.82" y="5.08" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB2(MOSI)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB2(MOSI)"/>
 </segment>
 <segment>
 <pinref part="ISP1" gate="G$1" pin="MOSI"/>
-<wire x1="154.94" y1="-27.94" x2="160.02" y2="-27.94" width="0.1524" layer="91"/>
-<label x="157.48" y="-27.94" size="1.778" layer="95"/>
+<wire x1="91.44" y1="-40.64" x2="96.52" y2="-40.64" width="0.1524" layer="91"/>
+<label x="93.98" y="-40.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -4430,10 +4437,10 @@ Standard 6 pin header for AVR programming</description>
 <junction x="170.18" y="66.04"/>
 <junction x="170.18" y="63.5"/>
 <junction x="170.18" y="60.96"/>
-<pinref part="U3" gate="G$1" pin="VCC@14"/>
-<pinref part="U3" gate="G$1" pin="VCC@34"/>
-<pinref part="U3" gate="G$1" pin="AVCC@24"/>
-<pinref part="U3" gate="G$1" pin="AVCC@44"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="VCC@14"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="VCC@34"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="AVCC@24"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="AVCC@44"/>
 <pinref part="P+4" gate="G$1" pin="3.3V"/>
 </segment>
 <segment>
@@ -4455,18 +4462,18 @@ Standard 6 pin header for AVR programming</description>
 </segment>
 <segment>
 <label x="50.8" y="30.48" size="1.778" layer="95"/>
-<pinref part="U1" gate="G$1" pin="EN"/>
+<pinref part="3.3VRREG" gate="G$1" pin="EN"/>
 <wire x1="60.96" y1="30.48" x2="50.8" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="20.32" x2="60.96" y2="20.32" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="20.32" x2="60.96" y2="30.48" width="0.1524" layer="91"/>
-<pinref part="U1" gate="G$1" pin="IN"/>
+<pinref part="3.3VRREG" gate="G$1" pin="IN"/>
 <wire x1="60.96" y1="30.48" x2="63.5" y2="30.48" width="0.1524" layer="91"/>
 <junction x="60.96" y="30.48"/>
 </segment>
 <segment>
 <pinref part="ISP1" gate="G$1" pin="VCC"/>
-<wire x1="154.94" y1="-25.4" x2="160.02" y2="-25.4" width="0.1524" layer="91"/>
-<label x="157.48" y="-25.4" size="1.778" layer="95"/>
+<wire x1="91.44" y1="-38.1" x2="96.52" y2="-38.1" width="0.1524" layer="91"/>
+<label x="93.98" y="-38.1" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="210.82" y1="-27.94" x2="210.82" y2="-25.4" width="0.1524" layer="91"/>
@@ -4474,143 +4481,143 @@ Standard 6 pin header for AVR programming</description>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="1"/>
-<wire x1="243.84" y1="-10.16" x2="236.22" y2="-10.16" width="0.1524" layer="91"/>
-<label x="236.22" y="-10.16" size="1.778" layer="95"/>
+<wire x1="287.02" y1="15.24" x2="279.4" y2="15.24" width="0.1524" layer="91"/>
+<label x="279.4" y="15.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D9" class="0">
 <segment>
 <wire x1="208.28" y1="22.86" x2="215.9" y2="22.86" width="0.1524" layer="91"/>
 <label x="210.82" y="22.86" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB5(ADC12)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB5(ADC12)"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="6"/>
-<wire x1="243.84" y1="-22.86" x2="236.22" y2="-22.86" width="0.1524" layer="91"/>
-<label x="236.22" y="-22.86" size="1.778" layer="95"/>
+<wire x1="287.02" y1="2.54" x2="279.4" y2="2.54" width="0.1524" layer="91"/>
+<label x="279.4" y="2.54" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D8" class="0">
 <segment>
 <wire x1="208.28" y1="25.4" x2="215.9" y2="25.4" width="0.1524" layer="91"/>
 <label x="210.82" y="25.4" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB4(ADC11)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB4(ADC11)"/>
 </segment>
 </net>
 <net name="A5" class="0">
 <segment>
 <wire x1="208.28" y1="55.88" x2="215.9" y2="55.88" width="0.1524" layer="91"/>
 <label x="210.82" y="55.88" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PF0(ADC0)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PF0(ADC0)"/>
 </segment>
 </net>
 <net name="A4" class="0">
 <segment>
 <wire x1="208.28" y1="58.42" x2="215.9" y2="58.42" width="0.1524" layer="91"/>
 <label x="210.82" y="58.42" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PF1(ADC1)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PF1(ADC1)"/>
 </segment>
 </net>
 <net name="A3" class="0">
 <segment>
 <wire x1="208.28" y1="60.96" x2="215.9" y2="60.96" width="0.1524" layer="91"/>
 <label x="210.82" y="60.96" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PF4(ADC4)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PF4(ADC4)"/>
 </segment>
 </net>
 <net name="A2" class="0">
 <segment>
 <wire x1="208.28" y1="63.5" x2="215.9" y2="63.5" width="0.1524" layer="91"/>
 <label x="210.82" y="63.5" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PF5(ADC5)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PF5(ADC5)"/>
 </segment>
 </net>
 <net name="A1" class="0">
 <segment>
 <wire x1="208.28" y1="66.04" x2="215.9" y2="66.04" width="0.1524" layer="91"/>
 <label x="210.82" y="66.04" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PF6(ADC6)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PF6(ADC6)"/>
 </segment>
 </net>
 <net name="A0" class="0">
 <segment>
 <wire x1="208.28" y1="68.58" x2="215.9" y2="68.58" width="0.1524" layer="91"/>
 <label x="210.82" y="68.58" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PF7(ADC7)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PF7(ADC7)"/>
 </segment>
 </net>
 <net name="D2" class="0">
 <segment>
 <wire x1="208.28" y1="40.64" x2="215.9" y2="40.64" width="0.1524" layer="91"/>
 <label x="210.82" y="40.64" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD1(SDA)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD1(SDA)"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="3"/>
-<wire x1="243.84" y1="-15.24" x2="236.22" y2="-15.24" width="0.1524" layer="91"/>
-<label x="236.22" y="-15.24" size="1.778" layer="95"/>
+<wire x1="287.02" y1="10.16" x2="279.4" y2="10.16" width="0.1524" layer="91"/>
+<label x="279.4" y="10.16" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D3" class="0">
 <segment>
 <wire x1="208.28" y1="38.1" x2="215.9" y2="38.1" width="0.1524" layer="91"/>
 <label x="210.82" y="38.1" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD0(SCL)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD0(SCL)"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="4"/>
-<wire x1="243.84" y1="-17.78" x2="236.22" y2="-17.78" width="0.1524" layer="91"/>
-<label x="236.22" y="-17.78" size="1.778" layer="95"/>
+<wire x1="287.02" y1="7.62" x2="279.4" y2="7.62" width="0.1524" layer="91"/>
+<label x="279.4" y="7.62" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D4" class="0">
 <segment>
 <wire x1="208.28" y1="35.56" x2="215.9" y2="35.56" width="0.1524" layer="91"/>
 <label x="210.82" y="35.56" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD4(ADC8)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD4(ADC8)"/>
 </segment>
 </net>
 <net name="D5" class="0">
 <segment>
 <wire x1="208.28" y1="33.02" x2="215.9" y2="33.02" width="0.1524" layer="91"/>
 <label x="210.82" y="33.02" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PC6"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PC6"/>
 </segment>
 </net>
 <net name="D6" class="0">
 <segment>
 <wire x1="208.28" y1="30.48" x2="215.9" y2="30.48" width="0.1524" layer="91"/>
 <label x="210.82" y="30.48" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD7(ADC10)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD7(ADC10)"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="5"/>
-<wire x1="243.84" y1="-20.32" x2="236.22" y2="-20.32" width="0.1524" layer="91"/>
-<label x="236.22" y="-20.32" size="1.778" layer="95"/>
+<wire x1="287.02" y1="5.08" x2="279.4" y2="5.08" width="0.1524" layer="91"/>
+<label x="279.4" y="5.08" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D7" class="0">
 <segment>
 <wire x1="208.28" y1="27.94" x2="215.9" y2="27.94" width="0.1524" layer="91"/>
 <label x="210.82" y="27.94" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PE6"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PE6"/>
 </segment>
 <segment>
 <pinref part="SW1" gate="G$1" pin="P1"/>
-<wire x1="281.94" y1="-7.62" x2="279.4" y2="-7.62" width="0.1524" layer="91"/>
-<wire x1="279.4" y1="-7.62" x2="279.4" y2="-15.24" width="0.1524" layer="91"/>
+<wire x1="276.86" y1="-38.1" x2="274.32" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="274.32" y1="-38.1" x2="274.32" y2="-45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D10" class="0">
 <segment>
 <wire x1="208.28" y1="20.32" x2="215.9" y2="20.32" width="0.1524" layer="91"/>
 <label x="210.82" y="20.32" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB6(ADC13)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB6(ADC13)"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="7"/>
-<wire x1="243.84" y1="-25.4" x2="236.22" y2="-25.4" width="0.1524" layer="91"/>
-<label x="236.22" y="-25.4" size="1.778" layer="95"/>
+<wire x1="287.02" y1="0" x2="279.4" y2="0" width="0.1524" layer="91"/>
+<label x="279.4" y="0" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -4618,7 +4625,7 @@ Standard 6 pin header for AVR programming</description>
 <wire x1="172.72" y1="17.78" x2="167.64" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="167.64" y1="17.78" x2="165.1" y2="17.78" width="0.1524" layer="91"/>
 <junction x="167.64" y="17.78"/>
-<pinref part="U3" gate="G$1" pin="XTAL2"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="XTAL2"/>
 <pinref part="Y1" gate="G$1" pin="1"/>
 <pinref part="C4" gate="G$1" pin="1"/>
 </segment>
@@ -4628,7 +4635,7 @@ Standard 6 pin header for AVR programming</description>
 <wire x1="172.72" y1="22.86" x2="167.64" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="167.64" y1="22.86" x2="165.1" y2="22.86" width="0.1524" layer="91"/>
 <junction x="167.64" y="22.86"/>
-<pinref part="U3" gate="G$1" pin="XTAL1"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="XTAL1"/>
 <pinref part="Y1" gate="G$1" pin="2"/>
 <pinref part="C2" gate="G$1" pin="1"/>
 </segment>
@@ -4639,7 +4646,7 @@ Standard 6 pin header for AVR programming</description>
 <wire x1="172.72" y1="40.64" x2="162.56" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="162.56" y1="40.64" x2="162.56" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="162.56" y1="35.56" x2="139.7" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="U3" gate="G$1" pin="UCAP"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="UCAP"/>
 <pinref part="C5" gate="G$1" pin="2"/>
 </segment>
 </net>
@@ -4650,16 +4657,16 @@ Standard 6 pin header for AVR programming</description>
 <wire x1="170.18" y1="43.18" x2="170.18" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="170.18" y1="48.26" x2="170.18" y2="45.72" width="0.1524" layer="91"/>
 <junction x="170.18" y="45.72"/>
-<pinref part="U3" gate="G$1" pin="VBUS"/>
-<pinref part="U3" gate="G$1" pin="UVCC"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="VBUS"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="UVCC"/>
 <pinref part="UVCC" gate="G$1" pin="3.3V"/>
 </segment>
 <segment>
 <pinref part="X2" gate="G$1" pin="VBUS"/>
-<wire x1="111.76" y1="-5.08" x2="121.92" y2="-5.08" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="-5.08" x2="121.92" y2="-2.54" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="-2.54" x2="127" y2="-2.54" width="0.1524" layer="91"/>
-<label x="124.46" y="0" size="1.778" layer="95"/>
+<wire x1="68.58" y1="-12.7" x2="78.74" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="-12.7" x2="78.74" y2="-10.16" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="-10.16" x2="83.82" y2="-10.16" width="0.1524" layer="91"/>
+<label x="81.28" y="-7.62" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="F1" gate="G$1" pin="1"/>
@@ -4667,25 +4674,25 @@ Standard 6 pin header for AVR programming</description>
 <label x="33.02" y="71.12" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="134.62" y1="63.5" x2="134.62" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="116.84" y1="66.04" x2="116.84" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="C6" gate="G$1" pin="2"/>
 <pinref part="UVCC1" gate="G$1" pin="3.3V"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="9"/>
-<wire x1="243.84" y1="-30.48" x2="236.22" y2="-30.48" width="0.1524" layer="91"/>
-<label x="236.22" y="-30.48" size="1.778" layer="95"/>
+<wire x1="287.02" y1="-5.08" x2="279.4" y2="-5.08" width="0.1524" layer="91"/>
+<label x="279.4" y="-5.08" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D-" class="0">
 <segment>
 <wire x1="172.72" y1="33.02" x2="167.64" y2="33.02" width="0.1524" layer="91"/>
 <label x="167.64" y="33.02" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="D-"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="D-"/>
 </segment>
 <segment>
-<wire x1="137.16" y1="-7.62" x2="142.24" y2="-7.62" width="0.1524" layer="91"/>
-<label x="139.7" y="-7.62" size="1.778" layer="95"/>
+<wire x1="93.98" y1="-15.24" x2="99.06" y2="-15.24" width="0.1524" layer="91"/>
+<label x="96.52" y="-15.24" size="1.778" layer="95"/>
 <pinref part="R7" gate="G$1" pin="1"/>
 </segment>
 </net>
@@ -4693,11 +4700,11 @@ Standard 6 pin header for AVR programming</description>
 <segment>
 <wire x1="172.72" y1="35.56" x2="167.64" y2="35.56" width="0.1524" layer="91"/>
 <label x="167.64" y="35.56" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="D+"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="D+"/>
 </segment>
 <segment>
-<wire x1="137.16" y1="-12.7" x2="142.24" y2="-12.7" width="0.1524" layer="91"/>
-<label x="139.7" y="-12.7" size="1.778" layer="95"/>
+<wire x1="93.98" y1="-20.32" x2="99.06" y2="-20.32" width="0.1524" layer="91"/>
+<label x="96.52" y="-20.32" size="1.778" layer="95"/>
 <pinref part="R5" gate="G$1" pin="1"/>
 </segment>
 </net>
@@ -4705,40 +4712,40 @@ Standard 6 pin header for AVR programming</description>
 <segment>
 <wire x1="208.28" y1="17.78" x2="215.9" y2="17.78" width="0.1524" layer="91"/>
 <label x="210.82" y="17.78" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB7"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB7"/>
 </segment>
 </net>
 <net name="D12" class="0">
 <segment>
 <wire x1="208.28" y1="15.24" x2="215.9" y2="15.24" width="0.1524" layer="91"/>
 <label x="210.82" y="15.24" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD6(ADC9)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD6(ADC9)"/>
 </segment>
 </net>
 <net name="D13" class="0">
 <segment>
 <wire x1="208.28" y1="12.7" x2="215.9" y2="12.7" width="0.1524" layer="91"/>
 <label x="210.82" y="12.7" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PC7"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PC7"/>
 </segment>
 <segment>
 <pinref part="JP1" gate="G$1" pin="8"/>
-<wire x1="243.84" y1="-27.94" x2="236.22" y2="-27.94" width="0.1524" layer="91"/>
-<label x="236.22" y="-27.94" size="1.778" layer="95"/>
+<wire x1="287.02" y1="-2.54" x2="279.4" y2="-2.54" width="0.1524" layer="91"/>
+<label x="279.4" y="-2.54" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D17" class="0">
 <segment>
 <wire x1="208.28" y1="10.16" x2="215.9" y2="10.16" width="0.1524" layer="91"/>
 <label x="210.82" y="10.16" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PB0(SS)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PB0(SS)"/>
 </segment>
 </net>
 <net name="TXLED" class="0">
 <segment>
 <wire x1="208.28" y1="-2.54" x2="210.82" y2="-2.54" width="0.1524" layer="91"/>
 <wire x1="210.82" y1="-2.54" x2="210.82" y2="-5.08" width="0.1524" layer="91"/>
-<pinref part="U3" gate="G$1" pin="PD5"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD5"/>
 <pinref part="R6" gate="G$1" pin="1"/>
 </segment>
 </net>
@@ -4751,7 +4758,7 @@ Standard 6 pin header for AVR programming</description>
 </net>
 <net name="+3V3_OUT" class="0">
 <segment>
-<pinref part="U1" gate="G$1" pin="OUT"/>
+<pinref part="3.3VRREG" gate="G$1" pin="OUT"/>
 <wire x1="81.28" y1="30.48" x2="96.52" y2="30.48" width="0.1524" layer="91"/>
 <label x="111.76" y="30.48" size="1.778" layer="95"/>
 <wire x1="96.52" y1="30.48" x2="106.68" y2="30.48" width="0.1524" layer="91"/>
@@ -4765,65 +4772,65 @@ Standard 6 pin header for AVR programming</description>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="VDD"/>
-<wire x1="269.24" y1="48.26" x2="269.24" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="269.24" y1="50.8" x2="261.62" y2="50.8" width="0.1524" layer="91"/>
-<label x="256.54" y="53.34" size="1.778" layer="95"/>
+<wire x1="269.24" y1="63.5" x2="269.24" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="66.04" x2="261.62" y2="66.04" width="0.1524" layer="91"/>
+<label x="256.54" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="WIFIDOUT" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="DOUT"/>
-<wire x1="269.24" y1="45.72" x2="261.62" y2="45.72" width="0.1524" layer="91"/>
-<label x="254" y="45.72" size="1.778" layer="95"/>
+<wire x1="269.24" y1="60.96" x2="261.62" y2="60.96" width="0.1524" layer="91"/>
+<label x="254" y="60.96" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="208.28" y1="45.72" x2="215.9" y2="45.72" width="0.1524" layer="91"/>
 <label x="210.82" y="45.72" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD2(RX)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD2(RX)"/>
 </segment>
 </net>
 <net name="WIFIDIN" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="DIN"/>
-<wire x1="269.24" y1="43.18" x2="261.62" y2="43.18" width="0.1524" layer="91"/>
-<label x="254" y="40.64" size="1.778" layer="95"/>
+<wire x1="269.24" y1="58.42" x2="261.62" y2="58.42" width="0.1524" layer="91"/>
+<label x="254" y="55.88" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="246.38" y1="68.58" x2="246.38" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="279.4" y1="88.9" x2="279.4" y2="91.44" width="0.1524" layer="91"/>
 <pinref part="R3" gate="G$1" pin="2"/>
-<wire x1="246.38" y1="71.12" x2="246.38" y2="76.2" width="0.1524" layer="91"/>
-<wire x1="248.92" y1="71.12" x2="246.38" y2="71.12" width="0.1524" layer="91"/>
-<junction x="246.38" y="71.12"/>
-<label x="246.38" y="76.2" size="1.778" layer="95"/>
+<wire x1="279.4" y1="91.44" x2="279.4" y2="96.52" width="0.1524" layer="91"/>
+<wire x1="281.94" y1="91.44" x2="279.4" y2="91.44" width="0.1524" layer="91"/>
+<junction x="279.4" y="91.44"/>
+<label x="279.4" y="96.52" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
 <pinref part="X2" gate="G$1" pin="D-"/>
 <pinref part="R7" gate="G$1" pin="2"/>
-<wire x1="111.76" y1="-7.62" x2="127" y2="-7.62" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="-15.24" x2="83.82" y2="-15.24" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$8" class="0">
 <segment>
 <pinref part="X2" gate="G$1" pin="D+"/>
-<wire x1="111.76" y1="-10.16" x2="119.38" y2="-10.16" width="0.1524" layer="91"/>
-<wire x1="119.38" y1="-10.16" x2="119.38" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="-17.78" x2="76.2" y2="-17.78" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="-17.78" x2="76.2" y2="-20.32" width="0.1524" layer="91"/>
 <pinref part="R5" gate="G$1" pin="2"/>
-<wire x1="119.38" y1="-12.7" x2="127" y2="-12.7" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="-20.32" x2="83.82" y2="-20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="TX" class="0">
 <segment>
 <wire x1="208.28" y1="43.18" x2="215.9" y2="43.18" width="0.1524" layer="91"/>
 <label x="210.82" y="43.18" size="1.778" layer="95"/>
-<pinref part="U3" gate="G$1" pin="PD3(TX)"/>
+<pinref part="ATMEGA32U4" gate="G$1" pin="PD3(TX)"/>
 </segment>
 <segment>
 <pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="246.38" y1="58.42" x2="246.38" y2="55.88" width="0.1524" layer="91"/>
-<label x="246.38" y="55.88" size="1.778" layer="95"/>
+<wire x1="279.4" y1="78.74" x2="279.4" y2="76.2" width="0.1524" layer="91"/>
+<label x="279.4" y="76.2" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
