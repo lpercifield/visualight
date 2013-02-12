@@ -1,0 +1,57 @@
+// preset form values if we receive a userdata object //
+- user = typeof(udata) != 'undefined' ? udata : {}
+// store the userId on the client side in a hidden input field //
+input(type='hidden', value= user._id)#userId
+
+div.navbar.navbar-fixed-top
+	div.navbar-inner
+		div.container-fluid
+			ul#global-nav.nav.pull-left
+				a(href='/home').brand My Account
+			div#blub-buttons(data-toggle='buttons-radio', style="float:left").btn-group
+			button#btn-add.btn.btn-primary ADD VISUALIGHT
+			button#btn-logout.btn.btn-primary
+				i.icon-lock.icon-white
+				| Sign Out
+#account-form-container
+	h1#nobulbs(style="display:none")
+		| No Visualights Found
+		br
+		| Click "Add Visualight" above
+	div#main.container(style='margin:20px; display:block')
+		form(style="width: 400px;")
+			.form-item
+				label(for="color")
+					input#color(type="text", value="", style="width:300px", name="color")
+				#picker
+		span#status
+		form#form-inline
+			input.cosm-input(type="number", name="feed", id="feed", value="", placeholder="Feed ID")
+			input.cosm-input(type="text", name="datastream", id="datastream", value="", placeholder="Datastream")
+			input.cosm-input(type="number", name="min", id="min", value="", placeholder="Min: 0")
+			input.cosm-input(type="number", name="max", id="max", value="", placeholder="Max: 100")
+			input(id="cosm", type="button", value="COSM")
+		form#form-inline
+			input(type="number", name="stopid", id="stopid", value="", placeholder="Stop ID")
+			input(id="bustime", type="button", value="Show Bus Time");
+		form#form-inline
+			input(type="number", name="zip", id="zip", value="", placeholder="Zipcode")
+			input(id="weather", type="button", value="Get Weather")
+		form#form-inline
+			input(id="open", type="button", value="Connect")
+			input(id="close", type="button", value="Disconnect")
+
+include modals/alert
+include modals/confirm
+include modals/setupbulb
+include modals/network
+
+script(type='text/javascript', src='/vendor/jquery.min.js')
+script(type='text/javascript', src='/vendor/jquery.form.js')
+script(type='text/javascript', src='/vendor/farbtastic.js')
+script(src='/vendor/bootstrap-modal_222.js')
+script(src='/vendor/bootstrap-transition.js')
+script(src='/vendor/bootstrap-button.js')
+script(src='/js/views/myvisualight.js')
+script(src='/js/controllers/visualightController.js')
+script(src="/socket.io/socket.io.js")

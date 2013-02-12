@@ -1,0 +1,16 @@
+
+div.navbar.navbar-fixed-top
+    div.navbar-inner
+        div.container-fluid
+            ul#global-nav.nav.pull-left
+                a(href='/myvisualight').brand My Visualight
+            button#btn-logout.btn.btn-primary
+                i.icon-lock.icon-white
+                | Sign Out
+
+include account
+include modals/alert
+include modals/confirm
+
+script(src='/js/views/home.js')
+script(src='/js/controllers/homeController.js')

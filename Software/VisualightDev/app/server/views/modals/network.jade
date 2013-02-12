@@ -1,0 +1,26 @@
+
+.modal-bulb-network.modal.hide.fade
+    div.modal-header
+        h3
+    div.modal-body
+        h4
+        div#searching(style="padding:10px; display:none")
+            p(style='float:left') Waiting for Wifi Connection - 
+            div.progress.progress-striped.active
+                div.bar(style='width: 100%')
+        form( method="post")#set-network-form.well.form-horizontal
+            div.control-group
+                label.control-label(for="network") Network Name
+                div.controls
+                    input(type="text", name="network", id='network').span5.required
+            div.control-group
+                label.control-label(for="password") Network Password
+                div.controls
+                    input(type="text", name="password", id='password').span5.required Password
+            div.control-group
+                div.controls
+                    button(type="submit")#submit.btn.btn-primary Submit
+            div.alert.alert-error.hide
+    div.modal-footer
+        button(data-dismiss="modal").cancel.btn Cancel
+        button(style="display:none").submit.btn Done
