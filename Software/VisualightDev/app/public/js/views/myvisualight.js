@@ -91,13 +91,13 @@ $(document).ready(function(){
     var c   = hexToRgb(e)
       , h   = rgbToHsl(c.r,c.g,c.b)
       , r   = hslToRgb(h.h,h.s,h.l)
-      , rgb = +r.r+','+r.g+','+r.b+',0'
+      , rgb = +c.r+','+c.g+','+c.b+',0'
       ;
     
     //$('#color').css({backgroundColor:e}).val(e);
     $('#color').css({backgroundColor:e});
 	console.log(rgb);
-	socket.send(rgb+","+currBulb);
+	socket.send(rgb);
     //updateHTML5LogoColor(rgb, e);
   });
       status.textContent = "Not Connected";
