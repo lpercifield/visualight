@@ -2,16 +2,16 @@
 var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
-
+var net = require('net');
 
 var lights=[];
 var bulbAuth=[];
 var bulbs=["00:06:66:71:19:2b","00:06:66:71:ca:df","00:06:66:71:cb:cd","00:06:66:71:e3:aa"];
 
-module.exports = function(app, io, netserver, sStore, parseCookie) {
+module.exports = function(app, io, sStore) {
 
 
-netserver.on('connection', function(socket) { //'connection' listener
+var netserver = net.createServer(function(socket) { //'connection' listener
 	console.log('Visualight connected from: ' +socket.remoteAddress);
 	//socket.write('hello from server');
 	//lights.push(socket);
@@ -44,7 +44,8 @@ netserver.on('connection', function(socket) { //'connection' listener
 				
 			}else{
 				console.log("NOT AUTHORIZED bulb: " + data);
-				//socket.destroy();
+				socket.end();
+				socket.destroy();
 			}
 		}else{
 			console.log("already auth");
@@ -52,15 +53,18 @@ netserver.on('connection', function(socket) { //'connection' listener
 		
 	});	
 });
+netserver.listen(5001, function() { //'listening' listener
+	console.log('tcp server bound');
+});
 
 function sendToVisualight(data){
 	lastArduinoData = data;
-	if(lights[bulbID] != null){
-		if(bulbAuth[bulbID]){
+	if(lights[0] != null){
+		if(bulbAuth[0]){
 		//for(var i = 0; i < lights.length; i++){
-			lights[bulbID].write("a");
-			lights[bulbID].write(data);
-			lights[bulbID].write("x");
+			lights[0].write("a");
+			lights[0].write(data);
+			lights[0].write("x");
 			//bulb.write(data);
 			//bulb.write("x");
 		}
@@ -101,6 +105,7 @@ io.sockets.on('connection', function (socket) {
 	//console.log(socket.handshake.headers.cookie);
   socket.on('message', function(message) {
   	//console.log(message);
+  	sendToVisualight(message);
   });
   socket.on('current-bulb', function(bulbID){
 	  AM.getBulbInfo(bulbID, function(e,o){
