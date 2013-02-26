@@ -74,10 +74,13 @@ exports.getBulbInfo = function(id, callback)
 exports.checkBulbAuth = function(mac, callback)
 {
 	bulbs.findOne({mac:mac}, function(e, o) {
+		
 		if (o == null){
 			callback('bulb-not-found');
+			console.log(e);
 		}	else{
 			callback(o);
+			console.log(o);
 		}
 	});
 }
