@@ -35,8 +35,10 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 	});
 
 	socket.on('data', function(data){
-		console.log(data.trim());
-		AM.checkBulbAuth(data.trim(),function(e,o){
+		mac = data.trim();
+		mac = "'"+mac+"'";
+		console.log(mac);
+		AM.checkBulbAuth(mac,function(e,o){
 			if(!o){
 			  //socket.emit('lookup-failed');
 			  console.log("NOT AUTHORIZED bulb: " + data);
