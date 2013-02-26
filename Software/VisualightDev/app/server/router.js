@@ -44,7 +44,7 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 				
 			}else{
 				console.log("NOT AUTHORIZED bulb: " + data);
-				//socket.destroy();
+				socket.destroy();
 			}
 		}else{
 			console.log("already auth");
