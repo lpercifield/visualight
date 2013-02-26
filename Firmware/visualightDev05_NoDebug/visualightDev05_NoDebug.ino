@@ -65,11 +65,15 @@ int _blinkMe = 0;
 //const int greenLED = 10;
 //const int blueLED = 9;
 //with transistors
-const int redLED = 13;
-const int greenLED = 9;
-const int blueLED = 10;
+//const int redLED = 13;
+//const int greenLED = 9;
+//const int blueLED = 10;
+//10mm led
+const int redLED = 9;
+const int greenLED = 10;
+const int blueLED = 13;
 
-boolean sink = false;
+boolean sink = true;
 
 //Button button = Button(8, BUTTON_PULLUP_INTERNAL, true, 50);
 const int resetButton = 7;
@@ -385,9 +389,9 @@ void connectToServer(){
 
 void colorLED(int red,int green,int blue){
   if(sink){
-    red = 200-red;
-    green = 200-green;
-    blue = 200-blue;
+    red = 255-red;
+    green = 255-green;
+    blue = 255-blue;
   }
   analogWrite(redLED, red);
   analogWrite(greenLED, green);

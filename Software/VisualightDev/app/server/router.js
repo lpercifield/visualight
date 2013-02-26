@@ -36,7 +36,18 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 
 	socket.on('data', function(data){
 		console.log(data.trim());
-		var i = lights.indexOf(socket);
+		AM.checkBulbAuth(data.trim(),function(e,o){
+			if(!o){
+			  //socket.emit('lookup-failed');
+			  console.log("NOT AUTHORIZED bulb: " + data);
+			  socket.destroy();
+			}else{
+			  //current bulb mac = o.mac;
+			  console.log("AUTHORIZED bulb: " + data);
+		  }
+		});
+		/*
+var i = lights.indexOf(socket);
 		if(!bulbAuth[i]){
 			if(bulbs.indexOf(data.trim())!=-1){
 				bulbAuth[i] = true;
@@ -44,12 +55,12 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 				
 			}else{
 				console.log("NOT AUTHORIZED bulb: " + data);
-				socket.end();
 				socket.destroy();
 			}
 		}else{
 			console.log("already auth");
 		}
+*/
 		
 	});	
 });
