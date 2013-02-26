@@ -13,7 +13,8 @@ var app = exp.createServer();
 
 
 
-var io = require('socket.io').listen(app,'log level': 1);
+var io = require('socket.io').listen(app,'log level',1);
+
 var MongoStore = require('connect-mongo')(exp);
 
 app.root = __dirname;
