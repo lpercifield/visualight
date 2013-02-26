@@ -69,6 +69,19 @@ exports.getBulbInfo = function(id, callback)
 	});
 }
 
+/* get current bulb information*/
+
+exports.checkBulbAuth = function(mac, callback)
+{
+	bulbs.findOne({mac:mac}, function(e, o) {
+		if (o == null){
+			callback('bulb-not-found');
+		}	else{
+			callback(o);
+		}
+	});
+}
+
 /* login validation methods */
 
 exports.autoLogin = function(user, pass, callback)

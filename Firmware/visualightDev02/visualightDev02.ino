@@ -13,8 +13,8 @@
 #include <EEPROM.h>
 #include <Button.h>
 
-#define PIN_LED_STATUS          10
-#define PIN_BUTTON_RESET        9    // Used to 'factory reset' the system
+//#define PIN_LED_STATUS          10
+#define PIN_BUTTON_RESET        8    // Used to 'factory reset' the system
 #define RESET_BUTTON_TIME       8000  // ms, time to hold down button
 
 #define ADHOC_SSID "Visualight"
@@ -41,12 +41,15 @@ const char* MAC;
 
 WiFlyServer server(80);
 WiFlyClient bulbClient;
-//Button resetButton = Button(PIN_BUTTON_RESET,BUTTON_PULLUP_INTERNAL);
+Button resetButton = Button(PIN_BUTTON_RESET,BUTTON_PULLUP_INTERNAL,true,2000);
 String scanlist;
 boolean wifiSet;
 
 void setup() {
   // Serial ports
+  analogWrite(6, _green);
+  analogWrite(3, _red);
+  analogWrite(5, _blue);
   Serial.begin(9600);
   //  while (!Serial) {
   //    ; // wait for serial port to connect. Needed for Leonardo only
@@ -64,10 +67,10 @@ void setup() {
   //server.begin();
 
   // set up factory reset button
-//  resetButton.holdHandler(factoryReset, RESET_BUTTON_TIME);
-//  if(resetButton.isPressed()){
-//    factoryReset(resetButton);
-//  }
+  resetButton.holdHandler(factoryReset, RESET_BUTTON_TIME);
+  //  if(resetButton.isPressed()){
+  //    factoryReset(resetButton);
+  //  }
 
   // Is the unit in Setup or Normal mode?
   wifiSet = EEPROM.read(0);
@@ -75,8 +78,16 @@ void setup() {
   if(wifiSet == 1 || wifiSet == true){
     // The WiFi module is set up for wifi, so try to connect to the Bitponics server
     Serial.println("WiFi Mode");
+    wifiSet = 1;
     WiFly.begin();
     delay(1000);
+    if (bulbClient.connect("leifp.com", 5001)) {
+      bulbClient.print(MAC);
+
+      //TODO: 
+    } 
+    else {
+    }
     //This is where we connect to the server
   } 
   else {
@@ -86,7 +97,7 @@ void setup() {
   }
 
   // Misc
-  pinMode(PIN_LED_STATUS, OUTPUT);
+  //pinMode(PIN_LED_STATUS, OUTPUT);
 }
 
 void factoryReset(Button& b){
@@ -109,6 +120,10 @@ void restart(){
 boolean setAdhocMode(){
   // sets up the wifi module for Adhoc mode
   // only called by the "Factory Reset" function or first run
+  analogWrite(5, 0);
+  analogWrite(3, 255);
+  analogWrite(6, 0);
+  Serial.println("ADHOC Mode");
   boolean sendOK = false;
   WiFly.begin(true);
   if(!WiFly.createAdHocNetwork(ADHOC_SSID)) {
@@ -117,9 +132,10 @@ boolean setAdhocMode(){
   } 
   else {
     //    Serial.println(F("*** setAdhocMode error"));
-    EEPROM.write(0, 0); // means that the device is NOT configured for WiFi, so upon start, perform the correct actions
+    if(EEPROM.read(0)!=0){
+      EEPROM.write(0, 0); // means that the device is NOT configured for WiFi, so upon start, perform the correct actions
+    }
     wifiSet = 0; // because loop will continue running
-    server.begin();
     sendOK = true;
   }
   return sendOK;
@@ -131,41 +147,65 @@ boolean setAdhocMode(){
 //  Serial.println("scanlist");
 //}
 
-void configWifi(){
+boolean configWifi(){
   WiFly.begin();
-
+  boolean sendOK = false;
   if (!WiFly.join(network, password)) {
-    Serial.println("Association failed.");
-    setAdhocMode();
+    Serial.print("Association failed. SSID: ");
+    Serial.print(network);
+    Serial.print(" Password ");
+    Serial.println(password);
+    delay(5000);
+    if (!WiFly.join(network, password)) {
+      Serial.println("Association failed.");
+      delay(5000);
+      if (!WiFly.join(network, password)) {
+        Serial.println("Association failed.");
+        //delay(1000);
+        setAdhocMode();
+        //1000
+        //0110
+        //0
+        //0
+        //0
+        //0
+        //0011
+      }
+    }
+
   }
   else{
     Serial.println("JOINED");
+    analogWrite(5, 0);
+    analogWrite(3, 0);
+    analogWrite(6, 255);
     EEPROM.write(0, 1);
     wifiSet = 1;
-    //Serial.println("Connect");
-    //    if (bulbClient.connect("leifp.com", 5001)) {
-    //      bulbClient.print(MAC);
-    //
-    //      //TODO: 
-    //    } 
-    //    else {
-    //    }
-  }
+    sendOK = true;
+    Serial.println("Connect");
+    if (bulbClient.connect("leifp.com", 5001)) {
+      bulbClient.print(MAC);
 
+      //TODO: 
+    } 
+    else {
+    }
+  }
+  return sendOK;
 
 }
 
 void visualight(){
   if (bulbClient.available()>1) {
-    Serial.println("Data");
-    delay(2);
+//    Serial.println("Data");
+//    delay(2);
     _red = bulbClient.parseInt();
     _green = bulbClient.parseInt();
     _blue = bulbClient.parseInt();
     _blinkMe = bulbClient.parseInt();
-    analogWrite(11, _green);
-    analogWrite(10, _red);
-    analogWrite(9, _blue);
+    analogWrite(5, _green);
+    analogWrite(3, _red);
+    analogWrite(6, _blue);
   }
   if(_blinkMe == 1){
     blinkLED();
@@ -174,10 +214,10 @@ void visualight(){
   if (!bulbClient.connected()) {
     Serial.println("connecting");
     bulbClient.stop();
-    delay(100);
+    //delay(100);
     bulbClient.connect("leifp.com", 5001);
     bulbClient.print(MAC);
-    delay(5000);
+    delay(3000);
   } 
 }
 
@@ -203,6 +243,7 @@ void blinkLED(){
 
 void processServer(){
   WiFlyClient client = server.available();
+  //Serial.println("Process Server");
   if (client) {
     Serial.println("GOT Client");
     boolean current_line_is_blank = true;
@@ -214,14 +255,11 @@ void processServer(){
           inString += c;
         }        
         if (c == '\n' && current_line_is_blank) {
-          client.println("HTTP/1.1 200 OK");
-            client.println("Content-Type: text/html");
-            client.println("Access-Control-Allow-Origin: *");
-            client.println();
-            client.println("<html><head></head><body>");
-            client.println("Visualight,");
-            client.println(MAC);
-            client.println("</body></html>");
+          client.println("HTTP/1.0 200 OK");
+          client.println("Connection: Keep-Alive");
+          client.println("Content-Type: text/html");
+          client.println("Transfer-Encoding: chunked");
+          client.println("Access-Control-Allow-Origin: *");
           if (inString.indexOf("?") > -1) {
             int Pos_1 = inString.indexOf("?");
             int commandEnd = inString.indexOf("**");
@@ -240,7 +278,20 @@ void processServer(){
               Serial.print(network);
               Serial.print('\t');
               Serial.println(password);
-              configWifi();
+              if(!configWifi()){
+                Serial.println("failed");
+                client.println("HTTP/1.0 200 OK");
+                client.println("Connection: Keep-Alive");
+                client.println("Content-Type: text/html");
+                client.println("Transfer-Encoding: chunked");
+                client.println("Access-Control-Allow-Origin: *");
+                client.println();
+                client.println("<html><head></head><body>");
+                client.println("FAILED");
+                //client.println(MAC);
+                client.println("</body></html>");
+              }
+              client.stop();
               //int passwordStart
               //= inString.substring((Pos_1+2),
               //int pos_n = inString.indexOf
@@ -248,7 +299,11 @@ void processServer(){
 
           }
           if(wifiSet!=1){
-            
+            client.println();
+            client.println("<html><head></head><body>");
+            client.println("Visualight, ");
+            client.println(MAC);
+            client.println("</body></html>");
           }
           break;
         }
@@ -267,7 +322,7 @@ void processServer(){
 }
 
 void loop() {
-  //resetButton.process();
+  resetButton.process();
   if(wifiSet == 1){
     //DO STUFF
     visualight();
@@ -276,5 +331,7 @@ void loop() {
     processServer();
   }
 }
+
+
 
 
