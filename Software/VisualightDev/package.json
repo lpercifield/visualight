@@ -1,53 +1,54 @@
 {
-   "engines": {
-      "npm": "1.1.65",
-      "node": "0.8.x"
-   },
-   "repository": {
-      "url": "git://github.com/lpercifield/node-login.git",
-      "type": "git"
-   },
-   "website": {
-      "url": "dev.visualight.org"
-   },
-   "env": {
-      "npm_config_production": false,
-      "npm_config_rebuild_bundle": false
-   },
-   "version": "1.2.0-17",
-   "dependencies": {
-      "jade": "~0.27.7",
-      "express": "~2.5.11",
-      "moment": "~1.7.2",
-      "socket.io": "~0.9.13",
-      "emailjs": "~0.3.3",
-      "stylus": "~0.31.0",
-      "connect-mongo": "~0.2.0",
-      "mongodb": "~1.2.7"
-   },
-   "private": true,
-   "name": "node-login",
-   "bundledDependencies": [
-      "connect-mongo",
-      ".bin",
-      "stylus",
-      "emailjs",
-      "moment",
-      "express",
-      "socket.io",
-      "mongodb",
-      "jade"
-   ],
-   "subdomain": "visdev",
-   "domains": [
-      "dev.visualight.org"
-   ],
-   "author": {
-      "email": "leif@visualight.org",
-      "name": "Leif Percifield"
-   },
-   "description": "Visualight User app - This was developed from the AMAZING template - https://github.com/braitsch/node-login by Stephen Braitsch - BIG UPS!!!",
-   "scripts": {
-      "start": "app.js"
-   }
+  "engines": {
+    "npm": "1.1.65",
+    "node": "0.8.x"
+  },
+  "repository": {
+    "url": "git://github.com/lpercifield/node-login.git",
+    "type": "git"
+  },
+  "website": {
+    "url": "dev.visualight.org"
+  },
+  "env": {
+    "npm_config_production": false,
+    "npm_config_rebuild_bundle": false
+  },
+  "version": "1.2.0-17",
+  "dependencies": {
+    "jade": "~0.27.7",
+    "express": "~2.5.11",
+    "moment": "~1.7.2",
+    "socket.io": "~0.9.13",
+    "emailjs": "~0.3.3",
+    "stylus": "~0.31.0",
+    "connect-mongo": "~0.2.0",
+    "mongodb": "~1.2.7",
+    "validator": "~0.4.28"
+  },
+  "private": true,
+  "name": "node-login",
+  "bundledDependencies": [
+    "connect-mongo",
+    ".bin",
+    "stylus",
+    "emailjs",
+    "moment",
+    "express",
+    "socket.io",
+    "mongodb",
+    "jade"
+  ],
+  "subdomain": "visdev",
+  "domains": [
+    "dev.visualight.org"
+  ],
+  "author": {
+    "email": "leif@visualight.org",
+    "name": "Leif Percifield"
+  },
+  "description": "Visualight User app - This was developed from the AMAZING template - https://github.com/braitsch/node-login by Stephen Braitsch - BIG UPS!!!",
+  "scripts": {
+    "start": "app.js"
+  }
 }

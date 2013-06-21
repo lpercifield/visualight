@@ -120,7 +120,7 @@ $('div.btn-group .btn').click(function(){
 			url: "http://169.254.1.1/mac",
 			type: "GET",
 			dataType: 'json',
-			timeout: 2000,
+			timeout: 8000,
 			success: function(data){
 				clearTimeout(timer);
 				console.log(data)
@@ -214,6 +214,7 @@ $('div.btn-group .btn').click(function(){
 		$('.modal-alert button').click(function(){window.location.href = '/';})
 		setTimeout(function(){window.location.href = '/';}, 3000);
 	}
+	
 	this.getBulbs = function(callback)
 	{
 		//$('.modal-confirm').modal('hide');
@@ -283,6 +284,7 @@ if ( checked ) {
 
         return radioFragment.firstChild;
     }
+    
     function addBulbButtons(bulbData, callback){
     	var checked = true;
     	var buttonDiv = document.getElementById('blub-buttons');

@@ -3,21 +3,26 @@ var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
 var net = require('net');
+var sanitize	= require('validator').sanitize;
 
 var lights=[];
 var bulbAuth=[];
-var bulbs=["00:06:66:71:19:2b","00:06:66:71:ca:df","00:06:66:71:cb:cd","00:06:66:71:e3:aa"];
+//var bulbs=["00:06:66:71:19:2b","00:06:66:71:ca:df","00:06:66:71:cb:cd","00:06:66:71:e3:aa"];
+var bulbs = [];
+var clients = [];
 
 module.exports = function(app, io, sStore) {
+
+	AM.connectServer(function(e){
+		while(e){
+			console.log("retry connect");
+			connectServer();
+		}
+	});
 
 
 var netserver = net.createServer(function(socket) { //'connection' listener
 	console.log('Visualight connected from: ' +socket.remoteAddress);
-	//socket.write('hello from server');
-	//lights.push(socket);
-	lights[0] = socket;
-	bulbAuth.push(false);
-	//bulb = socket;
 	socket.setEncoding('utf8');
 	socket.setKeepAlive(true,5000)
 
@@ -35,19 +40,38 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 	});
 
 	socket.on('data', function(data){
-		mac = data.trim();
-		mac = "'"+mac+"'";
-		console.log(mac);
-		AM.checkBulbAuth(mac,function(e,o){
-			if(!o){
-			  //socket.emit('lookup-failed');
-			  console.log("NOT AUTHORIZED bulb: " + data);
-			  socket.destroy();
-			}else{
-			  //current bulb mac = o.mac;
-			  console.log("AUTHORIZED bulb: " + data);
-		  }
-		});
+		var bulbIndex = arrayObjectIndexOf(bulbs,socket,'netsocket');
+		if(bulbs.indexOf(bulbIndex)== -1){
+			var mac = sanitize(data).trim();
+			//console.log(mac);
+			AM.checkBulbAuth(mac,function(o){
+				console.log('check bulb' + o);
+				if(!o){
+				  //socket.emit('lookup-failed');
+				  console.log("NOT AUTHORIZED bulb: " + data);
+				  socket.destroy();
+				}else{
+				  //current bulb mac = o.mac;
+				  //current bulb id = o._id;
+				  
+				  var cleanbulbID = sanitize(o._id).trim();
+				  console.log("returned id " + cleanbulbID);
+				  var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id');
+				  if(checkId != -1){
+					  bulbs.splice(checkId, 1);
+				  }
+				  var connectedBulb = {id:cleanbulbID,netsocket:socket};
+				  bulbs.push(connectedBulb);
+				  console.log("AUTHORIZED bulb: " + data);
+			  }
+			});
+		}else{
+			AM.updateBulbStatus(bulbs[bulbIndex].id,1, function(o){
+				if(o==null){
+					console.log("error saving bulb status");
+				}
+			});
+		}
 		/*
 var i = lights.indexOf(socket);
 		if(!bulbAuth[i]){
@@ -70,17 +94,30 @@ netserver.listen(5001, function() { //'listening' listener
 	console.log('tcp server bound');
 });
 
-function sendToVisualight(data){
+function arrayObjectIndexOf(myArray, searchTerm, property) {
+    for(var i = 0, len = myArray.length; i < len; i++) {
+    	//console.log(myArray[i][property]);
+        if (myArray[i][property] === searchTerm) return i;
+        else if (myArray[i][property] == searchTerm) return i;
+    }
+    return -1;
+}
+
+function sendToVisualight(sendToId,data){
 	lastArduinoData = data;
-	if(lights[0] != null){
-		if(bulbAuth[0]){
+	//console.log("bulbID "+sendToId);
+	var currBulbIndex = arrayObjectIndexOf(bulbs,sendToId,'id');
+	//console.log("currBulbIndex " + currBulbIndex);
+	if(bulbs[currBulbIndex] != null){
+		//if(bulbAuth[0]){
 		//for(var i = 0; i < lights.length; i++){
-			lights[0].write("a");
-			lights[0].write(data);
-			lights[0].write("x");
+			//console.log(data);
+			bulbs[currBulbIndex].netsocket.write("a");
+			bulbs[currBulbIndex].netsocket.write(data);
+			bulbs[currBulbIndex].netsocket.write("x");
 			//bulb.write(data);
 			//bulb.write("x");
-		}
+		//}
 	}else{
 		console.log("NO ARDUINO CONNECTED");
 		//sendToWeb("That Visualight is OFFLINE");
@@ -116,16 +153,24 @@ io.configure(function (){
 });
 io.sockets.on('connection', function (socket) {
 	//console.log(socket.handshake.headers.cookie);
-  socket.on('message', function(message) {
-  	//console.log(message);
-  	sendToVisualight(message);
+	var newClient = {iosocket:socket};
+	clients.push(newClient);
+  socket.on('message', function(message) {	
+  	sendToVisualight(clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb,message);
   });
   socket.on('current-bulb', function(bulbID){
-	  AM.getBulbInfo(bulbID, function(e,o){
+  	var cleanbulbID = sanitize(bulbID).trim();
+	  AM.getBulbInfo(cleanbulbID, function(o){
 		  if(!o){
 			  socket.emit('lookup-failed');
 		  }else{
 			  //current bulb mac = o.mac;
+			  console.log("socket current-bulb");
+			  var checkId = arrayObjectIndexOf(clients,o._id,'currentBulb');
+				  if(checkId != -1){
+					  clients.splice(checkId, 1);
+				  }
+			  clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
 		  }
 	  })
   });

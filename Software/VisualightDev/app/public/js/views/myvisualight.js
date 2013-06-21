@@ -51,7 +51,9 @@ $(document).ready(function(){
 		status.textContent = "Connected";
 		close.disabled = false;
         open.disabled = true;
-        socket.emit('current-bulb', $('div.btn-group .btn').find('input:radio').attr('checked', true).val());
+        var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+        console.log("currBulbID " + currBulbId);
+        if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
         console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
 	});
 	socket.on('disconnect',function(){

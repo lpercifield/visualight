@@ -5,6 +5,7 @@ var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 var Mongo 		= require('mongodb').MongoClient;
 
+
 var dbPort 		= 27017;
 var dbHost 		= global.host;
 var dbName 		= 'node-login';
@@ -18,16 +19,21 @@ connecting to: linus.mongohq.com:10052/nodejitsudb6620458662
 > db.auth("nodejitsu","ab124187f3e14972d1502824506e7123")
 
 */
-Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
-		if (err) {
-			console.log(err);
-		}	else{
-			console.log('connected to database :: ' + dbName);
-			accounts = db.collection('accounts');
-			bulbs = db.collection('bulbs');
-			sessions = db.collection('sessions');
-		}
-	}); 
+exports.connectServer = function(callback){
+	Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
+				console.log("connecting to DB...");
+			if (err) {
+				console.log(err);
+				callback(err);
+			}	else{
+				console.log('connected to database :: ' + dbName);
+				accounts = db.collection('accounts');
+				bulbs = db.collection('bulbs');
+				sessions = db.collection('sessions');
+				callback(null);
+			}
+		}); 
+	}
 /*
 var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
 	db.open(function(e, d){
@@ -59,28 +65,41 @@ exports.validateSession = function(session, callback)
 /* get current bulb information*/
 
 exports.getBulbInfo = function(id, callback)
-{
-	bulbs.findOne({_id:id}, function(e, o) {
+{	
+	console.log("bulbId" + id);
+	bulbs.findOne({_id: getBulbId(id)}, function(e, o) {
 		if (o == null){
-			callback('bulb-not-found');
+			callback(null);
 		}	else{
 			callback(o);
 		}
 	});
 }
 
+/* sets current bulb status*/
+exports.updateBulbStatus = function(id, online, callback)
+{	
+	//console.log("bulbId" + id);
+	bulbs.save({_id: getBulbId(id),status:online,lastOnline:moment()},{safe:true}, function(e, o) {
+		if (o == null){
+			callback(null);
+		}
+	});
+}
+
 /* get current bulb information*/
 
-exports.checkBulbAuth = function(mac, callback)
+exports.checkBulbAuth = function(macAdd, callback)
 {
-	bulbs.findOne({mac:mac}, function(e, o) {
-		
+	bulbs.findOne({mac:macAdd}, function(e, o) {
+		console.log("found" + macAdd);
 		if (o == null){
-			callback('bulb-not-found');
-			console.log(e);
-		}	else{
+			//console.log("error "+e);
+			callback(null);
+			
+		}else{
+			//console.log(o);
 			callback(o);
-			console.log(o);
 		}
 	});
 }
@@ -291,7 +310,10 @@ var getObjectId = function(id)
 {
 	return accounts.db.bson_serializer.ObjectID.createFromHexString(id)
 }
-
+var getBulbId = function(id)
+{
+	return bulbs.db.bson_serializer.ObjectID.createFromHexString(id)
+}
 var findById = function(id, callback)
 {
 	accounts.findOne({_id: getObjectId(id)},
