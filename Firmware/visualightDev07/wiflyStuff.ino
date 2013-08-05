@@ -17,14 +17,14 @@ void joinWifi(){
   wifly.save();
   //wifly.finishCommand();
   wifly.reboot();
-  delay(1000);
+  //delay(1000);
 
   //}
 
   if(!wifly.isAssociated()){
-    //Serial.println(F("Joining network"));
+    Serial.println(F("Joining network"));
     if (wifly.join()) {
-      //Serial.println(F("Joined wifi network"));
+      Serial.println(F("Joined wifi network"));
       connectToServer();
     } 
     else {
@@ -50,6 +50,20 @@ void joinWifi(){
 void connectToServer(){
   wifly.flushRx();
   //MAC = wifly.getMAC(buf, sizeof(buf));
+  if(!wifly.isAssociated()) { //|| 
+      Serial.println(F("Joining"));
+      //Serial.println(wifly.isAssociated());
+      if(!wifly.join()){
+        Serial.println("Join Failed");
+        Serial.println(wifly.isAssociated());
+      }
+      //else{
+      //wifiTimer = millis();
+      //}
+    }
+    else{
+      Serial.println("Already Assoc");
+    }
   if (wifly.isConnected()) {
     //Serial.println("Old connection active. Closing");
     wifly.close();

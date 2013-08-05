@@ -27,6 +27,7 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 	socket.setKeepAlive(true,5000)
 
 	socket.on('close', function() {
+		//bulbs.splice(arrayObjectIndexOf(bulbs,socket,'netsocket'),1);
 		//var i = lights.indexOf(socket);
 		//lights.splice(i,1);
 		//bulbAuth.splice(i,1);
@@ -40,9 +41,11 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 	});
 
 	socket.on('data', function(data){
-		var bulbIndex = arrayObjectIndexOf(bulbs,socket,'netsocket');
-		if(bulbs.indexOf(bulbIndex)== -1){
-			var mac = sanitize(data).trim();
+		var mac = sanitize(data).trim();
+		var bulbIndex = arrayObjectIndexOf(bulbs,mac,'macadd');
+		console.log("INCOMING: " + mac + " INDEX: " +bulbIndex);
+		if(bulbIndex < 0){
+			
 			//console.log(mac);
 			AM.checkBulbAuth(mac,function(o){
 				console.log('check bulb' + o);
@@ -58,17 +61,22 @@ var netserver = net.createServer(function(socket) { //'connection' listener
 				  console.log("returned id " + cleanbulbID);
 				  var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id');
 				  if(checkId != -1){
+				  	  console.log("REMOVED BULB FROM ARRAY");
 					  bulbs.splice(checkId, 1);
 				  }
-				  var connectedBulb = {id:cleanbulbID,netsocket:socket};
+				  var connectedBulb = {id:cleanbulbID,netsocket:socket,macadd:mac};
 				  bulbs.push(connectedBulb);
 				  console.log("AUTHORIZED bulb: " + data);
 			  }
 			});
 		}else{
+			console.log("HEARTBEAT");
 			AM.updateBulbStatus(bulbs[bulbIndex].id,1, function(o){
 				if(o==null){
 					console.log("error saving bulb status");
+				}else{
+					console.log("Sending Heartbeat response");
+					sendToVisualight(bulbs[bulbIndex].id,"OK",true);
 				}
 			});
 		}
@@ -103,12 +111,13 @@ function arrayObjectIndexOf(myArray, searchTerm, property) {
     return -1;
 }
 
-function sendToVisualight(sendToId,data){
+function sendToVisualight(sendToId,data,heartbeat){
 	lastArduinoData = data;
-	//console.log("bulbID "+sendToId);
+	console.log("bulbID "+sendToId);
 	var currBulbIndex = arrayObjectIndexOf(bulbs,sendToId,'id');
+	heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false;
 	//console.log("currBulbIndex " + currBulbIndex);
-	if(bulbs[currBulbIndex] != null){
+	if(bulbs[currBulbIndex] != null && !heartbeat){
 		//if(bulbAuth[0]){
 		//for(var i = 0; i < lights.length; i++){
 			//console.log(data);
@@ -118,6 +127,8 @@ function sendToVisualight(sendToId,data){
 			//bulb.write(data);
 			//bulb.write("x");
 		//}
+	}else if(bulbs[currBulbIndex] != null && heartbeat){
+		bulbs[currBulbIndex].netsocket.write("h");
 	}else{
 		console.log("NO ARDUINO CONNECTED");
 		//sendToWeb("That Visualight is OFFLINE");
@@ -158,6 +169,9 @@ io.sockets.on('connection', function (socket) {
   socket.on('message', function(message) {	
   	sendToVisualight(clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb,message);
   });
+  socket.on('disconnect', function(){
+	  clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
+  });
   socket.on('current-bulb', function(bulbID){
   	var cleanbulbID = sanitize(bulbID).trim();
 	  AM.getBulbInfo(cleanbulbID, function(o){
@@ -171,6 +185,9 @@ io.sockets.on('connection', function (socket) {
 					  clients.splice(checkId, 1);
 				  }
 			  clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
+			  if(arrayObjectIndexOf(bulbs,o._id,'id') == -1){
+				  socket.emit('bulb-offline');
+			  }
 		  }
 	  })
   });
@@ -208,6 +225,7 @@ io.sockets.on('connection', function (socket) {
 					res.cookie('pass', o.pass, { maxAge: 900000 });
 				}
 				res.send(o, 200);
+				//res.redirect('/myvisualight');
 			}
 		});
 	});

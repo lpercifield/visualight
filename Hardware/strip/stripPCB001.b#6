@@ -126,8 +126,8 @@
 <wire x1="76.4807375" y1="66.792" x2="29.667384375" y2="66.792" width="0" layer="20"/>
 <wire x1="29.667384375" y1="66.792" x2="28.448" y2="65.572615625" width="0" layer="20" curve="90"/>
 <wire x1="28.448" y1="65.572615625" x2="28.448" y2="25.86441875" width="0" layer="20"/>
-<text x="70.104" y="63.754" size="0.4064" layer="21" rot="SR90">GND</text>
-<text x="62.484" y="33.528" size="0.4064" layer="21">Leif Percifield</text>
+<text x="30.48" y="24.892" size="1.016" layer="20" font="vector">VISUALIGHT.ORG</text>
+<text x="30.48" y="26.416" size="1.016" layer="20" font="vector">LED Strip</text>
 </plain>
 <libraries>
 <library name="SparkFun">
@@ -927,17 +927,25 @@ design rules under a new name.</description>
 <attribute name="NAME" x="48.895" y="57.2135" size="0.4064" layer="21" rot="R180"/>
 <attribute name="VALUE" x="49.3395" y="56.769" size="0.4064" layer="21" rot="R180"/>
 </element>
-<element name="Q1" library="transistor-power" package="SOT223" value="N-HEXFET-2D_SOT232-" x="73.406" y="42.164"/>
-<element name="Q2" library="transistor-power" package="SOT223" value="N-HEXFET-2D_SOT232-" x="73.406" y="54.356"/>
-<element name="Q3" library="transistor-power" package="SOT223" value="N-HEXFET-2D_SOT232-" x="73.406" y="31.242"/>
-<element name="X1" library="con-wago-500" package="W237-4" value="" x="53.848" y="30.734">
-<attribute name="OC_NEWARK" value="unknown" x="53.848" y="30.734" size="1.778" layer="27" display="off"/>
-<attribute name="MPN" value="" x="53.848" y="30.734" size="1.778" layer="27" display="off"/>
-<attribute name="MF" value="" x="53.848" y="30.734" size="1.778" layer="27" display="off"/>
-<attribute name="OC_FARNELL" value="unknown" x="53.848" y="30.734" size="1.778" layer="27" display="off"/>
+<element name="Q1" library="transistor-power" package="SOT223" value="N-HEXFET-2D_SOT232-" x="73.406" y="42.164" smashed="yes">
+<attribute name="NAME" x="68.58" y="36.1188" size="1.27" layer="25"/>
+</element>
+<element name="Q2" library="transistor-power" package="SOT223" value="N-HEXFET-2D_SOT232-" x="73.406" y="54.356" smashed="yes">
+<attribute name="NAME" x="73.914" y="48.3108" size="1.27" layer="25"/>
+</element>
+<element name="Q3" library="transistor-power" package="SOT223" value="N-HEXFET-2D_SOT232-" x="73.406" y="31.242" smashed="yes">
+<attribute name="NAME" x="67.056" y="27.4828" size="1.27" layer="25"/>
+</element>
+<element name="X1" library="con-wago-500" package="W237-4" value="" x="53.34" y="28.448" smashed="yes">
+<attribute name="OC_NEWARK" value="unknown" x="53.34" y="28.448" size="1.778" layer="27" display="off"/>
+<attribute name="MPN" value="" x="53.34" y="28.448" size="1.778" layer="27" display="off"/>
+<attribute name="MF" value="" x="53.34" y="28.448" size="1.778" layer="27" display="off"/>
+<attribute name="OC_FARNELL" value="unknown" x="53.34" y="28.448" size="1.778" layer="27" display="off"/>
+<attribute name="VALUE" x="45.6876" y="23.4188" size="1.27" layer="27" ratio="10"/>
+<attribute name="NAME" x="44.5954" y="21.0058" size="1.27" layer="25" ratio="10"/>
 </element>
 <element name="J1" library="SparkFun-Connectors" package="POWER_JACK_PTH" value="POWER_JACKPTH" x="36.322" y="69.596" rot="R180"/>
-<element name="U$2" library="v-reg" package="SOT223" value="MIC5239" x="34.798" y="47.752"/>
+<element name="U$2" library="v-reg" package="SOT223" value="MIC5239" x="34.798" y="47.752" smashed="yes"/>
 </elements>
 <signals>
 <signal name="GND" class="1">
@@ -1426,10 +1434,11 @@ design rules under a new name.</description>
 <wire x1="73.406" y1="39.065" x2="73.406" y2="36.83" width="0.8128" layer="1"/>
 <via x="73.406" y="36.83" extent="1-16" drill="0.6"/>
 <wire x1="73.406" y1="36.83" x2="68.834" y2="32.258" width="0.8128" layer="16"/>
-<wire x1="68.834" y1="32.258" x2="60.198" y2="32.258" width="0.8128" layer="16"/>
-<wire x1="60.198" y1="32.258" x2="57.404" y2="29.464" width="0" layer="19" extent="1-16"/>
-<wire x1="57.404" y1="29.464" x2="56.348" y2="29.464" width="0.8128" layer="16"/>
+<wire x1="68.834" y1="32.258" x2="58.42" y2="32.258" width="0.8128" layer="16"/>
 <wire x1="73.406" y1="45.263" x2="73.406" y2="39.065" width="0.8128" layer="1"/>
+<wire x1="58.42" y1="32.258" x2="56.388" y2="30.226" width="0.8128" layer="16"/>
+<wire x1="56.388" y1="30.226" x2="56.388" y2="27.726" width="0.8128" layer="16"/>
+<wire x1="56.388" y1="27.726" x2="55.84" y2="27.178" width="0.8128" layer="16"/>
 </signal>
 <signal name="GREEN" class="2">
 <contactref element="Q2" pad="4"/>
@@ -1443,8 +1452,10 @@ design rules under a new name.</description>
 <wire x1="72.39" y1="49.022" x2="71.882" y2="48.514" width="0.8128" layer="16"/>
 <wire x1="71.882" y1="48.514" x2="71.882" y2="38.1" width="0.8128" layer="16"/>
 <wire x1="71.882" y1="38.1" x2="68.58" y2="34.798" width="0.8128" layer="16"/>
-<wire x1="68.58" y1="34.798" x2="56.682" y2="34.798" width="0.8128" layer="16"/>
-<wire x1="56.682" y1="34.798" x2="51.348" y2="29.464" width="0" layer="19" extent="1-16"/>
+<wire x1="68.58" y1="34.798" x2="54.356" y2="34.798" width="0.8128" layer="16"/>
+<wire x1="54.356" y1="34.798" x2="51.308" y2="31.75" width="0.8128" layer="16"/>
+<wire x1="51.308" y1="31.75" x2="51.308" y2="27.646" width="0.8128" layer="16"/>
+<wire x1="51.308" y1="27.646" x2="50.84" y2="27.178" width="0.8128" layer="16"/>
 </signal>
 <signal name="BLUE" class="2">
 <contactref element="Q3" pad="4"/>
@@ -1452,10 +1463,9 @@ design rules under a new name.</description>
 <contactref element="X1" pad="4"/>
 <wire x1="73.406" y1="28.143" x2="73.406" y2="26.416" width="0.8128" layer="1"/>
 <wire x1="73.406" y1="26.416" x2="72.898" y2="25.908" width="0.8128" layer="1"/>
-<wire x1="72.898" y1="25.908" x2="62.738" y2="25.908" width="0.8128" layer="1"/>
-<wire x1="62.738" y1="25.908" x2="61.348" y2="27.298" width="0" layer="19" extent="1-16"/>
-<wire x1="61.348" y1="27.298" x2="61.348" y2="29.464" width="0" layer="19" extent="1-16"/>
 <wire x1="73.406" y1="34.341" x2="73.406" y2="28.143" width="0.8128" layer="1"/>
+<wire x1="72.898" y1="25.908" x2="62.11" y2="25.908" width="0.8128" layer="1"/>
+<wire x1="62.11" y1="25.908" x2="60.84" y2="27.178" width="0.8128" layer="1"/>
 </signal>
 <signal name="12V" class="2">
 <contactref element="X1" pad="1"/>
@@ -1463,13 +1473,14 @@ design rules under a new name.</description>
 <contactref element="U$2" pad="1"/>
 <wire x1="32.498" y1="44.602" x2="32.498" y2="32.78" width="0.8128" layer="1"/>
 <wire x1="32.498" y1="32.78" x2="35.814" y2="29.464" width="0.8128" layer="1"/>
-<wire x1="35.814" y1="29.464" x2="46.348" y2="29.464" width="0" layer="19" extent="1-16"/>
 <wire x1="36.322" y1="55.896" x2="34.274" y2="53.848" width="0.8128" layer="1"/>
 <wire x1="34.274" y1="53.848" x2="31.242" y2="53.848" width="0.8128" layer="1"/>
 <wire x1="31.242" y1="53.848" x2="30.734" y2="53.34" width="0.8128" layer="1"/>
 <wire x1="30.734" y1="53.34" x2="30.734" y2="45.974" width="0.8128" layer="1"/>
 <wire x1="30.734" y1="45.974" x2="32.106" y2="44.602" width="0.8128" layer="1"/>
 <wire x1="32.106" y1="44.602" x2="32.498" y2="44.602" width="0.8128" layer="1"/>
+<wire x1="35.814" y1="29.464" x2="43.554" y2="29.464" width="0.8128" layer="1"/>
+<wire x1="43.554" y1="29.464" x2="45.84" y2="27.178" width="0.8128" layer="1"/>
 </signal>
 </signals>
 </board>

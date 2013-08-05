@@ -3,6 +3,24 @@ void processClient(){
   //delay(100);
   int available;
 
+
+//  if((millis() - wifiTimer) > wifiCheckInterval){
+//    if(!wifly.isAssociated()) { //|| 
+//      Serial.println(F("Joining"));
+//      //Serial.println(wifly.isAssociated());
+//      if(!wifly.join()){
+//        Serial.println("Join Failed");
+//        Serial.println(wifly.isAssociated());
+//      }
+//      //else{
+//      //wifiTimer = millis();
+//      //}
+//    }
+//    else{
+//      Serial.println("Already Assoc");
+//    }
+//  }
+
   if (wifly.isConnected() == false) {
     //Serial.println("Not Connected in loop");
     if(millis()-connectTime > connectServerInterval){
@@ -29,18 +47,23 @@ void processClient(){
         colorLED(_red,_green,_blue);
         //wifly.write('x');
         ////Serial.println("data");
+      }if(wifly.read() == 104 && sentHeartBeat){
+        Serial.println("Heartbeat TRUE");
+        sentHeartBeat = false;
       }
     } 
     else {
       //This sends a checkin to the server to ensure the connection is live
-      //      if ((millis() - connectTime) > heartBeatInterval) {
-      //        //Serial.println("heartBeat");
-      //        wifly.write('x');
-      //      }
-      //      if (wifly.isConnected() == false) {
-      //        //Serial.println("Not Connected in loop");
-      //        connectToServer();
-      //      } 
+      if ((millis()-connectTime)>heartBeatInterval) {
+        Serial.println("heartBeat");
+        sentHeartBeat=true;
+        wifly.write(MAC);
+        connectTime = millis();
+      }
+      if (wifly.isConnected() == false) {
+        //Serial.println("Not Connected in loop");
+        connectToServer();
+      } 
     }
 
     /* Send data from the //Serial monitor to the TCP server */
@@ -123,4 +146,8 @@ void processServer(){
     }
   }
 }
+
+
+
+
 

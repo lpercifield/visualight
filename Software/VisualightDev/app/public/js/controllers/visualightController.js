@@ -85,7 +85,7 @@ $('div.btn-group .btn').click(function(){
 	this.postNetwork = function(){
 		var that = this;
 		$.ajax({
-			url: "http://169.254.1.1",
+			url: "http://1.2.3.4",
 			type: "POST",
 			timeout: 5000,
 			data: {network : $('.modal-bulb-network #network').val(), password : $('.modal-bulb-network #password').val()},
@@ -117,7 +117,7 @@ $('div.btn-group .btn').click(function(){
 		//var that = this;
 		console.log("Getting visualight...")
 		getRequest = $.ajax({
-			url: "http://169.254.1.1/mac",
+			url: "http://1.2.3.4/mac",
 			type: "GET",
 			dataType: 'json',
 			timeout: 8000,
@@ -277,7 +277,7 @@ if ( checked ) {
     	if ( checked ) {
         	radioHtml += ' active';
         }
-        radioHtml += '">'+name+'<input type="radio" name="bulb-button" value="'+val+'" /></button>';
+        radioHtml += '">'+name+'<input type="radio" bulbname="'+name+'" name="bulb-button" value="'+val+'" /></button>';
 
         var radioFragment = document.createElement('div');
         radioFragment.innerHTML = radioHtml;

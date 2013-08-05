@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.2">
+<eagle version="6.4">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -644,6 +644,35 @@ Source: http://www.onsemi.co.jp .. LM137M-D.PDF</description>
 </package>
 </packages>
 </library>
+<library name="SparkFun-Electromechanical">
+<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
+In this library you'll find anything that moves- switches, relays, buttons, potentiometers. Also, anything that goes on a board but isn't electrical in nature- screws, standoffs, etc.&lt;br&gt;&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
+&lt;br&gt;&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; CC v3.0 Share-Alike You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="TACTILE_SWITCH_SMD">
+<wire x1="-1.54" y1="-2.54" x2="-2.54" y2="-1.54" width="0.2032" layer="51"/>
+<wire x1="-2.54" y1="-1.24" x2="-2.54" y2="1.27" width="0.2032" layer="21"/>
+<wire x1="-2.54" y1="1.54" x2="-1.54" y2="2.54" width="0.2032" layer="51"/>
+<wire x1="-1.54" y1="2.54" x2="1.54" y2="2.54" width="0.2032" layer="21"/>
+<wire x1="1.54" y1="2.54" x2="2.54" y2="1.54" width="0.2032" layer="51"/>
+<wire x1="2.54" y1="1.24" x2="2.54" y2="-1.24" width="0.2032" layer="21"/>
+<wire x1="2.54" y1="-1.54" x2="1.54" y2="-2.54" width="0.2032" layer="51"/>
+<wire x1="1.54" y1="-2.54" x2="-1.54" y2="-2.54" width="0.2032" layer="21"/>
+<wire x1="1.905" y1="1.27" x2="1.905" y2="0.445" width="0.127" layer="51"/>
+<wire x1="1.905" y1="0.445" x2="2.16" y2="-0.01" width="0.127" layer="51"/>
+<wire x1="1.905" y1="-0.23" x2="1.905" y2="-1.115" width="0.127" layer="51"/>
+<circle x="0" y="0" radius="1.27" width="0.2032" layer="21"/>
+<smd name="1" x="-2.54" y="1.905" dx="0.762" dy="1.524" layer="1" rot="R90"/>
+<smd name="2" x="2.54" y="1.905" dx="0.762" dy="1.524" layer="1" rot="R90"/>
+<smd name="3" x="-2.54" y="-1.905" dx="0.762" dy="1.524" layer="1" rot="R90"/>
+<smd name="4" x="2.54" y="-1.905" dx="0.762" dy="1.524" layer="1" rot="R90"/>
+<text x="-0.889" y="1.778" size="0.4064" layer="25">&gt;NAME</text>
+<text x="-0.889" y="-2.032" size="0.4064" layer="27">&gt;Value</text>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -658,7 +687,7 @@ Source: http://www.onsemi.co.jp .. LM137M-D.PDF</description>
 <class number="2" name="mosfet" width="0.6096" drill="0">
 </class>
 </classes>
-<designrules>
+<designrules name="default">
 <description language="de">&lt;b&gt;EAGLE Design Rules&lt;/b&gt;
 &lt;p&gt;
 Die Standard-Design-Rules sind so gewählt, dass sie für 
@@ -953,10 +982,10 @@ design rules under a new name.</description>
 <attribute name="MF" value="" x="53.34" y="28.448" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="53.34" y="28.448" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="45.6876" y="23.4188" size="1.27" layer="27" ratio="10"/>
-<attribute name="NAME" x="44.5954" y="21.0058" size="1.27" layer="25" ratio="10"/>
 </element>
 <element name="J1" library="SparkFun-Connectors" package="POWER_JACK_PTH" value="POWER_JACKPTH" x="36.322" y="69.596" rot="R180"/>
 <element name="U$2" library="v-reg" package="SOT223" value="MIC5239" x="34.798" y="47.752" smashed="yes"/>
+<element name="S1" library="SparkFun-Electromechanical" package="TACTILE_SWITCH_SMD" value="SWITCH-MOMENTARY-2SMD" x="31.496" y="20.066"/>
 </elements>
 <signals>
 <signal name="GND" class="1">
@@ -1012,6 +1041,38 @@ design rules under a new name.</description>
 <wire x1="48.768" y1="56.642" x2="48.91" y2="56.5" width="0.4064" layer="1"/>
 <wire x1="48.91" y1="56.5" x2="48.91" y2="55.626" width="0.4064" layer="1"/>
 <via x="62.23" y="53.594" extent="1-16" drill="0.6"/>
+<contactref element="S1" pad="3"/>
+<wire x1="67.534" y1="62.628" x2="72.834" y2="65.278" width="0" layer="19" extent="1-1"/>
+<wire x1="64.834" y1="65.278" x2="67.534" y2="62.628" width="0" layer="19" extent="1-1"/>
+<wire x1="58.024" y1="61.722" x2="64.834" y2="65.278" width="0" layer="19" extent="1-1"/>
+<wire x1="58.036" y1="59.436" x2="58.024" y2="61.722" width="0" layer="19" extent="1-1"/>
+<wire x1="55.6561" y1="62.738" x2="58.024" y2="61.722" width="0" layer="19" extent="1-1"/>
+<wire x1="58.562" y1="56.642" x2="58.036" y2="59.436" width="0" layer="19" extent="1-1"/>
+<wire x1="60.452" y1="57.292" x2="58.562" y2="56.642" width="0" layer="19" extent="1-1"/>
+<wire x1="58.215365625" y1="53.611159375" x2="58.562" y2="56.642" width="0" layer="19" extent="1-1"/>
+<wire x1="62.23" y1="53.594" x2="58.215365625" y2="53.611159375" width="0" layer="19" extent="1-1"/>
+<wire x1="63.246" y1="49.590840625" x2="62.23" y2="53.594" width="0" layer="19" extent="1-1"/>
+<wire x1="63.31985625" y1="45.983303125" x2="62.748740625" y2="49.09358125" width="0" layer="19" extent="1-1"/>
+<wire x1="51.45" y1="59.69" x2="55.6561" y2="62.738" width="0" layer="19" extent="1-1"/>
+<wire x1="48.626" y1="57.404" x2="51.45" y2="59.69" width="0" layer="19" extent="1-1"/>
+<wire x1="51.054" y1="53.594" x2="48.91" y2="55.626" width="0" layer="19" extent="1-1"/>
+<wire x1="47.876" y1="61.722" x2="51.45" y2="59.69" width="0" layer="19" extent="1-1"/>
+<wire x1="48.272" y1="64.008" x2="47.876" y2="61.722" width="0" layer="19" extent="1-1"/>
+<wire x1="63.642" y1="39.878" x2="63.31985625" y2="45.983303125" width="0" layer="19" extent="1-1"/>
+<wire x1="57.672884375" y1="40.316584375" x2="63.642" y2="39.878" width="0" layer="19" extent="1-1"/>
+<wire x1="54.976" y1="36.068" x2="57.672884375" y2="40.316584375" width="0" layer="19" extent="1-1"/>
+<wire x1="51.1606" y1="44.265021875" x2="57.672884375" y2="40.316584375" width="0" layer="19" extent="1-1"/>
+<wire x1="46.634" y1="40.862" x2="51.1606" y2="44.265021875" width="0" layer="19" extent="1-1"/>
+<wire x1="42.926" y1="38.212" x2="46.634" y2="40.862" width="0" layer="19" extent="1-1"/>
+<wire x1="37.084" y1="40.894" x2="42.926" y2="38.212" width="0" layer="19" extent="1-1"/>
+<wire x1="34.798" y1="44.602" x2="37.084" y2="40.894" width="0" layer="19" extent="1-1"/>
+<wire x1="34.798" y1="50.902" x2="34.798" y2="44.602" width="0" layer="19" extent="1-1"/>
+<wire x1="31.622" y1="58.896" x2="34.798" y2="50.902" width="0" layer="19" extent="1-1"/>
+<wire x1="36.322" y1="61.896" x2="31.622" y2="58.896" width="0" layer="19" extent="1-1"/>
+<wire x1="75.717" y1="39.065" x2="63.642" y2="39.878" width="0" layer="19" extent="1-1"/>
+<wire x1="75.717" y1="28.143" x2="75.717" y2="39.065" width="0" layer="19" extent="1-1"/>
+<wire x1="75.717" y1="51.257" x2="75.717" y2="39.065" width="0" layer="19" extent="1-1"/>
+<wire x1="28.956" y1="18.161" x2="37.084" y2="40.894" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="AREF">
 <contactref element="C1" pad="2"/>
@@ -1492,6 +1553,9 @@ design rules under a new name.</description>
 <wire x1="32.106" y1="44.602" x2="32.498" y2="44.602" width="0.8128" layer="1"/>
 <wire x1="35.814" y1="29.464" x2="43.554" y2="29.464" width="0.8128" layer="1"/>
 <wire x1="43.554" y1="29.464" x2="45.84" y2="27.178" width="0.8128" layer="1"/>
+</signal>
+<signal name="N$9">
+<contactref element="S1" pad="1"/>
 </signal>
 </signals>
 </board>

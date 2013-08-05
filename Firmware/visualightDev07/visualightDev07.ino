@@ -20,8 +20,8 @@
 #include <WiFlyHQ.h>
 #include <EEPROM.h>
 
-//#define heartBeatInterval = 5000;
-#define wifiCheckInterval 10000
+#define heartBeatInterval 25000
+#define wifiCheckInterval 30000
 #define connectServerInterval 10000
 
 WiFly wifly;
@@ -48,6 +48,7 @@ boolean isServer = true;
 char MAC[18];
 char devID[] = "Visualight";
 long wifiTimer;
+boolean sentHeartBeat;
 
 int _red = 255;
 int _green = 255;
@@ -173,20 +174,20 @@ void loop()
     processServer();
   }
   else{
-    if(wifly.isAssociated()==false && (millis() - wifiTimer) > wifiCheckInterval) {
-      Serial.println(F("Joining"));
-      Serial.println(wifly.isAssociated());
-      if(!wifly.join()){
-        Serial.println("Join Failed");
-        Serial.println(wifly.isAssociated());
-      }
-      else{
-        wifiTimer = millis();
-      }
-    }
-    else{
+//    if(wifly.isAssociated()==false ) { //|| (millis() - wifiTimer) > wifiCheckInterval
+//      Serial.println(F("Joining"));
+//      Serial.println(wifly.isAssociated());
+//      if(!wifly.join()){
+//        Serial.println("Join Failed");
+//        Serial.println(wifly.isAssociated());
+//      }
+//      else{
+//        wifiTimer = millis();
+//      }
+//    }
+//    else{
       processClient();
-    }
+    //}
   }
   processButton(resetButton);
 }
