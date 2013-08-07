@@ -20,7 +20,24 @@ connecting to: linus.mongohq.com:10052/nodejitsudb6620458662
 
 */
 exports.connectServer = function(callback){
+/*
 	Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
+				console.log("connecting to DB...");
+			if (err) {
+				console.log(err);
+				callback(err);
+			}	else{
+				console.log('connected to database :: ' + dbName);
+				accounts = db.collection('accounts');
+				bulbs = db.collection('bulbs');
+				sessions = db.collection('sessions');
+				callback(null);
+			}
+		}); 
+	}
+*/
+	
+	Mongo.connect("mongodb://localhost:27017/visualightdev", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
 			if (err) {
 				console.log(err);

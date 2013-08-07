@@ -138,7 +138,6 @@ div.btn-group[data-toggle=buttons-radio] input[type=radio] {
   width: 100px;
   top: 1px;
   right: 8px;
-  /* position: absolute; */
 }
 #print {
   padding: 20px;

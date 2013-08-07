@@ -69,7 +69,8 @@ void connectToServer(){
     wifly.close();
   }
   if(DEBUG) Serial.println("Connecting");
-  if (wifly.open("dev.visualight.org",5001)) {
+  //if (wifly.open("dev.visualight.org",5001)) {
+  if (wifly.open("192.168.1.18",5001)) {
     colorLED(255,255,255);
     //Serial.println("Connected: ");
     //Serial.print(F("Free memory: "));
