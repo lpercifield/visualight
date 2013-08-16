@@ -33,6 +33,7 @@ SERVER:
 	Todo:
 		MONGO - Check out local server vs remote
 		Create API for both socket and REST (json -- based on HUE)
+		Create API key setup
 		Apply API to apps:
 			Weather
 			Tides (Wunderground? NOAA?)
@@ -49,6 +50,7 @@ INTERFACE:
 	TODO:
 		Impliment "apps" sidebar
 		Impliment icon for each bulb to show state(online/offline) and color
+		Impliment API key interface
 	
 	KNOW BUGS:
 		Collapsed State dropdown button fails on mobile

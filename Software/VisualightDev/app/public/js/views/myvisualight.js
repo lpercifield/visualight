@@ -122,14 +122,13 @@ $(document).ready(function(){
 	{
 	    on:true,
 	    type:'put',
-	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees by multiplying the value by 182.04
+	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254)
 	};
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
   });
       status.textContent = "Not Connected";
-      //url.value = "ws://leifp.com:8080";
       close.disabled = true;
       //send.disabled = true;
       
