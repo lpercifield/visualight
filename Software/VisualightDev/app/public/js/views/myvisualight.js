@@ -129,7 +129,7 @@ $(document).ready(function(){
 	var state =
 	{
 	    on:true,
-	    type:'put',
+	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254)
 	};
