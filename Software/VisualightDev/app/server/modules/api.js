@@ -73,7 +73,10 @@ var putAPICall = function(parsed, bulbObject, callback){
 				callback("PARAMETER IGNORED: " + parsed[keyname],true);
 		}
 	}
-	proccessBulbColors(bulbObject);
+	var rgb = proccessBulbColors(bulbObject);
+	bulbObject.r = rgb.r;
+	bulbObject.g = rgb.g;
+	bulbObject.b = rgb.b;
 	console.log(bulbObject);
 	//process color details and send to bulb
 	//write bulbobject to db
@@ -105,9 +108,7 @@ var processBulbColors = function(bulbObject){
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1/3);
     }
-	bulbObject.r = parseInt(r*255);
-	bulbObject.g = parseInt(g*255);
-	bulbObject.b = parseInt(b*255);
-    //return {r:parseInt(r*255), g:parseInt(g*255), b:parseInt(b*255)};
+	
+    return {r:parseInt(r*255), g:parseInt(g*255), b:parseInt(b*255)};
   //}
 }

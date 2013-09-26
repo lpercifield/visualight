@@ -58,7 +58,7 @@ void processClient(){
         connectTime = millis();
       }
       if (wifly.isConnected() == false) {
-        //Serial.println("Not Connected in loop");
+        if(DEBUG) Serial.println("Not Connected in loop");
         connectToServer();
       } 
     }
