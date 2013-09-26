@@ -56,11 +56,7 @@ $(document).ready(function(){
 		status.textContent = "Connected";
 		close.disabled = false;
         open.disabled = true;
-        if(currBulbId == null){
-	        currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
-	        currBulbName = $('div.btn-group .btn').find('input:radio').attr('checked', true).attr('bulbname');
-        }
-        //var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+        var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
         console.log("currBulbID " + currBulbId);
         if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
         console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
@@ -74,6 +70,24 @@ $(document).ready(function(){
 	socket.on('bulb-offline',function(){
 		alert(currBulbName +" is currently offline");
 	});
+	
+	function sendAPICall(state){
+/*
+		//build our State object
+		var state = new
+		{
+		    type = value
+		    //hue = (int)(hsv.Hue * 182.04), //we convert the hue value into degrees by multiplying the value by 182.04
+		    //sat = (int)(hsv.Saturation * 254)
+		};
+*/	
+		var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+		state.id = currBulbId;
+		//convert it to json:
+		var jsonObj = JSON.stringify(state);
+		console.log(jsonObj);
+		socket.send(jsonObj);
+	}
 // handle bulb button change
 		
 
@@ -111,11 +125,18 @@ $(document).ready(function(){
     //$('#color').css({backgroundColor:e}).val(e);
     $('#color').css({backgroundColor:e});
 	console.log(rgb);
-	socket.send(rgb);
+	//socket.send(rgb);
+	var state =
+	{
+	    on:true,
+	    type:'put',
+	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
+	    sat:(h.s * 254)
+	};
+	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
   });
       status.textContent = "Not Connected";
-      //url.value = "ws://leifp.com:8080";
       close.disabled = true;
       //send.disabled = true;
       

@@ -34,6 +34,24 @@ exports.connectServer = function(callback){
 			}
 		}); 
 	}
+	
+/*
+	Mongo.connect("mongodb://localhost:27017/visualightdev", {auto_reconnect: true}, function(err, db) {
+				console.log("connecting to DB...");
+			if (err) {
+				console.log(err);
+				callback(err);
+			}	else{
+				console.log('connected to database :: ' + dbName);
+				accounts = db.collection('accounts');
+				bulbs = db.collection('bulbs');
+				sessions = db.collection('sessions');
+				callback(null);
+			}
+		}); 
+	}
+*/
+
 /*
 var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
 	db.open(function(e, d){
@@ -80,6 +98,8 @@ exports.getBulbInfo = function(id, callback)
 exports.updateBulbStatus = function(id, online, callback)
 {	
 	//console.log("bulbId" + id);
+
+	// convert this to an update and modify the object... this currently overwrites the bulb object -- oops...
 	bulbs.save({_id: getBulbId(id),status:online,lastOnline:moment()},{safe:true}, function(e, o) {
 		if (o == null){
 			callback(null);
@@ -162,6 +182,7 @@ exports.addNewAccount = function(newData, callback)
 exports.addNewBulb = function(user, bulbMac, callback)
 {
 	//TODO - Verify that the bulb is not already added
+	//TODO - Setup default bulb object status including all available params including params not yet available in API
 	//mongod --dbpath /var/lib/mongodb
 	//Boolean bulbExists = false;
 	bulbs.findOne({mac:bulbMac.mac}, function(err, item){

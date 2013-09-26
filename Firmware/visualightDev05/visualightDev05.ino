@@ -65,11 +65,11 @@ int _blinkMe = 0;
 //const int greenLED = 10;
 //const int blueLED = 9;
 //with transistors
-const int redLED = 9;
-const int greenLED = 10;
+const int redLED = 10;
+const int greenLED = 9;
 const int blueLED = 13;
 
-boolean sink = true;
+boolean sink = false;
 
 //Button button = Button(8, BUTTON_PULLUP_INTERNAL, true, 50);
 const int resetButton = 7;

@@ -15,3 +15,9 @@ module.exports = function(app, exp, MongoStore) {
 	});
 	
 }
+/*
+		app.use(exp.session({ 
+		secret: 'super-duper-secret-secret', 
+		store: new MongoStore({url:'mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662'},
+		function(){console.log('MongoStore')}) }));
+*/

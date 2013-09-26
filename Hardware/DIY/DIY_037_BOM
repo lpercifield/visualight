@@ -1,0 +1,40 @@
+Partlist
+
+Exported from VisualightMicroDIY_037_gnd.sch at 4/15/13 9:38 AM
+
+EAGLE Version 6.2.0 Copyright (c) 1988-2012 CadSoft
+
+Assembly variant: 
+
+Part       Value                     Device                    Package                   Library                    Sheet
+
+3.3VREG    MIC5219 3.3V              V_REG_MIC52193.3V         SOT23-5                   SparkFun-PowerIC           1
+ATMEGA32U4 ATMEGA32U4                ATMEGA32U4TQFP            SPARKFUN-DIGITALIC_TQFP44 SparkFun-DigitalIC         1
+C1         0.1uF                     CAP0402-CAP               0402-CAP                  SparkFun                   1
+C2         22pF                      CAP0402-CAP               0402-CAP                  SparkFun                   1
+C4         22pF                      CAP0402-CAP               0402-CAP                  SparkFun                   1
+C5         1uF                       CAP0402-CAP               0402-CAP                  SparkFun                   1
+C6         1uF                       CAP0402-CAP               0402-CAP                  SparkFun                   1
+C8         10uF                      CAP_POL1206               EIA3216                   SparkFun                   1
+C9         0.1uF                     CAP0402-CAP               0402-CAP                  SparkFun                   1
+C10        1uF                       CAP0402-CAP               0402-CAP                  SparkFun                   1
+C13        10uF                      CAP_POL1206               EIA3216                   SparkFun                   1
+F1         500mA                     PTCSMD                    PTC-1206                  SparkFun                   1
+ISP1       AVRISP-6                  AVRISP-6                  AVRISP                    adafruit                   1
+JP2                                  M05PTH                    1X05                      SparkFun-Connectors        1
+POWER      Red                       LED0603                   LED-0603                  SparkFun                   1
+R1         2.2K                      RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R2         10K                       RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R3         3.3K                      RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R4         2.2K                      RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R5         22                        RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R6         330                       RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R7         22                        RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R8         3.3K                      RESISTOR0402-RES          0402-RES                  SparkFun                   1
+R11        1K                        RESISTOR0402-RES          0402-RES                  SparkFun                   1
+S1         SWITCH-MOMENTARY-2SIDE_EZ SWITCH-MOMENTARY-2SIDE_EZ TACTILE-PTH-SIDEEZ        SparkFun-Electromechanical 1
+SK1                                  DF3-05S                   DF3S-05                   con-hirose-df3             1
+TX         Green                     LED0603                   LED-0603                  SparkFun                   1
+U$1        XBEE-1B3                  XBEE-1B3                  XBEE-SMD                  SparkFun-RF                1
+X2         USBPCB                    USBPCB                    USB-A-PCB                 SparkFun-Connectors        1
+Y1         16MHz                     CRYSTAL5X3                CRYSTAL-SMD-5X3           SparkFun                   1

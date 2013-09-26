@@ -69,11 +69,12 @@ int _blinkMe = 0;
 //const int greenLED = 9;
 //const int blueLED = 10;
 //10mm led
-const int redLED = 9;
-const int greenLED = 10;
-const int blueLED = 13;
+const int redLED = 10;
+const int greenLED = 13;
+const int blueLED = 9;
+const int wiflyReset = 11;
 
-boolean sink = true;
+boolean sink = false;
 
 //Button button = Button(8, BUTTON_PULLUP_INTERNAL, true, 50);
 const int resetButton = 7;
@@ -84,6 +85,8 @@ void setup()
   fadeOn();
   pinMode(resetButton, INPUT);
   digitalWrite(resetButton, HIGH);
+  pinMode(wiflyReset, INPUT);
+  digitalWrite(wiflyReset, LOW);
   //Serial.begin(115200);
 //  while(!Serial){
 //    ;
