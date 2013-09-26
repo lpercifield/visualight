@@ -53,7 +53,7 @@ var getAPICall = function(bulbObject, callback){
 var putAPICall = function(parsed, bulbObject, callback){
 	// Loop through all the keys provided in the api call json object
 	for(var keyname in parsed){
-    	console.log(keyname+": "+parsed[keyname]);
+    	//console.log(keyname+": "+parsed[keyname]);
     	switch(keyname){
 			case 'on':
 				if(parsed.on == false || bulbObject.on == false){
@@ -61,16 +61,16 @@ var putAPICall = function(parsed, bulbObject, callback){
 				}
 				break;
 			case 'hue':
-				bulbObject.hue = parsed.hue;
+				bulbObject.hue = parseFloat(parsed.hue);
 				break;
 			case 'sat':
-				bulbObject.sat = parsed.sat;
+				bulbObject.sat = parseFloat(parsed.sat);
 				break;
 			case 'alert':
 				bulbObject.alert = parsed.alert;
 				break;
 			case 'bri':
-				bulbObject.bri = parsed.bri;
+				bulbObject.bri = parseFloat(parsed.bri);
 				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
