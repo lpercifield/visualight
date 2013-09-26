@@ -1,6 +1,6 @@
 var net = require('net');
 var sanitize	= require('validator').sanitize;
-var API = require('./modules/api');
+var API = require('./api');
 var lights=[];
 var bulbAuth=[];
 //var bulbs=["00:06:66:71:19:2b","00:06:66:71:ca:df","00:06:66:71:cb:cd","00:06:66:71:e3:aa"];
