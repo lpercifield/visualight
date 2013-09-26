@@ -59,9 +59,9 @@ int _blinkMe = 0;
 //const int greenLED = 10;
 //const int blueLED = 9;
 //with transistors
-const int redLED = 13;
-const int greenLED = 10;
-const int blueLED = 9;
+const int redLED = 9;
+const int greenLED = 13;
+const int blueLED = 10;
 const int blueComp = 1.2;
 
 boolean sink = false;
@@ -70,7 +70,7 @@ boolean sink = false;
 const int resetButton = 7;
 const int resetPin = 11;
 
-const boolean DEBUG = true;
+const boolean DEBUG = false;
 
 void setup()
 {

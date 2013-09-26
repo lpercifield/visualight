@@ -1,5 +1,6 @@
 var sanitize	= require('validator').sanitize;
 var AM = require('./account-manager');
+var IO = require('./handle-sockets');
 
 exports.setup = function(AM){
 	
@@ -72,6 +73,10 @@ var putAPICall = function(parsed, bulbObject, callback){
 			case 'bri':
 				bulbObject.bri = parseFloat(parsed.bri);
 				break;
+			case 'method':
+				break;
+			case 'id':
+				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
 		}
@@ -81,6 +86,7 @@ var putAPICall = function(parsed, bulbObject, callback){
 	bulbObject.r = parseInt(rgb.r);
 	bulbObject.g = parseInt(rgb.g);
 	bulbObject.b = parseInt(rgb.b);
+	callback(bulbObject);
 	//console.log(bulbObject);
 	//process color details and send to bulb
 	//write bulbobject to db

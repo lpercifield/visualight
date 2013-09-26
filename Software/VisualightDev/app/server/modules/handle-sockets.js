@@ -100,10 +100,11 @@ function arrayObjectIndexOf(myArray, searchTerm, property) {
     return -1;
 }
 
-function sendToVisualight(sendToId,data,heartbeat){
-	lastArduinoData = data;
+function sendToVisualight(bulbObject,heartbeat){
+	//lastArduinoData = data;
 	console.log("bulbID "+sendToId);
-	var currBulbIndex = arrayObjectIndexOf(bulbs,sendToId,'id');
+	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+"0";
+	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject.id,'id');
 	heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false;
 	//console.log("currBulbIndex " + currBulbIndex);
 	if(bulbs[currBulbIndex] != null && !heartbeat){
