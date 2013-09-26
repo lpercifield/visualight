@@ -61,16 +61,16 @@ var putAPICall = function(parsed, bulbObject, callback){
 				}
 				break;
 			case 'hue':
-				bulbObject.hue = parseInt(parsed.hue);
+				bulbObject.hue = parseFloat(parsed.hue);
 				break;
 			case 'sat':
-				bulbObject.sat = parseInt(parsed.sat);
+				bulbObject.sat = parseFloat(parsed.sat);
 				break;
 			case 'alert':
 				bulbObject.alert = parsed.alert;
 				break;
 			case 'bri':
-				bulbObject.bri = parseInt(parsed.bri);
+				bulbObject.bri = parseFloat(parsed.bri);
 				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
@@ -89,14 +89,12 @@ var putAPICall = function(parsed, bulbObject, callback){
 
 var processBulbColors = function(bulbObject){
 	      //function hslToRgb(h, s, l){
-	var h = parseInt(bulbObject.hue)/182.04;
-	var s = parseInt(bulbObject.sat)/254; // check this value range // set defaults here??
-	var l = parseInt(bulbObject.bri)/254; // check this value range // set defaults here??
-	var hsl = h+s+l;
-	console.log("HSL: "+h + " " + s + " " + l + " " +hsl );
-    var r =0;
-    var g = 0;
-    var b = 0;
+	var h = bulbObject.hue/182.04;
+	var s = bulbObject.sat/254; // check this value range // set defaults here??
+	var l = bulbObject.bri/254; // check this value range // set defaults here??
+	//var hsl = h+s+l
+	//console.log("HSL: "+h + " " + s + " " + l + " " +hsl );
+    var r,g,b;
 
     if(s == 0){
         r = g = b = l; // achromatic
@@ -108,8 +106,8 @@ var processBulbColors = function(bulbObject){
         b = hue2rgb(p, q, h - (1/3));
     }
     var rgbTotal = r+g+b;
-	console.log("RGB: " +r + " " + g + " " + b + " " +rgbTotal);
-    return {r:r*255, g:parseInt(g*255), b:parseInt(b*255)};
+	//console.log("RGB: " +r + " " + g + " " + b + " " +rgbTotal);
+    return {r:r*255, g:g*255, b:b*255};
   //}
 }
  var hue2rgb = function (p, q, t){
@@ -118,5 +116,5 @@ var processBulbColors = function(bulbObject){
             if(t < (1/6)) return p + (q - p) * 6 * t;
             if(t < (1/2)) return q;
             if(t < (2/3)) return p + (q - p) * ((2/3) - t) * 6;
-            return parseInt(p);
+            return p;
         }
