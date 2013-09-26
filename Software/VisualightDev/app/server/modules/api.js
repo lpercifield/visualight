@@ -76,7 +76,7 @@ var putAPICall = function(parsed, bulbObject, callback){
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
 		}
 	}
-	var rgb = proccessBulbColors(bulbObject);
+	var rgb = processBulbColors(bulbObject);
 	bulbObject.r = rgb.r;
 	bulbObject.g = rgb.g;
 	bulbObject.b = rgb.b;
