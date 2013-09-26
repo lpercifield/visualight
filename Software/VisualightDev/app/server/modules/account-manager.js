@@ -84,7 +84,7 @@ exports.validateSession = function(session, callback)
 
 exports.getBulbInfo = function(id, callback)
 {	
-	console.log("bulbId" + id);
+	//console.log("bulbId" + id);
 	bulbs.findOne({_id: getBulbId(id)}, function(e, o) {
 		if (o == null){
 			callback(null);
