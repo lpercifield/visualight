@@ -89,9 +89,9 @@ var putAPICall = function(parsed, bulbObject, callback){
 
 var processBulbColors = function(bulbObject){
 	      //function hslToRgb(h, s, l){
-	var h = parseInt(bulbObject.hue/182);
-	var s = parseInt(bulbObject.sat); // check this value range // set defaults here??
-	var l = parseInt(bulbObject.bri); // check this value range // set defaults here??
+	var h = parseInt(bulbObject.hue)/182.04;
+	var s = parseInt(bulbObject.sat)/254; // check this value range // set defaults here??
+	var l = parseInt(bulbObject.bri)/254; // check this value range // set defaults here??
 	var hsl = h+s+l;
 	console.log("HSL: "+h + " " + s + " " + l + " " +hsl );
     var r =0;
