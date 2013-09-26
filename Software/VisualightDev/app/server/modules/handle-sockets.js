@@ -120,7 +120,7 @@ function sendToVisualight(bulbObject,heartbeat){
 	}else if(bulbs[currBulbIndex] != null && heartbeat){
 		bulbs[currBulbIndex].netsocket.write("h");
 	}else{
-		console.log("Visulight NOT CONNECTED: " + sendToId);
+		console.log("Visulight NOT CONNECTED: " + bulbObject.id);
 		//sendToWeb("That Visualight is OFFLINE");
 	}
 }
