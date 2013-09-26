@@ -158,7 +158,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('message', function(message) {	
   	console.log(JSON.parse(message));
   	API.parseMessage(message,function(o,e){
-	  	if(o !=null){
+	  	if(o != null){
 	  		console.log(o);
 		  	console.log("SEND IT TO VISUALIGHT");
 	  	}else{

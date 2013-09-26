@@ -39,7 +39,8 @@ exports.parseMessage = function(message,callback){
         }
         
     }catch(e){
-        callback("INVALID JSON",true);
+    	console.log("PARSE ERROR: " + e);
+        callback(null,"INVALID JSON");
     }
 }
 
@@ -70,7 +71,7 @@ var putAPICall = function(parsed, bulbObject, callback){
 				bulbObject.bri = parsed[bri];
 				break;
 			default:
-				callback("PARAMETER IGNORED: " + parsed[keyname],true);
+				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
 		}
 	}
 	var rgb = proccessBulbColors(bulbObject);
