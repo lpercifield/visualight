@@ -17,7 +17,7 @@ exports.parseMessage = function(message,callback){
 	//build response json?
 	try{
         var parsed = JSON.parse(message);
-        if(parsed[id] != null){
+        if(parsed.id != null){
 	        AM.getBulbInfo(parsed[id], function(o){
 		        if(!o){
 			        callback(null,"BULB ID LOOKUP FAILED");
@@ -54,21 +54,21 @@ var putAPICall = function(parsed, bulbObject, callback){
     	console.log(keyname+": "+parsed[keyname]);
     	switch(keyname){
 			case 'on':
-				if(parsed[on] == false || bulbObject.on == false){
+				if(parsed.on == false || bulbObject.on == false){
 					continue;
 				}
 				break;
 			case 'hue':
-				bulbObject.hue = parsed[hue];
+				bulbObject.hue = parsed.hue;
 				break;
 			case 'sat':
-				bulbObject.sat = parsed[sat];
+				bulbObject.sat = parsed.sat;
 				break;
 			case 'alert':
-				bulbObject.alert = parsed[alert];
+				bulbObject.alert = parsed.alert;
 				break;
 			case 'bri':
-				bulbObject.bri = parsed[bri];
+				bulbObject.bri = parsed.bri;
 				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
