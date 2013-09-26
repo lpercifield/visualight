@@ -15,6 +15,7 @@ exports.parseMessage = function(message,callback){
 	
 	//DEAL WITH API KEY
 	//build response json?
+	console.log("INCOMING MESSAGE: " + message);
 	try{
         var parsed = JSON.parse(message);
         if(parsed.id != null){

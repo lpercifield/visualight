@@ -156,7 +156,7 @@ io.sockets.on('connection', function (socket) {
 	var newClient = {iosocket:socket};
 	clients.push(newClient);
   socket.on('message', function(message) {	
-  	console.log(JSON.parse(message));
+  	//console.log(JSON.parse(message));
   	API.parseMessage(message,function(o,e){
 	  	if(o != null){
 	  		console.log(o);
