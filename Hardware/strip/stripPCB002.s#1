@@ -4703,12 +4703,10 @@ We've spent an enormous amount of time creating and checking these footprints an
 <segment>
 <pinref part="U$2" gate="G$1" pin="GND"/>
 <wire x1="33.02" y1="-12.7" x2="33.02" y2="-20.32" width="0.1524" layer="91"/>
-<label x="27.94" y="-17.78" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="U$2" gate="G$1" pin="GNDTAB"/>
 <wire x1="38.1" y1="-12.7" x2="38.1" y2="-20.32" width="0.1524" layer="91"/>
-<label x="40.64" y="-17.78" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="S1" gate="G$1" pin="2"/>
@@ -4845,7 +4843,6 @@ We've spent an enormous amount of time creating and checking these footprints an
 <segment>
 <pinref part="U$2" gate="G$1" pin="OUT"/>
 <wire x1="53.34" y1="0" x2="58.42" y2="0" width="0.1524" layer="91"/>
-<label x="55.88" y="2.54" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="D9" class="0">
@@ -5246,7 +5243,6 @@ We've spent an enormous amount of time creating and checking these footprints an
 <segment>
 <pinref part="U$2" gate="G$1" pin="IN"/>
 <wire x1="20.32" y1="0" x2="15.24" y2="0" width="0.1524" layer="91"/>
-<label x="15.24" y="2.54" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

@@ -90,7 +90,7 @@ void setup()
   if(DEBUG) Serial.println(F("Starting"));
   if(DEBUG) Serial.print(F("Free memory: "));
   if(DEBUG) Serial.println(wifly.getFreeMemory(),DEC);
-  if(DEBUG) Serial1.begin(9600);
+  Serial1.begin(9600);
   if (!wifly.begin(&Serial1,&Serial)) {
     if(DEBUG) Serial.println(F("Failed to start wifly"));
   }
@@ -166,7 +166,7 @@ void setup()
     if(DEBUG) Serial.println(F("Already Configured"));
 
     //isServer = false;
-    //connectToServer();
+    connectToServer();
     //Already Joined
   }
 }
