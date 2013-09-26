@@ -15,9 +15,10 @@ exports.parseMessage = function(message,callback){
 	
 	//DEAL WITH API KEY
 	//build response json?
-	console.log("INCOMING MESSAGE: " + JSON.parse(message).id);
+	
 	try{
         var parsed = JSON.parse(message);
+        console.log("INCOMING MESSAGE: " + parsed);
         if(parsed.id != null){
 	        AM.getBulbInfo(parsed.id, function(o){
 		        if(!o){
@@ -41,7 +42,7 @@ exports.parseMessage = function(message,callback){
         
     }catch(e){
     	console.log("PARSE ERROR: " + e);
-        callback(null,"INVALID JSON");
+        callback(null,"INVALID JSON: " + message);
     }
 }
 
