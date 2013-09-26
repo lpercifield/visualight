@@ -61,16 +61,16 @@ var putAPICall = function(parsed, bulbObject, callback){
 				}
 				break;
 			case 'hue':
-				bulbObject.hue = parseFloat(parsed.hue);
+				bulbObject.hue = parseInt(parsed.hue);
 				break;
 			case 'sat':
-				bulbObject.sat = parseFloat(parsed.sat);
+				bulbObject.sat = parseInt(parsed.sat);
 				break;
 			case 'alert':
 				bulbObject.alert = parsed.alert;
 				break;
 			case 'bri':
-				bulbObject.bri = parseFloat(parsed.bri);
+				bulbObject.bri = parseInt(parsed.bri);
 				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
@@ -89,9 +89,9 @@ var putAPICall = function(parsed, bulbObject, callback){
 
 var processBulbColors = function(bulbObject){
 	      //function hslToRgb(h, s, l){
-	var h = parseFloat(bulbObject.hue)/182.04;
-	var s = parseFloat(bulbObject.sat); // check this value range // set defaults here??
-	var l = parseFloat(bulbObject.bri); // check this value range // set defaults here??
+	var h = parseInt(bulbObject.hue)/182.04;
+	var s = parseInt(bulbObject.sat); // check this value range // set defaults here??
+	var l = parseInt(bulbObject.bri); // check this value range // set defaults here??
     var r, g, b;
 
     if(s == 0){
@@ -113,6 +113,6 @@ var processBulbColors = function(bulbObject){
         b = hue2rgb(p, q, h - 1/3);
     }
 	
-    return {r:parseInt(r*255), g:parseInt(g*255), b:parseInt(b*255)};
+    return {r:r*255), g:parseInt(g*255), b:parseInt(b*255)};
   //}
 }
