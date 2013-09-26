@@ -77,9 +77,10 @@ var putAPICall = function(parsed, bulbObject, callback){
 		}
 	}
 	var rgb = processBulbColors(bulbObject);
-	bulbObject.r = rgb.r;
-	bulbObject.g = rgb.g;
-	bulbObject.b = rgb.b;
+	console.log(rgb);
+	bulbObject.r = parseInt(rgb.r);
+	bulbObject.g = parseInt(rgb.g);
+	bulbObject.b = parseInt(rgb.b);
 	console.log(bulbObject);
 	//process color details and send to bulb
 	//write bulbobject to db
@@ -88,9 +89,9 @@ var putAPICall = function(parsed, bulbObject, callback){
 
 var processBulbColors = function(bulbObject){
 	      //function hslToRgb(h, s, l){
-	var h = bulbObject.hue/182.04;
-	var s = bulbObject.sat; // check this value range // set defaults here??
-	var l = bulbObject.bri; // check this value range // set defaults here??
+	var h = parseFloat(bulbObject.hue)/182.04;
+	var s = parseFloat(bulbObject.sat); // check this value range // set defaults here??
+	var l = parseFloat(bulbObject.bri); // check this value range // set defaults here??
     var r, g, b;
 
     if(s == 0){
@@ -112,6 +113,6 @@ var processBulbColors = function(bulbObject){
         b = hue2rgb(p, q, h - 1/3);
     }
 	
-    return {r:r*255, g:g*255, b:b*255};
+    return {r:parseInt(r*255), g:parseInt(g*255), b:parseInt(b*255)};
   //}
 }
