@@ -141,7 +141,7 @@ module.exports = function(app, io, sStore) {
 // get bulb info
 
 	app.get('/get-bulbs', function(req,res){
-		//console.log("user: "+ req.session.user.user);
+		//console.log;
 		if(req.session.user == null){
 	    		res.send('not-authorized',400);
 	    }else{

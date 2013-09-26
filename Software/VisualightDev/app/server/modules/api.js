@@ -10,7 +10,7 @@ exports.setup = function(AM){
 	bulbobject: json containing bulb status and details
 	errormessage: verbose error string
 */
-exports.parseAPI = function(message,callback){
+exports.parseMessage = function(message,callback){
 
 	
 	//DEAL WITH API KEY
@@ -20,7 +20,7 @@ exports.parseAPI = function(message,callback){
         if(parsed[id] != null){
 	        AM.getBulbInfo(parsed[id], function(o){
 		        if(!o){
-			        callback("BULB ID LOOKUP FAILED",true);
+			        callback(null,"BULB ID LOOKUP FAILED");
 		        }else{
 			        //Check which api method is called and execute on that
 					switch(parsed[method]){
@@ -73,13 +73,14 @@ var putAPICall = function(parsed, bulbObject, callback){
 				callback("PARAMETER IGNORED: " + parsed[keyname],true);
 		}
 	}
-	proccessBulbColors(bulbObject,callback);
+	proccessBulbColors(bulbObject);
+	console.log(bulbObject);
 	//process color details and send to bulb
 	//write bulbobject to db
 	
 }
 
-var processBulbColors = function(bulbObject,callback){
+var processBulbColors = function(bulbObject){
 	      //function hslToRgb(h, s, l){
 	var h = bulbObject.hue/182.04;
 	var s = bulbObject.sat; // check this value range // set defaults here??
@@ -104,7 +105,9 @@ var processBulbColors = function(bulbObject,callback){
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1/3);
     }
-
-    return {r:parseInt(r*255), g:parseInt(g*255), b:parseInt(b*255)};
+	bulbObject.r = parseInt(r*255);
+	bulbObject.g = parseInt(g*255);
+	bulbObject.b = parseInt(b*255);
+    //return {r:parseInt(r*255), g:parseInt(g*255), b:parseInt(b*255)};
   //}
 }

@@ -1,5 +1,6 @@
 var net = require('net');
 var sanitize	= require('validator').sanitize;
+var API = require('./modules/api');
 var lights=[];
 var bulbAuth=[];
 //var bulbs=["00:06:66:71:19:2b","00:06:66:71:ca:df","00:06:66:71:cb:cd","00:06:66:71:e3:aa"];
@@ -118,7 +119,7 @@ function sendToVisualight(sendToId,data,heartbeat){
 	}else if(bulbs[currBulbIndex] != null && heartbeat){
 		bulbs[currBulbIndex].netsocket.write("h");
 	}else{
-		console.log("NO ARDUINO CONNECTED");
+		console.log("Visulight NOT CONNECTED: " + sendToId);
 		//sendToWeb("That Visualight is OFFLINE");
 	}
 }
@@ -156,6 +157,13 @@ io.sockets.on('connection', function (socket) {
 	clients.push(newClient);
   socket.on('message', function(message) {	
   	console.log(JSON.parse(message));
+  	API.parseMessage(message,function(o,e){
+	  	if(o !=null){
+		  	console.log("SEND IT TO VISUALIGHT");
+	  	}else{
+		  	console.log(e);
+	  	}
+  	});
   	//sendToVisualight(clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb,message);
   });
   socket.on('disconnect', function(){
