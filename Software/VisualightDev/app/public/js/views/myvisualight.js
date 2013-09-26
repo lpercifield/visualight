@@ -131,7 +131,8 @@ $(document).ready(function(){
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
-	    sat:(h.s * 254)
+	    sat:(h.s * 254),
+	    bri:h.l
 	};
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
