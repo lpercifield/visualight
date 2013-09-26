@@ -19,12 +19,12 @@ exports.parseMessage = function(message,callback){
 	try{
         var parsed = JSON.parse(message);
         if(parsed.id != null){
-	        AM.getBulbInfo(parsed[id], function(o){
+	        AM.getBulbInfo(parsed.id, function(o){
 		        if(!o){
 			        callback(null,"BULB ID LOOKUP FAILED");
 		        }else{
 			        //Check which api method is called and execute on that
-					switch(parsed[method]){
+					switch(parsed.method){
 						case 'put':
 							putAPICall(parsed, o, callback);
 							break;
