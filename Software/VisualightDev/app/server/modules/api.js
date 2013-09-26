@@ -92,6 +92,7 @@ var processBulbColors = function(bulbObject){
 	var h = parseInt(bulbObject.hue)/182.04;
 	var s = parseInt(bulbObject.sat); // check this value range // set defaults here??
 	var l = parseInt(bulbObject.bri); // check this value range // set defaults here??
+	console.log(h + " " + s);
     var r, g, b;
 
     if(s == 0){
