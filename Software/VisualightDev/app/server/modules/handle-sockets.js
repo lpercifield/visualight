@@ -102,7 +102,7 @@ function arrayObjectIndexOf(myArray, searchTerm, property) {
 
 function sendToVisualight(bulbObject,heartbeat){
 	//lastArduinoData = data;
-	console.log("bulbID "+bulbObject._id);
+	//console.log("bulbID "+bulbObject._id);
 	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+"0";
 	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id');
 	heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false;

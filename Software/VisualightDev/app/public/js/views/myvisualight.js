@@ -81,7 +81,7 @@ $(document).ready(function(){
 		    //sat = (int)(hsv.Saturation * 254)
 		};
 */	
-		var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
 		state.id = currBulbId;
 		//convert it to json:
 		var jsonObj = JSON.stringify(state);

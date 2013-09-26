@@ -19,7 +19,7 @@ exports.parseMessage = function(message,callback){
 	
 	try{
         var parsed = JSON.parse(message);
-        console.log("INCOMING MESSAGE: " + message);
+        //console.log("INCOMING MESSAGE: " + message);
         if(parsed.id != null){
 	        AM.getBulbInfo(parsed.id, function(o){
 		        if(!o){
