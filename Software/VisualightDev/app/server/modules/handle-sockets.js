@@ -102,9 +102,9 @@ function arrayObjectIndexOf(myArray, searchTerm, property) {
 
 function sendToVisualight(bulbObject,heartbeat){
 	//lastArduinoData = data;
-	console.log("bulbID "+bulbObject.id);
+	console.log("bulbID "+bulbObject._id);
 	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+"0";
-	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject.id,'id');
+	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id');
 	heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false;
 	//console.log("currBulbIndex " + currBulbIndex);
 	if(bulbs[currBulbIndex] != null && !heartbeat){
@@ -120,7 +120,7 @@ function sendToVisualight(bulbObject,heartbeat){
 	}else if(bulbs[currBulbIndex] != null && heartbeat){
 		bulbs[currBulbIndex].netsocket.write("h");
 	}else{
-		console.log("Visulight NOT CONNECTED: " + bulbObject.id);
+		console.log("Visulight NOT CONNECTED: " + bulbObject._id);
 		//sendToWeb("That Visualight is OFFLINE");
 	}
 }
@@ -160,7 +160,7 @@ io.sockets.on('connection', function (socket) {
   	//console.log(JSON.parse(message));
   	API.parseMessage(message,function(o,e){
 	  	if(o != null){
-	  		console.log(o);
+	  		//console.log(o);
 		  	//console.log("SEND IT TO VISUALIGHT");
 		  	sendToVisualight(o);
 	  	}else{
