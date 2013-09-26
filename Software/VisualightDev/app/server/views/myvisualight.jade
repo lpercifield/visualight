@@ -3,16 +3,21 @@
 // store the userId on the client side in a hidden input field //
 input(type='hidden', value= user._id)#userId
 
-div.navbar.navbar-fixed-top
+div.navbar
 	div.navbar-inner
-		div.container-fluid
-			ul#global-nav.nav.pull-left
-				a(href='/home').brand My Account
-			div#blub-buttons(data-toggle='buttons-radio', style="float:left").btn-group
-			button#btn-add.btn.btn-primary ADD VISUALIGHT
-			button#btn-logout.btn.btn-primary
+		div.container
+			a(data-toggle='collapse',data-target='.nav-collapse').btn.btn-navbar
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+			button#btn-logout.btn.btn-primary.pull-right
 				i.icon-lock.icon-white
 				| Sign Out
+			ul#global-nav.nav.pull-left
+				a(href='/home').brand My Account
+			div.nav-collapse.hidden-phone
+				div#blub-buttons(data-toggle='buttons-radio', style="float:left").btn-group
+				button#btn-add.btn.btn-primary ADD VISUALIGHT
 #account-form-container
 	h1#nobulbs(style="display:none")
 		| No Visualights Found
@@ -52,6 +57,9 @@ script(type='text/javascript', src='/vendor/farbtastic.js')
 script(src='/vendor/bootstrap-modal_222.js')
 script(src='/vendor/bootstrap-transition.js')
 script(src='/vendor/bootstrap-button.js')
+script(src='/vendor/bootstrap-modalmanager.js')
+script(src='/vendor/bootstrap-modal.js')
+<script src="/vendor/bootstrap-collapse.js"></script>
 script(src='/js/views/myvisualight.js')
 script(src='/js/controllers/visualightController.js')
 script(src="/socket.io/socket.io.js")

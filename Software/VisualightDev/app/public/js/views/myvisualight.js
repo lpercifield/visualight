@@ -15,6 +15,8 @@ $(document).ready(function(){
       var message = document.getElementById("message");
       var socket;
       var currBulb = 0;
+      var currBulbId = null;
+      var currBulbName = null;
       var poweron = true;
       var bulbArray = null;
       var reconnect = false;
@@ -29,7 +31,10 @@ $(document).ready(function(){
 		//console.log("getting complete");
 			$('div.btn-group .btn').click(function(){
 				//console.log($(this).find('input:radio').attr('checked', true).val());
-				alert($('input[name=bulb-button]:checked').val());
+				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
+				currBulbId = $('input[name=bulb-button]:checked').val();
+				currBulbName = $('input[name=bulb-button]:checked').attr('bulbname');
+				socket.emit('current-bulb', currBulbId);
 				});
 		});
 		//connectSocket();
@@ -51,7 +56,13 @@ $(document).ready(function(){
 		status.textContent = "Connected";
 		close.disabled = false;
         open.disabled = true;
-        socket.emit('current-bulb', $('div.btn-group .btn').find('input:radio').attr('checked', true).val());
+        if(currBulbId == null){
+	        currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+	        currBulbName = $('div.btn-group .btn').find('input:radio').attr('checked', true).attr('bulbname');
+        }
+        //var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+        console.log("currBulbID " + currBulbId);
+        if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
         console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
 	});
 	socket.on('disconnect',function(){
@@ -59,6 +70,9 @@ $(document).ready(function(){
 		open.disabled = false;
 		close.disabled = true;
 		reconnect = true;
+	});
+	socket.on('bulb-offline',function(){
+		alert(currBulbName +" is currently offline");
 	});
 // handle bulb button change
 		
