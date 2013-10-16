@@ -12,13 +12,9 @@ var dbName 		= 'node-login';
 var accounts;
 var bulbs;
 var sessions;
-/* establish the database connection 
-mongo linus.mongohq.com:10052/nodejitsudb6620458662
-MongoDB shell version: 2.2.0
-connecting to: linus.mongohq.com:10052/nodejitsudb6620458662
-> db.auth("nodejitsu","ab124187f3e14972d1502824506e7123")
 
-*/
+
+
 exports.connectServer = function(callback){
 	Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
@@ -34,8 +30,8 @@ exports.connectServer = function(callback){
 			}
 		}); 
 	}
-	
 /*
+	exports.connectServer = function(callback){
 	Mongo.connect("mongodb://localhost:27017/visualightdev", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
 			if (err) {

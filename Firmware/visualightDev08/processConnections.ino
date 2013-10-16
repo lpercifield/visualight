@@ -44,10 +44,11 @@ void processClient(){
         _blue = wifly.parseInt();
         _blinkMe = wifly.parseInt();
         colorLED(_red,_green,_blue);
-      }if(wifly.read() == 104 && sentHeartBeat){
-       if(DEBUG) Serial.println("Heartbeat TRUE");
-        sentHeartBeat = false;
       }
+//      if(wifly.read() == 104 && sentHeartBeat){
+//       if(DEBUG) Serial.println("Heartbeat TRUE");
+//        sentHeartBeat = false;
+//      }
     } 
     else {
       //This sends a checkin to the server to ensure the connection is live
@@ -59,6 +60,7 @@ void processClient(){
       }
       if (wifly.isConnected() == false) {
         if(DEBUG) Serial.println("Not Connected in loop");
+        // go white
         connectToServer();
       } 
     }
