@@ -70,7 +70,7 @@ boolean sink = false;
 const int resetButton = 7;
 const int resetPin = 11;
 
-const boolean DEBUG = false;
+const boolean DEBUG = true;
 
 void setup()
 {
@@ -93,6 +93,7 @@ void setup()
   Serial1.begin(9600);
   if (!wifly.begin(&Serial1,&Serial)) {
     if(DEBUG) Serial.println(F("Failed to start wifly"));
+    //RESET WIFI MODULE -- Toggle reset pin
   }
   wifly.getDeviceID(devID,sizeof(devID));
   if(strcmp(devID, "Visualight")==0){
@@ -106,7 +107,7 @@ void setup()
 
 
   //wifly.terminal();
-  if(digitalRead(resetButton) == LOW){
+  if(digitalRead(resetButton) == LOW){ //TAKE OUT??
     //if(DEBUG) Serial.println("RESET");
     colorLED(255,0,0);
     isServer = true;
@@ -128,7 +129,7 @@ void setup()
 
 
 
-  if (wifly.isConnected()) {
+  if (wifly.isConnected()) {// isConnected is a little wonky
     if(DEBUG) Serial.println(F("Old connection active. Closing"));
     wifly.close();
   }
@@ -149,7 +150,7 @@ void setup()
   if(isServer){
     /* Create AP*/
     if(DEBUG) Serial.println(F("Creating AP"));
-    colorLED(255,0,0);
+    colorLED(0,0,255); // set led to blue for setup
     if(DEBUG) Serial.println("Create server");
     wifly.setSoftAP();
     EEPROM.write(0, 1);
@@ -180,7 +181,7 @@ void loop()
   else{
     processClient();
   }
-  processButton();
+  processButton(); // test to see if this is getting blocked somewhere...
 }
 
 

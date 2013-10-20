@@ -71,7 +71,8 @@ void connectToServer(){
   if(DEBUG) Serial.println("Connecting");
   if (wifly.open("dev.visualight.org",5001)) {
   //if (wifly.open("10.0.1.39",5001)) {
-    colorLED(255,255,255);
+    colorLED(255,255,255); // white is connected
+    if(DEBUG) Serial.println("Connected");
     //Serial.println("Connected: ");
     //Serial.print(F("Free memory: "));
     //Serial.println(wifly.getFreeMemory(),DEC);
@@ -92,10 +93,12 @@ void connectToServer(){
 
 }
 void wifiReset(){
+  if(DEBUG) Serial.println("Wifi RESET");
   colorLED(255,0,0);
   isServer = true;
-  wifly.setSoftAP();
   EEPROM.write(0, 1);
+  wifly.reboot();
+  wifly.setSoftAP();
 }
 void configureWifi(){
   if(DEBUG) Serial.println("From Config");
