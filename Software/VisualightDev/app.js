@@ -13,16 +13,17 @@ var app = exp.createServer();
 
 
 
-var io = require('socket.io').listen(app,'log level',1);
+var io = require('socket.io').listen(app,'log level',1); // Setup socket IO
 
-var MongoStore = require('connect-mongo')(exp);
+var MongoStore = require('connect-mongo')(exp);// Setup mongo store to store user sessions in the db
 
-app.root = __dirname;
-global.host = 'localhost';
+app.root = __dirname; // setup the app directory
+global.host = 'localhost'; // setup the app url
 
-require('./app/config')(app, exp, MongoStore);
-require('./app/server/router')(app, io, MongoStore);
+require('./app/config')(app, exp, MongoStore); // run the config.js
+require('./app/server/router')(app, io, MongoStore);// run the server/router.js
 
+//Start the express app on the port listed and console log
 app.listen(8080, function(){
 	console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });

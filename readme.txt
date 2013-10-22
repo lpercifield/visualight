@@ -24,6 +24,10 @@ Current Firmware Dev: 08
 		Look at hueValues
 		Customize web_config app
 		Refactor bulb configuration to use web_config app
+		
+		
+  KNOW BUGS:
+    reconnect after inital setup fails
 
 SERVER:
 
@@ -41,6 +45,17 @@ SERVER:
 			Twitter
 			Facebook?
 			Gmail?
+			
+    App rules:
+
+      Color picker always sets the color
+  
+      Two type of apps:
+      - subscribe: this app can change the color of your bulb at any time
+      - alert: this app can send a colored alert to your bulb at any time
+  
+      only one subscribe app can be active
+      multiple alert apps can be active
 
 INTERFACE:
 

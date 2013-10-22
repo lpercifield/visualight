@@ -6,40 +6,49 @@ var WS = require('./modules/handle-sockets');
 var API = require('./modules/api');
 
 
-var lights=[];
-var bulbAuth=[];
-//var bulbs=["00:06:66:71:19:2b","00:06:66:71:ca:df","00:06:66:71:cb:cd","00:06:66:71:e3:aa"];
-var bulbs = [];
-var clients = [];
+module.exports = function(app, io, sStore) { // this gets called from the main app
 
-module.exports = function(app, io, sStore) {
-
+	//this function sets up the DB connections
 	AM.connectServer(function(e){
-		if(e == null){
-			WS.createSockets(app, io, AM);
+		if(e == null){ // if there is no error in creating the db connections
+			WS.createSockets(app, io, AM); // then setup the sockets
 		}
 	});
 	
-// main login page //
-
+/**
+* main login page 
+* This route is called from the idex of the URL where the app is running
+*
+* @method get /
+* @param {String} req.cookies.user from the cookie get the user
+* @param {String} req.cookies.pass from the cookie get the pass
+*/
 	app.get('/', function(req, res){
-	// check if the user's credentials are saved in a cookie //
-		if (req.cookies.user == undefined || req.cookies.pass == undefined){
-			res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }});
+	// check if the user's credentials are saved in a cookie //this allows us to auto login a user using cookies
+		if (req.cookies.user == undefined || req.cookies.pass == undefined){ // if there are no cookies that match are stuff then redirect
+			res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }}); // this renders the login view
 		}	else{
 	// attempt automatic login //
-			AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){
+			AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){ // pass the login data to the Account Manager and attempt autologin
 				if (o != null){
-				    req.session.user = o;
+				    req.session.user = o; // we were able to auth in the user and now we are setting a session
 				    res.cookie('sessionID',req.sessionID, {maxAge: null});
-					res.redirect('/myvisualight');
+					res.redirect('/myvisualight'); // this is where the auth'd user is redirected
 				}	else{
-					res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }});
+					res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }}); // this is where you are redirected if the auth fails
 				}
 			});
 		}
 	});
 	
+/**
+* post login route 
+* This route is used to manually login
+*
+* @method post /
+* @param {String} user user-id
+* @param {String} pass password
+*/
 	app.post('/', function(req, res){
 		AM.manualLogin(req.param('user'), req.param('pass'), function(e, o){
 			if (!o){
@@ -52,13 +61,19 @@ module.exports = function(app, io, sStore) {
 					res.cookie('pass', o.pass, { maxAge: 900000 });
 				}
 				res.send(o, 200);
-				//res.redirect('/myvisualight');
 			}
 		});
 	});
 	
 // logged-in user homepage //
-	
+
+/**
+* main home page 
+* This route is called to show the control panel for a user
+*
+* @method get /home
+*/
+
 	app.get('/home', function(req, res) {
 	    if (req.session.user == null){
 	// if user is not logged-in redirect back to login page //
@@ -73,6 +88,13 @@ module.exports = function(app, io, sStore) {
 			});
 	    }
 	});
+	
+/**
+* main visualight page 
+* This route is called to show the visualight panel for a user
+*
+* @method get /myvisualight
+*/
 	app.get('/myvisualight', function(req, res) {
 	    if (req.session.user == null){
 	// if user is not logged-in redirect back to login page //
@@ -86,7 +108,17 @@ module.exports = function(app, io, sStore) {
 			});
 	    }
 	});
-	
+/**
+* updates a user in the DB 
+* This route is called when you change your user data
+*
+* @method post /home
+* @param {String} user user-id
+* @param {String} name the users name
+* @param {String} email users email
+* @param {String} country the users country
+* @param {String} pass password
+*/	
 	app.post('/home', function(req, res){
 		if (req.param('user') != undefined) {
 			AM.updateAccount({
@@ -115,12 +147,27 @@ module.exports = function(app, io, sStore) {
 		}
 	});
 	
-// creating new accounts //
-	
+
+/**
+* creating new accounts 
+* This route is called to show the signup page
+*
+* @method get /signup
+*/	
 	app.get('/signup', function(req, res) {
 		res.render('signup', {  locals: { title: 'Signup', countries : CT } });
 	});
-	
+/**
+* adds a user to the DB 
+* This route is called when you signup
+*
+* @method post /signup
+* @param {String} name the users name
+* @param {String} email users email
+* @param {String} user user-id
+* @param {String} pass password
+* @param {String} country the users country
+*/		
 	app.post('/signup', function(req, res){
 		AM.addNewAccount({
 			name 	: req.param('name'),
@@ -139,7 +186,14 @@ module.exports = function(app, io, sStore) {
 
 
 // get bulb info
-
+/**
+* get the registered bulbs for a user
+* This route is called to get the bulbs for a user
+* ---THIS NEEDS AN UPDATE
+* should take either the session or an API key
+*
+* @method get /get-bulbs
+*/	
 	app.get('/get-bulbs', function(req,res){
 		//console.log;
 		if(req.session.user == null){
@@ -157,7 +211,15 @@ module.exports = function(app, io, sStore) {
 	});
 	
 	// add bulb to user
-
+/**
+* adds a bulb to DB
+* This route is called to add a bulb
+* ---THIS NEEDS AN UPDATE
+* should take either the session or an API key??
+*
+* @method post /add-bulbs
+* @param {Object} bulb this is a new bulb object {bulb : bulbMac}
+*/	
 	app.post('/add-bulb', function(req,res){
 		if(req.session.user == null){
 	    		res.send('not-authorized',400);
@@ -175,7 +237,12 @@ module.exports = function(app, io, sStore) {
 	});
 
 // password reset //
-
+/**
+* sends the reset password url to the registered email
+*
+* @method post /lost-password
+* @param {String} email
+*/	
 	app.post('/lost-password', function(req, res){
 	// look up the user's account via their email //
 		AM.getAccountByEmail(req.param('email'), function(o){
@@ -196,7 +263,13 @@ module.exports = function(app, io, sStore) {
 			}
 		});
 	});
-
+/**
+* sends the reset password view if the link is valid
+*
+* @method get /reset-password
+* @param {String} e email
+* @param {String} p password
+*/	
 	app.get('/reset-password', function(req, res) {
 		var email = req.query["e"];
 		var passH = req.query["p"];
@@ -210,7 +283,12 @@ module.exports = function(app, io, sStore) {
 			}
 		})
 	});
-	
+/**
+* handles saving the new password for a user
+*
+* @method post /reset-password
+* @param {String} pass
+*/	
 	app.post('/reset-password', function(req, res) {
 		var nPass = req.param('pass');
 	// retrieve the user's email from the session to lookup their account and reset password //
@@ -229,13 +307,21 @@ module.exports = function(app, io, sStore) {
 	});
 	
 // view & delete accounts //
-	
+/**
+* Shows all the registered users -- DELETE FROM PROD BUILD OR PASSWORD PROTECT!!!!
+*
+* @method get /print
+*/	
 	app.get('/print', function(req, res) {
 		AM.getAllRecords( function(e, accounts){
 			res.render('print', { locals: { title : 'Account List', accts : accounts } });
 		})
 	});
-	
+/**
+* delete a registered user using session data
+*
+* @method post /delete
+*/		
 	app.post('/delete', function(req, res){
 		AM.deleteAccount(req.body.id, function(e, obj){
 			if (!e){
@@ -247,13 +333,23 @@ module.exports = function(app, io, sStore) {
 			}
 	    });
 	});
-	
+// view & delete accounts //
+/**
+* deletes all users -- DELETE FROM PROD BUILD OR PASSWORD PROTECT!!!!
+*
+* @method get /reset
+*/		
 	app.get('/reset', function(req, res) {
 		AM.delAllRecords(function(){
 			res.redirect('/print');	
 		});
 	});
 	
+/**
+* send 404
+*
+* @method get *
+*/		
 	app.get('*', function(req, res) { res.render('404', { title: 'Page Not Found'}); });
 	
 };
