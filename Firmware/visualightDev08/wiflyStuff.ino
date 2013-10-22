@@ -93,6 +93,7 @@ void connectToServer(){
 
 }
 void wifiReset(){
+  wifly.close();
   if(DEBUG) Serial.println("Wifi RESET");
   colorLED(255,0,0);
   isServer = true;
