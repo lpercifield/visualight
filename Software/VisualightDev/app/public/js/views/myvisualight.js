@@ -82,11 +82,13 @@ $(document).ready(function(){
 		};
 */	
 		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
-		console.log(currBulbId);
+
+		//console.log(currBulbId);
+
 		state.id = currBulbId;
 		//convert it to json:
 		var jsonObj = JSON.stringify(state);
-		console.log(jsonObj);
+		//console.log(jsonObj);
 		socket.send(jsonObj);
 	}
 // handle bulb button change
@@ -125,7 +127,7 @@ $(document).ready(function(){
     
     //$('#color').css({backgroundColor:e}).val(e);
     $('#color').css({backgroundColor:e});
-	console.log(rgb);
+	//console.log(rgb);
 	//socket.send(rgb);
 	var state =
 	{
