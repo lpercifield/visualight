@@ -85,7 +85,7 @@
 <layer number="151" name="HeatSink" color="7" fill="1" visible="no" active="yes"/>
 <layer number="152" name="_bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="199" name="Contour" color="7" fill="1" visible="no" active="yes"/>
-<layer number="200" name="200bmp" color="15" fill="10" visible="no" active="yes"/>
+<layer number="200" name="200bmp" color="15" fill="10" visible="yes" active="yes"/>
 <layer number="201" name="201bmp" color="2" fill="10" visible="no" active="yes"/>
 <layer number="202" name="202bmp" color="3" fill="1" visible="no" active="no"/>
 <layer number="203" name="203bmp" color="4" fill="10" visible="no" active="yes"/>
@@ -130,11 +130,11 @@
 <wire x1="40.64" y1="55.626" x2="25.908" y2="55.626" width="0" layer="20"/>
 <wire x1="25.908" y1="55.626" x2="25.908" y2="43.434" width="0" layer="20"/>
 <wire x1="25.908" y1="43.434" x2="40.64" y2="43.434" width="0" layer="20"/>
-<text x="72.21728125" y="63.611759375" size="0.4064" layer="21" rot="SR180">GND</text>
-<text x="72.298559375" y="61.092078125" size="0.4064" layer="21" rot="SR90">USBvcc</text>
-<text x="72.2985625" y="59.425840625" size="0.4064" layer="21" rot="SR90">D13*</text>
-<text x="72.2985625" y="57.383678125" size="0.4064" layer="21" rot="SR90">D10*</text>
-<text x="72.400159375" y="53.309521875" size="0.4064" layer="21" rot="SR90">D5*</text>
+<text x="71.363840625" y="63.225678125" size="0.6096" layer="21" rot="R45">GND</text>
+<text x="71.262240625" y="61.092078125" size="0.6096" layer="21" rot="R45">USB+</text>
+<text x="71.2825625" y="59.222640625" size="0.6096" layer="21" rot="R45">D13*</text>
+<text x="71.221603125" y="57.078878125" size="0.6096" layer="21" rot="R45">D10*</text>
+<text x="71.40448125" y="53.1469625" size="0.6096" layer="21" rot="R45">D5*</text>
 <text x="70.134478125" y="42.24528125" size="0.6096" layer="121" rot="SR45">D6*/A7</text>
 <text x="69.51471875" y="39.2176" size="0.6096" layer="121" rot="SR45">D3*/SCL</text>
 <text x="69.87031875" y="36.972240625" size="0.6096" layer="121" rot="SR45">D2/SDA</text>
@@ -9165,7 +9165,7 @@
 <dimension x1="75.438" y1="67.056" x2="75.438" y2="33.02" x3="81.15808125" y3="50.038" textsize="0.040640625" layer="199"/>
 <text x="71.39431875" y="46.3905625" size="0.6096" layer="121" rot="SR45">A0</text>
 <text x="71.2724" y="48.95088125" size="0.6096" layer="121" rot="SR45">A1</text>
-<text x="72.339203125" y="55.351678125" size="0.4064" layer="21" rot="SR90">D9*</text>
+<text x="71.424803125" y="55.168796875" size="0.6096" layer="21" rot="R45">D9*</text>
 <text x="67.38111875" y="58.887359375" size="1.778" layer="122" rot="MR0">HARD RESET</text>
 </plain>
 <libraries>

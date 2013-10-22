@@ -8,14 +8,14 @@
 </settings>
 <grid distance="0.8" unitdist="mil" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
@@ -72,7 +72,7 @@
 <layer number="112" name="tSilk" color="7" fill="1" visible="no" active="yes"/>
 <layer number="116" name="Patch_BOT" color="9" fill="4" visible="no" active="yes"/>
 <layer number="121" name="_tsilk" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="122" name="_bsilk" color="7" fill="1" visible="no" active="yes"/>
+<layer number="122" name="_bsilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="123" name="tTestmark" color="7" fill="1" visible="no" active="yes"/>
 <layer number="124" name="bTestmark" color="7" fill="1" visible="no" active="yes"/>
 <layer number="125" name="_tNames" color="7" fill="1" visible="no" active="yes"/>
@@ -85,7 +85,7 @@
 <layer number="151" name="HeatSink" color="7" fill="1" visible="no" active="yes"/>
 <layer number="152" name="_bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="199" name="Contour" color="7" fill="1" visible="no" active="yes"/>
-<layer number="200" name="200bmp" color="15" fill="10" visible="no" active="yes"/>
+<layer number="200" name="200bmp" color="15" fill="10" visible="yes" active="yes"/>
 <layer number="201" name="201bmp" color="2" fill="10" visible="no" active="yes"/>
 <layer number="202" name="202bmp" color="3" fill="1" visible="no" active="no"/>
 <layer number="203" name="203bmp" color="4" fill="10" visible="no" active="yes"/>
@@ -140,8 +140,8 @@
 <text x="69.87031875" y="36.972240625" size="0.6096" layer="121" rot="SR45">D2/SDA</text>
 <text x="71.0184" y="35.7022375" size="0.6096" layer="121" rot="SR45">GND</text>
 <text x="71.668640625" y="33.8328" size="0.6096" layer="121" rot="SR45">5v</text>
-<text x="55.483759375" y="33.568640625" size="0.889" layer="121" font="vector">VISUALIGHT.ORG</text>
-<text x="62.575440625" y="34.930078125" size="0.8128" layer="121" font="vector">v0.38</text>
+<text x="56.01208125" y="33.345121875" size="0.889" layer="121" font="vector">VISUALIGHT.ORG</text>
+<text x="63.1037625" y="34.625278125" size="0.8128" layer="121" font="vector">v0.38</text>
 <rectangle x1="54.325521875" y1="53.22824375" x2="54.467759375" y2="53.2485625" layer="200" rot="R180"/>
 <rectangle x1="54.4677625" y1="53.207921875" x2="54.48808125" y2="53.228240625" layer="200" rot="R180"/>
 <rectangle x1="54.386484375" y1="53.207921875" x2="54.447440625" y2="53.228240625" layer="200" rot="R180"/>
@@ -9948,7 +9948,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="58.293" y="64.8335" size="0.4064" layer="27" rot="R270"/>
 </element>
 <element name="POWER" library="SparkFun" package="LED-0603" value="Red" x="43.088559375" y="63.926721875" smashed="yes" rot="R180">
-<attribute name="NAME" x="43.85818125" y="65.9638" size="0.8128" layer="121" rot="R270"/>
+<attribute name="NAME" x="44.000421875" y="65.841878125" size="0.8128" layer="121" rot="R270"/>
 </element>
 <element name="R2" library="SparkFun" package="0402-RES" value="10K" x="48.514" y="43.18" smashed="yes">
 <attribute name="NAME" x="47.625" y="43.8785" size="0.4064" layer="25"/>
