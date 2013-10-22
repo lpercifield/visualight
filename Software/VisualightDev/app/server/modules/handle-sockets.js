@@ -43,7 +43,7 @@ var netserver = net.createServer(function(socket) {
 		var bulbIndex = arrayObjectIndexOf(bulbs,mac,'macadd'); // we check to see if the mac address is already in the bulbs array
 		console.log("INCOMING: " + mac + " INDEX: " +bulbIndex);
 		
-		if(bulbIndex < 0){ // if the bulb is not in the array...
+		//if(bulbIndex < 0){ // if the bulb is not in the array...
 			
 			//console.log(mac);
 			AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
@@ -67,9 +67,7 @@ var netserver = net.createServer(function(socket) {
 				  console.log("AUTHORIZED bulb: " + data);
 			  }
 			});
-		}else{
-			console.log("HEARTBEAT");
-			
+		//}else{
 			//This is where we should handle the heartbeat from the bulb
 			
 			/*
@@ -82,7 +80,7 @@ AM.updateBulbStatus(bulbs[bulbIndex].id,1, function(o){
 				}
 			});
 */
-		}
+		//}
 	});	
 });
 // end of net socket setup
@@ -111,9 +109,11 @@ function arrayObjectIndexOf(myArray, searchTerm, property) {
 */
 
 function sendToVisualight(bulbObject,heartbeat){
+  //console.log(bulbObject);
 	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+"0"; // this creates the r,g,b,blink array
 	
 	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id'); // get the index of the bulb
+	//console.log(currBulbIndex);
 	
 	heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false; // if we didnt define heartbeat then set it to false
 	
@@ -178,7 +178,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function(){
 	  clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
   });
-  // handle the socket selecting the current bulb -- THIS WILL BE DEPRICATED WITH THE NEW API (sending the bulb id in the json)
+  // handle the socket selecting the current bulb
   socket.on('current-bulb', function(bulbID){
   	var cleanbulbID = sanitize(bulbID).trim();
 	  AM.getBulbInfo(cleanbulbID, function(o){
@@ -186,12 +186,14 @@ io.sockets.on('connection', function (socket) {
 			  socket.emit('lookup-failed');
 		  }else{
 			  //current bulb mac = o.mac;
-			  console.log("socket current-bulb");
+			  
 			  var checkId = arrayObjectIndexOf(clients,o._id,'currentBulb');
 				  if(checkId != -1){
             console.log("client already setup");
 					  clients.splice(checkId, 1);
 				  }
+				//console.log(clients);
+				//console.log(bulbs);
 			  clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
 			  if(arrayObjectIndexOf(bulbs,o._id,'id') == -1){
 				  socket.emit('bulb-offline');

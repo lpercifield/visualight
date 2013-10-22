@@ -15,6 +15,7 @@ var sessions;
 
 
 
+/*
 exports.connectServer = function(callback){
 	Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
@@ -30,7 +31,7 @@ exports.connectServer = function(callback){
 			}
 		}); 
 	}
-/*
+*/
 	exports.connectServer = function(callback){
 	Mongo.connect("mongodb://localhost:27017/visualightdev", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
@@ -46,7 +47,6 @@ exports.connectServer = function(callback){
 			}
 		}); 
 	}
-*/
 
 /*
 var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
