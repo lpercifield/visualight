@@ -56,7 +56,7 @@ $(document).ready(function(){
 		status.textContent = "Connected";
 		close.disabled = false;
         open.disabled = true;
-        var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+        currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
         console.log("currBulbID " + currBulbId);
         if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
         console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
@@ -82,6 +82,7 @@ $(document).ready(function(){
 		};
 */	
 		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+		console.log(currBulbId);
 		state.id = currBulbId;
 		//convert it to json:
 		var jsonObj = JSON.stringify(state);

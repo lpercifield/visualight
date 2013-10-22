@@ -52,12 +52,12 @@ void processClient(){
     } 
     else {
       //This sends a checkin to the server to ensure the connection is live
-      if ((millis()-connectTime)>heartBeatInterval) {
-        if(DEBUG) Serial.println("heartBeat");
-        sentHeartBeat=true;
-        wifly.write(MAC);
-        connectTime = millis();
-      }
+//      if ((millis()-connectTime)>heartBeatInterval) {
+//        if(DEBUG) Serial.println("heartBeat");
+//        sentHeartBeat=true;
+//        wifly.write(MAC);
+//        connectTime = millis();
+//      }
       if (wifly.isConnected() == false) {
         if(DEBUG) Serial.println("Not Connected in loop");
         // go white

@@ -111,6 +111,7 @@ function arrayObjectIndexOf(myArray, searchTerm, property) {
 */
 
 function sendToVisualight(bulbObject,heartbeat){
+  console.log(bulbObject);
 	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+"0"; // this creates the r,g,b,blink array
 	
 	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id'); // get the index of the bulb
@@ -178,7 +179,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('disconnect', function(){
 	  clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
   });
-  // handle the socket selecting the current bulb -- THIS WILL BE DEPRICATED WITH THE NEW API (sending the bulb id in the json)
+  // handle the socket selecting the current bulb
   socket.on('current-bulb', function(bulbID){
   	var cleanbulbID = sanitize(bulbID).trim();
 	  AM.getBulbInfo(cleanbulbID, function(o){
