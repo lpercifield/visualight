@@ -1,0 +1,41 @@
+key:
+	api key -- used for REST and socket calls
+id:
+	database id for current bulb
+	
+method:
+	put = set value
+	get = get value
+	
+on: 
+	On=true
+	Off=false
+hue: 
+	RANGE: 0 - 65535 
+		This is 182.04 * degrees -- hue/182.04 = HSB hue...
+		
+bri:
+	RANGE: 0 - 255
+		This is brightness
+
+sat:
+	RANGE: 0 - 255
+		This is saturation
+		
+alert:
+	"none"
+	"select"
+	"lselect"
+	
+		
+http://developers.meethue.com/1_lightsapi.html
+	
+{
+	"id":5202b8e0cdcde8e906000001
+	"type":put,
+    "hue": 50000,
+    "on": true,
+    "bri": 200
+}
+
+//response json?
