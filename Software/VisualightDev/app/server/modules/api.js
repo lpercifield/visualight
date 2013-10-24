@@ -121,13 +121,9 @@ var processBulbColors = function(bulbObject){
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - (1/3));
         w = l-s;
-<<<<<<< HEAD
         if(w <= 0){
           w=0
         }
-=======
-        if(w)<= 0 ? w=0 : w;
->>>>>>> 9fb9db89808f5e4bc6164a8f4211afe2ed35627c
     }
     var rgbTotal = r+g+b;
 	//console.log("RGB: " +r + " " + g + " " + b + " " +rgbTotal);
