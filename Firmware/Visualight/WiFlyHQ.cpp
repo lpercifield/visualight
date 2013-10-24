@@ -34,8 +34,8 @@ extern unsigned int __bss_end;
 extern unsigned int __heap_start;
 extern void *__brkval;
 
-//#undef DEBUG
-#define DEBUG
+#undef DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define DPRINT(item) debug.print(item)
