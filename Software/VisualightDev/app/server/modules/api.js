@@ -86,6 +86,12 @@ var putAPICall = function(parsed, bulbObject, callback){
 	bulbObject.r = parseInt(rgb.r);
 	bulbObject.g = parseInt(rgb.g);
 	bulbObject.b = parseInt(rgb.b);
+	bulbObject.w = parseInt(rgb.w);
+	/*
+if(bulbObject.hue == 0){
+  	bulbObkect.w = bulbObject.bri;
+	}
+*/
 
   //console.log("callingback with bulb");
 
@@ -103,20 +109,24 @@ var processBulbColors = function(bulbObject){
 	var l = bulbObject.bri/254; // check this value range // set defaults here??
 	//var hsl = h+s+l
 	//console.log("HSL: "+h + " " + s + " " + l + " " +hsl );
-    var r,g,b;
+    var r,g,b,w;
 
     if(s == 0){
-        r = g = b = l; // achromatic
+        r = g = b = w = l; // achromatic
     }else{
         var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
         var p = 2 * l - q;
         r = hue2rgb(p, q, h + (1/3));
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - (1/3));
+        w = l-s;
+        if(w <= 0){
+          w=0
+        }
     }
     var rgbTotal = r+g+b;
 	//console.log("RGB: " +r + " " + g + " " + b + " " +rgbTotal);
-    return {r:r*255, g:g*255, b:b*255};
+    return {r:r*255, g:g*255, b:b*255, w:w*255};
   //}
 }
  var hue2rgb = function (p, q, t){

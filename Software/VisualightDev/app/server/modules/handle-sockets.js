@@ -112,7 +112,7 @@ function sendToVisualight(bulbObject,heartbeat){
 
   //console.log(bulbObject);
 
-	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+"0"; // this creates the r,g,b,blink array
+	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+bulbObject.w; // this creates the r,g,b,blink array
 	
 	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id'); // get the index of the bulb
 	//console.log(currBulbIndex);
