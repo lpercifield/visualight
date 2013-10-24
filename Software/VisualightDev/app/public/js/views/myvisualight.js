@@ -88,7 +88,7 @@ $(document).ready(function(){
 		state.id = currBulbId;
 		//convert it to json:
 		var jsonObj = JSON.stringify(state);
-		//console.log(jsonObj);
+		console.log(jsonObj);
 		socket.send(jsonObj);
 	}
 // handle bulb button change
