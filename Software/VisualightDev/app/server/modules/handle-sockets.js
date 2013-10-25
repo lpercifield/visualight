@@ -96,7 +96,8 @@ exports.createSockets = function(app, io, AM){
 						  }
 						  console.log("AUTHORIZED bulb: " + data);
 					  }// o is valid
-					 }catch(e){
+					 }
+					}catch(e){
 					 	console.error("Bad Data")
 					 	console.error(e)
 					 }
