@@ -25,9 +25,9 @@ exports.createSockets = function(app, io, AM){
 		console.log('Visualight connected from: ' +socket.remoteAddress);
 		socket.setEncoding('utf8');
 		socket.setKeepAlive(true); // heartbeat timer... This doesnt really work...
-		socket.setTimeout(1000,function(){
-
-
+		socket.setTimeout(60000,function(){
+			//console.log();
+			//socket.write('H');
 			Bulbs[connection_id].netsocket.destroy();
 		})
 	 	//this is called when the bulb socket closes
@@ -55,7 +55,7 @@ exports.createSockets = function(app, io, AM){
 			data = JSON.parse(data)
 			console.log(data)
 			var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
-			console.log("INCOMING: " + data.mac );
+			console.log("INCOMING: " + mac );
 				
 				//**NOTE** MAC ADDRESS VALIDATOR
 
@@ -77,16 +77,19 @@ exports.createSockets = function(app, io, AM){
 					  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
 					  }else{
-					  	console.log('Bulbs['+cleanbulbID+'] is defined');
-					  	Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
-					  	delete Bulbs[cleanbulbID];
 
-					  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
-					  	connection_id = cleanbulbID;
+					  	if(!data.hasOwnProperty('h')){ //check if we get heartbeat from device
+					  		console.log('Bulbs['+cleanbulbID+'] is defined');
+					  		Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
+					  		delete Bulbs[cleanbulbID];
+
+					  		Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+					  		connection_id = cleanbulbID;
+					  	}
 
 					  }
 					  console.log("AUTHORIZED bulb: " + data);
-					  socket.write('H'); //writing to the socket
+					  //socket.write('H'); //writing to the socket
 				  }// o is valid
 				});
 
