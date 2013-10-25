@@ -25,7 +25,7 @@ exports.createSockets = function(app, io, AM){
 		console.log('Visualight connected from: ' +socket.remoteAddress);
 		socket.setEncoding('utf8');
 		socket.setKeepAlive(true); // heartbeat timer... This doesnt really work...
-		socket.setTimeout(60000,function(){
+		socket.setTimeout(60000,function(){ //if we don't hear anything from the server for a minute then we kill the connection
 			//console.log();
 			//socket.write('H');
 			Bulbs[connection_id].netsocket.destroy();
@@ -85,11 +85,14 @@ exports.createSockets = function(app, io, AM){
 
 					  		Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
 					  		connection_id = cleanbulbID;
+					  	}else{
+
+					  		socket.write('H'); //writing to the socket
+
 					  	}
 
 					  }
 					  console.log("AUTHORIZED bulb: " + data);
-					  //socket.write('H'); //writing to the socket
 				  }// o is valid
 				});
 
