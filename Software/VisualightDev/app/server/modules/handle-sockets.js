@@ -38,7 +38,7 @@ var netserver = net.createServer(function(socket) {
 		console.log('visualight error');
 		console.log(err);
 		console.log('Socket: ');
-		console.log(JSON.stringify(socket))
+		//console.log(JSON.stringify(socket))
 	});
 
   // this is the function that gets called when the bulb sends data
