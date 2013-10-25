@@ -34,7 +34,7 @@ $(document).ready(function(){
 				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
 				currBulbId = $('input[name=bulb-button]:checked').val();
 				currBulbName = $('input[name=bulb-button]:checked').attr('bulbname');
-				socket.emit('current-bulb', currBulbId);
+				//socket.emit('current-bulb', currBulbId);
 				});
 		});
 		//connectSocket();
@@ -58,7 +58,7 @@ $(document).ready(function(){
         open.disabled = true;
         currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
         console.log("currBulbID " + currBulbId);
-        if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
+        //if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
         console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
 	});
 	socket.on('disconnect',function(){
@@ -68,7 +68,7 @@ $(document).ready(function(){
 		reconnect = true;
 	});
 	socket.on('bulb-offline',function(){
-		alert(currBulbName +" is currently offline");
+		console.log(currBulbName +" is currently offline");
 	});
 	
 	function sendAPICall(state){

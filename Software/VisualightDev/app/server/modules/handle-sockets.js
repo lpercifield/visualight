@@ -2,7 +2,7 @@ var net = require('net');
 var sanitize	= require('validator').sanitize;
 var API = require('./api');
 
-var bulbs = []; // array for bulb sockets
+//var bulbs = []; // array for bulb sockets
 var clients = []; // array for brower sockets
 
 
@@ -49,11 +49,12 @@ var netserver = net.createServer(function(socket) {
   // this is the function that gets called when the bulb sends data
 	socket.on('data', function(data){
 		var mac = sanitize(data).trim(); // we hope that we are getting a mac address
-		var bulbIndex = arrayObjectIndexOf(bulbs,mac,'macadd'); // we check to see if the mac address is already in the bulbs array
-		console.log("INCOMING: " + mac + " INDEX: " +bulbIndex);
-		console.log(Bulbs)
+		//var bulbIndex = arrayObjectIndexOf(bulbs,mac,'macadd'); // we check to see if the mac address is already in the bulbs array
+		console.log("INCOMING: " + mac );
 		//if(bulbIndex < 0){ // if the bulb is not in the array...
 			
+			//**NOTE** MAC ADDRESS VALIDATOR
+
 			//console.log(mac);
 			AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
 				console.log('check bulb' + o);
@@ -68,23 +69,27 @@ var netserver = net.createServer(function(socket) {
 				  //create Bulbs obj
 				  if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
 				  	console.log('Bulbs['+cleanbulbID+'] not defined');
+				  	
 				  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
-	
+
 				  }else{
 				  	console.log('Bulbs['+cleanbulbID+'] is defined');
+				  	Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
 				  	delete Bulbs[cleanbulbID];
 
 				  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+
 				  }
 
-				  var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id'); // check and see if this bulb id is in the array
+				  // var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id'); // check and see if this bulb id is in the array
 				  
-				  if(checkId != -1){// if there is a bulb matching the id remove the socket, it must be an old socket from the same bulb
-				  	  console.log("REMOVED BULB FROM ARRAY");
-					  bulbs.splice(checkId, 1); // actually remove the socket
-				  }
-				  var connectedBulb = {id:cleanbulbID,netsocket:socket,macadd:mac}; // create the new bulb object for the bulb array
-				  bulbs.push(connectedBulb); // add the new bulb object to the array
+				  // if(checkId != -1){// if there is a bulb matching the id remove the socket, it must be an old socket from the same bulb
+				  // 	  console.log("REMOVED BULB FROM ARRAY");
+					 //  bulbs.splice(checkId, 1); // actually remove the socket
+				  // }
+				  // var connectedBulb = {id:cleanbulbID,netsocket:socket,macadd:mac}; // create the new bulb object for the bulb array
+				  // bulbs.push(connectedBulb); // add the new bulb object to the array
+
 				  console.log("AUTHORIZED bulb: " + data);
 			  }
 			});
@@ -135,19 +140,21 @@ function sendToVisualight(bulbObject,heartbeat){
 
 	var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+bulbObject.w; // this creates the r,g,b,blink array
 	
-	var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id'); // get the index of the bulb
+	//var currBulbIndex = arrayObjectIndexOf(bulbs,bulbObject._id,'id'); // get the index of the bulb
 	//console.log(currBulbIndex);
 	
 	heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false; // if we didnt define heartbeat then set it to false
 	
-	if(bulbs[currBulbIndex] != null && !heartbeat){ // if we have a bulb and the message is not a heartbeat
+	var cleanbulbID = sanitize(bulbObject._id).trim();
 
-		bulbs[currBulbIndex].netsocket.write("a"); // start character
-		bulbs[currBulbIndex].netsocket.write(data); // data
-		bulbs[currBulbIndex].netsocket.write("x"); // stop character
+	if(Bulbs.hasOwnProperty(cleanbulbID) && !heartbeat){ // if we have a bulb and the message is not a heartbeat
+
+		Bulbs[cleanbulbID].netsocket.write("a"); // start character
+		Bulbs[cleanbulbID].netsocket.write(data); // data
+		Bulbs[cleanbulbID].netsocket.write("x"); // stop character
 		
-	}else if(bulbs[currBulbIndex] != null && heartbeat){ // we are sending a heartbeat
-		bulbs[currBulbIndex].netsocket.write("h");
+	}else if(Bulbs.hasOwnProperty(cleanbulbID) && heartbeat){ // we are sending a heartbeat
+		Bulbs[cleanbulbID].netsocket.write("h");
 	}else{
 		console.log("Visulight NOT CONNECTED: " + bulbObject._id); // the visualight is not connected
 		//sendToWeb("That Visualight is OFFLINE");
@@ -202,6 +209,7 @@ io.sockets.on('connection', function (socket) {
 	  clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
   });
   // handle the socket selecting the current bulb
+  /* TO DO:: DEPRECATED */
   socket.on('current-bulb', function(bulbID){
   	var cleanbulbID = sanitize(bulbID).trim();
 	  AM.getBulbInfo(cleanbulbID, function(o){
@@ -223,6 +231,7 @@ io.sockets.on('connection', function (socket) {
 			  }
 		  }
 	  })
-  });
+  });//end current-bulb
+
 });
 }
