@@ -27,6 +27,9 @@ var netserver = net.createServer(function(socket) {
 	socket.setEncoding('utf8');
 	socket.setKeepAlive(true,5000); // heartbeat timer... This doesnt really work...
   // this is called when the bulb socket closes
+
+  	var connection_id; 
+
 	socket.on('close', function() {
 		//bulbs.splice(arrayObjectIndexOf(bulbs,socket,'netsocket'),1); // is this working??
 		console.log('visualight closed');
@@ -40,8 +43,7 @@ var netserver = net.createServer(function(socket) {
 
 		console.log('visualight error');
 		console.log(err);
-		console.log('Socket: ');
-		//console.log(JSON.stringify(socket))
+
 	});
 
   // this is the function that gets called when the bulb sends data
@@ -63,6 +65,18 @@ var netserver = net.createServer(function(socket) {
 				  var cleanbulbID = sanitize(o._id).trim(); // we got a bulb object that matches the sent mac address
 				  console.log("returned id " + cleanbulbID);
 				  
+				  //create Bulbs obj
+				  if(Bulbs[cleanbulbID] === 'undefined'){ //check if Bulbs[] exists
+				  	console.log('Bulbs['+cleanbulbID+'] not defined');
+				  	Blubs[cleanbulbID] = {mac: mac, netsocket: socket };
+	
+				  }else{
+				  	console.log('Bulbs['+cleanbulbID+'] is defined');
+				  	delete Bulbs[cleanbulbID];
+
+				  	Blubs[cleanbulbID] = {mac: mac, netsocket: socket };
+				  }
+
 				  var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id'); // check and see if this bulb id is in the array
 				  
 				  if(checkId != -1){// if there is a bulb matching the id remove the socket, it must be an old socket from the same bulb
