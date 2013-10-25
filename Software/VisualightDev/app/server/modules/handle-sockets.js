@@ -33,8 +33,12 @@ var netserver = net.createServer(function(socket) {
 		console.log('visualight ended');
 	});
 	// this is called when there is an error on the bulb socket
-	socket.on('error',function(){
-		console.log('visualight error' + socket);
+	socket.on('error',function(err){
+
+		console.log('visualight error');
+		console.log(err);
+		console.log('Socket: ');
+		console.log(JSON.stringify(socket))
 	});
 
   // this is the function that gets called when the bulb sends data
