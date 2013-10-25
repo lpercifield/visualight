@@ -76,6 +76,8 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 		if(_debug) Serial.println(F("Failed to start wifly"));
 		//RESET WIFI MODULE -- Toggle reset pin
 	}
+  //wifly.factoryRestore(); /***** **/
+
 	wifly.getDeviceID(devID,sizeof(devID));
 	if(strcmp(devID, "Visualight")==0){
 		if(_debug) Serial.println(F("SAME"));
@@ -86,12 +88,12 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	}
 
 	//wifly.terminal();
-	if(digitalRead(resetButton) == LOW){ //TAKE OUT??
-		//if(_debug) Serial.println("RESET");
-		if (MODEL > 0) colorLED(255,0,0,255);
-    else colorLED(255,0,0);
-		isServer = true;
-	} 
+	// if(digitalRead(resetButton) == LOW){ //TAKE OUT??
+	// 	//if(_debug) Serial.println("RESET");
+	// 	if (MODEL > 0) colorLED(255,0,0,255);
+ //    else colorLED(255,0,0);
+	// 	isServer = true;
+	// } 
 	else{
 		//EEPROM.write(0, 1);
 
@@ -107,10 +109,10 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	if(_debug) Serial.print(F("IP: "));
 	if(_debug) Serial.println(wifly.getIP(buf, sizeof(buf)));
 
-	if (wifly.isConnected()) {// isConnected is a little wonky
-		if(_debug) Serial.println(F("Old connection active. Closing"));
-		wifly.close();
-	}
+	// if (wifly.isConnected()) {// isConnected is a little wonky
+	// 	if(_debug) Serial.println(F("Old connection active. Closing"));
+	// 	wifly.close();
+	// }
 
 	if (wifly.getPort() != 80) {
 		wifly.setPort(80);
@@ -244,8 +246,8 @@ void Visualight::connectToServer(){
 void Visualight::wifiReset(){
   wifly.close();
   if(_debug) Serial.println(F("Wifi RESET"));
-  if(MODEL>0)colorLED(255,0,0,255);
-  else colorLED(255,0,0);
+  if(MODEL>0)colorLED(0,0,255,255);
+  else colorLED(0,0,255);
   isServer = true;
   EEPROM.write(0, 1);
   wifly.reboot();
@@ -257,6 +259,7 @@ void Visualight::configureWifi(){
   if(_debug){
     Serial.println(F("From Config"));
   } 
+  //wifly.factoryRestore();
   wifly.setBroadcastInterval(0);	// Turn off UPD broadcast
   wifly.setDeviceID("Visualight");
   wifly.setProtocol(WIFLY_PROTOCOL_TCP);
@@ -287,7 +290,7 @@ void Visualight::processClient(){
   int available;
 
 
-//  if((millis() - wifiTimer) > wifiCheckInterval){
+//  if((millis() - wifiTimer) > connectServerInterval){
 //    if(!wifly.isAssociated()) { //|| 
 //      Serial.println(F("Joining"));
 //      //Serial.println(wifly.isAssociated());

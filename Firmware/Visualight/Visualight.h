@@ -35,8 +35,7 @@
 #define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];})) 
 
 #define heartBeatInterval 25000
-#define wifiCheckInterval 30000
-#define connectServerInterval 10000
+#define connectServerInterval 60000 //
 
 #define redLED 9
 #define greenLED 13
