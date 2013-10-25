@@ -21,14 +21,14 @@ exports.createSockets = function(app, io, AM){
 	var netserver = net.createServer(function(socket) {
 		console.log('Visualight connected from: ' +socket.remoteAddress);
 		socket.setEncoding('utf8');
-		socket.setKeepAlive(true,5000); // heartbeat timer... This doesnt really work...
+		socket.setKeepAlive(true, 1); // heartbeat timer... This doesnt really work...
 	 	//this is called when the bulb socket closes
 
 	  	var connection_id; 
 
 		socket.on('close', function() {
 			//inform clients that bulbs are lost
-			console.log('visualight closed: '+connection_id);
+			console.log('visualight closed id: '+connection_id);
 		});
 		// this is called when the bulb socket ends
 		socket.on('end',function(){
@@ -38,7 +38,7 @@ exports.createSockets = function(app, io, AM){
 		// this is called when there is an error on the bulb socket
 		socket.on('error',function(err){
 
-			console.log('visualight error: '+connection_id);
+			console.log('visualight error id: '+connection_id);
 			console.log(err);
 
 		});
@@ -76,7 +76,6 @@ exports.createSockets = function(app, io, AM){
 					  	connection_id = cleanbulbID;
 
 					  }
-
 					  console.log("AUTHORIZED bulb: " + data);
 				  }
 				});
