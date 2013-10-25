@@ -26,22 +26,22 @@ var netserver = net.createServer(function(socket) {
 	console.log('Visualight connected from: ' +socket.remoteAddress);
 	socket.setEncoding('utf8');
 	socket.setKeepAlive(true,5000); // heartbeat timer... This doesnt really work...
-  // this is called when the bulb socket closes
+ 	//this is called when the bulb socket closes
 
   	var connection_id; 
 
 	socket.on('close', function() {
 		//bulbs.splice(arrayObjectIndexOf(bulbs,socket,'netsocket'),1); // is this working??
-		console.log('visualight closed');
+		console.log('visualight closed: '+connection_id);
 	});
 	// this is called when the bulb socket ends
 	socket.on('end',function(){
-		console.log('visualight ended');
+		console.log('visualight ended id: '+connection_id);
 	});
 	// this is called when there is an error on the bulb socket
 	socket.on('error',function(err){
 
-		console.log('visualight error');
+		console.log('visualight error: '+connection_id);
 		console.log(err);
 
 	});
@@ -49,13 +49,10 @@ var netserver = net.createServer(function(socket) {
   // this is the function that gets called when the bulb sends data
 	socket.on('data', function(data){
 		var mac = sanitize(data).trim(); // we hope that we are getting a mac address
-		//var bulbIndex = arrayObjectIndexOf(bulbs,mac,'macadd'); // we check to see if the mac address is already in the bulbs array
 		console.log("INCOMING: " + mac );
-		//if(bulbIndex < 0){ // if the bulb is not in the array...
 			
 			//**NOTE** MAC ADDRESS VALIDATOR
 
-			//console.log(mac);
 			AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
 				console.log('check bulb' + o);
 				
@@ -71,6 +68,7 @@ var netserver = net.createServer(function(socket) {
 				  	console.log('Bulbs['+cleanbulbID+'] not defined');
 				  	
 				  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+				  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
 				  }else{
 				  	console.log('Bulbs['+cleanbulbID+'] is defined');
@@ -78,35 +76,14 @@ var netserver = net.createServer(function(socket) {
 				  	delete Bulbs[cleanbulbID];
 
 				  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+				  	connection_id = cleanbulbID;
 
 				  }
-
-				  // var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id'); // check and see if this bulb id is in the array
-				  
-				  // if(checkId != -1){// if there is a bulb matching the id remove the socket, it must be an old socket from the same bulb
-				  // 	  console.log("REMOVED BULB FROM ARRAY");
-					 //  bulbs.splice(checkId, 1); // actually remove the socket
-				  // }
-				  // var connectedBulb = {id:cleanbulbID,netsocket:socket,macadd:mac}; // create the new bulb object for the bulb array
-				  // bulbs.push(connectedBulb); // add the new bulb object to the array
 
 				  console.log("AUTHORIZED bulb: " + data);
 			  }
 			});
-		//}else{
-			//This is where we should handle the heartbeat from the bulb
-			
-			/*
-AM.updateBulbStatus(bulbs[bulbIndex].id,1, function(o){
-				if(o==null){
-					console.log("error saving bulb status");
-				}else{
-					console.log("Sending Heartbeat response");
-					sendToVisualight(bulbs[bulbIndex].id,"OK",true);
-				}
-			});
-*/
-		//}
+
 	});	
 });
 // end of net socket setup
@@ -116,15 +93,6 @@ netserver.listen(5001, function() { //'listening' listener
 	console.log('tcp server bound');
 });
 
-// this parses an array for a property - this pretty much sucks
-function arrayObjectIndexOf(myArray, searchTerm, property) {
-    for(var i = 0, len = myArray.length; i < len; i++) {
-    	//console.log(myArray[i][property]);
-        if (myArray[i][property] === searchTerm) return i;
-        else if (myArray[i][property] == searchTerm) return i;
-    }
-    return -1;
-}
 
 /**
 * Send data to a visualight 
@@ -219,18 +187,15 @@ io.sockets.on('connection', function (socket) {
 			  //current bulb mac = o.mac;
 			  
 			  var checkId = arrayObjectIndexOf(clients,o._id,'currentBulb');
-				  if(checkId != -1){
-            console.log("client already setup");
-					  clients.splice(checkId, 1);
-				  }
-				//console.log(clients);
-				//console.log(bulbs);
-			  clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
-			  if(arrayObjectIndexOf(bulbs,o._id,'id') == -1){
-				  socket.emit('bulb-offline');
-			  }
-		  }
-	  })
+			  if(checkId != -1){
+            			console.log("client already setup");
+					  	clients.splice(checkId, 1);
+			  }//end if(checkID)
+
+		   clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
+
+		  }//if(!o)
+	  })//end AM.getBulbInfo
   });//end current-bulb
 
 });
