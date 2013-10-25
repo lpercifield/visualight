@@ -27,7 +27,7 @@
  * @file WiFly RN-XV Library
  */
 
-#include "WiFlyHQ.h"
+#include "WiFlyVisualight.h"
 
 /* For free memory check */
 extern unsigned int __bss_end;

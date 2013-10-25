@@ -16,7 +16,9 @@
  This example code is in the public domain.
  
  */
+#include <WiFlyHQ.h>
 
+WiFly wifly;
 
 int redPin = 9;
 int greenPin = 13;
@@ -27,6 +29,8 @@ float redScale = 1;
 const int resetButton = 7;
 const int resetPin = 11;
 volatile int resetButtonState = HIGH;
+
+boolean wiflyFailed = false;
 
 void setup()  { 
   // nothing happens in setup 
@@ -42,80 +46,78 @@ void setup()  {
   digitalWrite(greenPin,LOW);
   digitalWrite(bluePin,LOW);
   attachInterrupt(4, resetWifi, CHANGE);
-  
+
+
+  Serial1.begin(9600);
+  if (!wifly.begin(&Serial1,&Serial)) {
+    Serial.println(F("Failed to start wifly"));
+    wiflyFailed = true;
+  }
+
+  while(wiflyFailed){
+    digitalWrite(redPin, HIGH);
+    delay(750);
+    digitalWrite(redPin, LOW);
+    delay(750); 
+  }
 } 
 
 void loop()  { 
-   for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(redPin, fadeValue/redScale);         
-    // wait for 30 milliseconds to see the dimming effect    
+  // green
+  for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
+    analogWrite(greenPin, fadeValue);         
     delay(30);                            
   } 
-   for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(redPin, fadeValue/redScale);         
-    // wait for 30 milliseconds to see the dimming effect    
+  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
+    analogWrite(greenPin, fadeValue);         
     delay(30);                            
   }
-  // fade in from min to max in increments of 5 points:
- 
 
-  // fade out from max to min in increments of 5 points:
+  // blue
+//  for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
+//    analogWrite(bluePin, fadeValue);         
+//    delay(30);                            
+//  }
+//  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
+//    analogWrite(bluePin, fadeValue);         
+//    delay(30);                            
+//  }
+  fadeLED(greenPin);
+  fadeLED(bluePin);
+  fadeLED(redPin);
+
+  //white
   for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(greenPin, fadeValue);         
-    // wait for 30 milliseconds to see the dimming effect    
+    analogWrite(redPin, fadeValue);  
+    analogWrite(greenPin, fadeValue);
+    analogWrite(bluePin, fadeValue);      
     delay(30);                            
   } 
   for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(greenPin, fadeValue);         
-    // wait for 30 milliseconds to see the dimming effect    
+    analogWrite(redPin, fadeValue);  
+    analogWrite(greenPin, fadeValue);
+    analogWrite(bluePin, fadeValue);
     delay(30);                            
   }
-  
-  
-for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(bluePin, fadeValue);         
-    // wait for 30 milliseconds to see the dimming effect    
-    delay(30);                            
-  }
-  // fade out from max to min in increments of 5 points:
-  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(bluePin, fadeValue);         
-    // wait for 30 milliseconds to see the dimming effect    
-    delay(30);                            
-  }
-  
-  for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
-    // sets the value (range from 0 to maxFade):
-       analogWrite(redPin, fadeValue/redScale);  
-analogWrite(greenPin, fadeValue);
-analogWrite(bluePin, fadeValue);      
-    // wait for 30 milliseconds to see the dimming effect    
-    delay(30);                            
-  } 
-  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
-    // sets the value (range from 0 to maxFade):
-    analogWrite(redPin, fadeValue/redScale);  
-analogWrite(greenPin, fadeValue);
-analogWrite(bluePin, fadeValue);
-    // wait for 30 milliseconds to see the dimming effect    
-    delay(30);                            
-  }
-  
-  // fade out =9=from max to min in increments of 5 points:
-  
 }
-void resetWifi()
-{
+
+void fadeLED(int ledPin){
+    // red 
+  for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
+    analogWrite(ledPin, fadeValue);         
+    delay(30);                            
+  } 
+  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
+    analogWrite(ledPin, fadeValue);         
+    delay(30);                            
+  }
+}
+
+void resetWifi() {
   resetButtonState = digitalRead(resetButton);
   digitalWrite(resetPin, resetButtonState);
-  
-  
 }
+
+
 
 
