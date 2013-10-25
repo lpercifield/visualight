@@ -6,7 +6,7 @@ var bulbs = []; // array for bulb sockets
 var clients = []; // array for brower sockets
 
 
-var Bulbs ={}; //temp object of bulbs to start cross referenceing
+var Bulbs = {}; //temp object of bulbs to start cross referenceing
 			   //each object will contain mac address, socket.io client, netsocket client
 
 /**
@@ -51,7 +51,7 @@ var netserver = net.createServer(function(socket) {
 		var mac = sanitize(data).trim(); // we hope that we are getting a mac address
 		var bulbIndex = arrayObjectIndexOf(bulbs,mac,'macadd'); // we check to see if the mac address is already in the bulbs array
 		console.log("INCOMING: " + mac + " INDEX: " +bulbIndex);
-		
+		console.log(Bulbs)
 		//if(bulbIndex < 0){ // if the bulb is not in the array...
 			
 			//console.log(mac);
@@ -66,7 +66,7 @@ var netserver = net.createServer(function(socket) {
 				  console.log("returned id " + cleanbulbID);
 				  
 				  //create Bulbs obj
-				  if(Bulbs[cleanbulbID] === 'undefined'){ //check if Bulbs[] exists
+				  if(Bulbs.hasOwnProperty(cleanbulbID)){ //check if Bulbs[] exists
 				  	console.log('Bulbs['+cleanbulbID+'] not defined');
 				  	Blubs[cleanbulbID] = {mac: mac, netsocket: socket };
 	
