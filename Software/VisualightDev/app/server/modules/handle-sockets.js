@@ -19,12 +19,17 @@ exports.createSockets = function(app, io, AM){
 
 	// this is called everytime a bulb connects to the server
 	var netserver = net.createServer(function(socket) {
+
+	  	var connection_id; //make connection id 
+
 		console.log('Visualight connected from: ' +socket.remoteAddress);
 		socket.setEncoding('utf8');
-		socket.setKeepAlive(true, 1); // heartbeat timer... This doesnt really work...
+		socket.setKeepAlive(true); // heartbeat timer... This doesnt really work...
+		socket.setTimeout(1000,function(){
+			Bulbs[connection_id].netsocket.destroy();
+		})
 	 	//this is called when the bulb socket closes
 
-	  	var connection_id; 
 
 		socket.on('close', function() {
 			//inform clients that bulbs are lost
