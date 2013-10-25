@@ -72,13 +72,13 @@ exports.createSockets = function(app, io, AM){
 							  console.log("returned id " + cleanbulbID);
 							  
 							  //create Bulbs obj
-							  if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
+							if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
 							  	console.log('Bulbs['+cleanbulbID+'] not defined');
 							  	
 							  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
 							  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
-							  }else{
+							}else{
 
 							  	if(!data.hasOwnProperty('h')){ //check if we get heartbeat from device
 							  		console.log('Bulbs['+cleanbulbID+'] is defined');
@@ -93,6 +93,7 @@ exports.createSockets = function(app, io, AM){
 
 							  	}
 								console.log("AUTHORIZED bulb: " + data);
+							}
 					  	}// o is valid
 					
 					});
