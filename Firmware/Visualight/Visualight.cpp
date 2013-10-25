@@ -94,12 +94,12 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
  //    else colorLED(255,0,0);
 	// 	isServer = true;
 	// } 
-	else{
+	//else{
 		//EEPROM.write(0, 1);
 
 		isServer = EEPROM.read(0);
 		//isServer = true;
-	}
+	//}
 
 	//wifly.flush();
 	//wifly.flushRx();
