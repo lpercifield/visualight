@@ -66,15 +66,15 @@ var netserver = net.createServer(function(socket) {
 				  console.log("returned id " + cleanbulbID);
 				  
 				  //create Bulbs obj
-				  if(Bulbs.hasOwnProperty(cleanbulbID.toString())){ //check if Bulbs[] exists
+				  if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
 				  	console.log('Bulbs['+cleanbulbID+'] not defined');
-				  	Blubs[cleanbulbID] = {mac: mac, netsocket: socket };
+				  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
 	
 				  }else{
 				  	console.log('Bulbs['+cleanbulbID+'] is defined');
 				  	delete Bulbs[cleanbulbID];
 
-				  	Blubs[cleanbulbID] = {mac: mac, netsocket: socket };
+				  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
 				  }
 
 				  var checkId = arrayObjectIndexOf(bulbs,cleanbulbID,'id'); // check and see if this bulb id is in the array
