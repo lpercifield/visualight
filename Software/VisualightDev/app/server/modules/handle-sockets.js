@@ -53,8 +53,8 @@ exports.createSockets = function(app, io, AM){
 	  // this is the function that gets called when the bulb sends data
 		socket.on('data', function(data){
 			console.log(data)
-			var mac = sanitize(data).trim(); // we hope that we are getting a mac address
-			console.log("INCOMING: " + mac );
+			var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
+			console.log("INCOMING: " + data.mac );
 				
 				//**NOTE** MAC ADDRESS VALIDATOR
 
