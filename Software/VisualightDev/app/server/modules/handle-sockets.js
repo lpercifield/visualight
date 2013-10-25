@@ -28,7 +28,8 @@ exports.createSockets = function(app, io, AM){
 		socket.setTimeout(60000,function(){ //if we don't hear anything from the server for a minute then we kill the connection
 			console.log('connection_id: '+connection_id+" TIMEOUT");
 			//socket.write('H');
-			Bulbs[connection_id].netsocket.destroy();
+			Bulbs[connection_id].netsocket.destroy(); //destroy socket 
+			delete Bulbs[connection_id]; //delete obj
 		})
 	 	//this is called when the bulb socket closes
 
