@@ -159,8 +159,8 @@ io.configure(function (){
 
 //handle a connection from a IO socket -- this is after the handshack is validated
 io.sockets.on('connection', function (socket) {
-	var newClient = {iosocket:socket}; // create a new "client" object
-	clients.push(newClient); // add this client object to the array
+	//var newClient = {iosocket:socket}; // create a new "client" object
+	//clients.push(newClient); // add this client object to the array
   socket.on('message', function(message) {	// handle a message from the client
   	//console.log(JSON.parse(message));
   	API.parseMessage(message,function(o,e){ // this parses the json from the web socket
@@ -174,29 +174,29 @@ io.sockets.on('connection', function (socket) {
   });
   // handle client disconnect
   socket.on('disconnect', function(){
-	  clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
+	  //clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
   });
   // handle the socket selecting the current bulb
   /* TO DO:: DEPRECATED */
-  socket.on('current-bulb', function(bulbID){
-  	var cleanbulbID = sanitize(bulbID).trim();
-	  AM.getBulbInfo(cleanbulbID, function(o){
-		  if(!o){
-			  socket.emit('lookup-failed');
-		  }else{
-			  //current bulb mac = o.mac;
+  // socket.on('current-bulb', function(bulbID){
+  // 	var cleanbulbID = sanitize(bulbID).trim();
+	 //  AM.getBulbInfo(cleanbulbID, function(o){
+		//   if(!o){
+		// 	  socket.emit('lookup-failed');
+		//   }else{
+		// 	  //current bulb mac = o.mac;
 			  
-			  var checkId = arrayObjectIndexOf(clients,o._id,'currentBulb');
-			  if(checkId != -1){
-            			console.log("client already setup");
-					  	clients.splice(checkId, 1);
-			  }//end if(checkID)
+		// 	  var checkId = arrayObjectIndexOf(clients,o._id,'currentBulb');
+		// 	  if(checkId != -1){
+  //           			console.log("client already setup");
+		// 			  	//clients.splice(checkId, 1);
+		// 	  }//end if(checkID)
 
-		   clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
+		//    //clients[arrayObjectIndexOf(clients,socket,'iosocket')].currentBulb = o._id;
 
-		  }//if(!o)
-	  })//end AM.getBulbInfo
-  });//end current-bulb
+		//   }//if(!o)
+	 //  })//end AM.getBulbInfo
+  // });//end current-bulb
 
 });
 }
