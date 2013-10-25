@@ -26,7 +26,7 @@ exports.createSockets = function(app, io, AM){
 		socket.setEncoding('utf8');
 		socket.setKeepAlive(true); // heartbeat timer... This doesnt really work...
 		socket.setTimeout(60000,function(){ //if we don't hear anything from the server for a minute then we kill the connection
-			//console.log();
+			console.log('connection_id: '+connection_id+" TIMEOUT");
 			//socket.write('H');
 			Bulbs[connection_id].netsocket.destroy();
 		})
