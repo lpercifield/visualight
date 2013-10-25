@@ -26,7 +26,6 @@ var netserver = net.createServer(function(socket) {
 	console.log('Visualight connected from: ' +socket.remoteAddress);
 	socket.setEncoding('utf8');
 	socket.setKeepAlive(true,5000); // heartbeat timer... This doesnt really work...
-	console.log(JSON.stringify(socket));
   // this is called when the bulb socket closes
 	socket.on('close', function() {
 		//bulbs.splice(arrayObjectIndexOf(bulbs,socket,'netsocket'),1); // is this working??
