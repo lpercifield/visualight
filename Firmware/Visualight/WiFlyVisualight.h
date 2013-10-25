@@ -66,8 +66,8 @@
  * @brief The WiFly class definition.
  */
 
-#ifndef _WIFLYHQ_H_
-#define _WIFLYHQ_H_
+#ifndef _WIFLYVISUALIGHT_H_
+#define _WIFLYVISUALIGHT_H_
 
 #include <Arduino.h>
 #include <Stream.h>

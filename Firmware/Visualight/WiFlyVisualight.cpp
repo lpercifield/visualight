@@ -27,15 +27,15 @@
  * @file WiFly RN-XV Library
  */
 
-#include "WiFlyHQ.h"
+#include "WiFlyVisualight.h"
 
 /* For free memory check */
 extern unsigned int __bss_end;
 extern unsigned int __heap_start;
 extern void *__brkval;
 
-//#undef DEBUG
-#define DEBUG
+#undef DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 #define DPRINT(item) debug.print(item)

@@ -27,7 +27,7 @@
  * @file WiFly RN-XV ftp methods 
  */
 
-#include "WiFlyHQ.h"
+#include "WiFlyVisualight.h"
 
 /** Restore the default ftp settings. These
  * are the settings needed to upgrade the firmware.

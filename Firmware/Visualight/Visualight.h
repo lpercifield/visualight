@@ -26,7 +26,7 @@
     #include "WProgram.h"
 #endif
  
-#include <WiFlyHQ.h>
+#include <WiFlyVisualight.h>
 #include "../EEPROM/EEPROM.h"
 
 #undef PROGMEM 
