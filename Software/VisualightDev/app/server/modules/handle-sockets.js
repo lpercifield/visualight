@@ -53,48 +53,53 @@ exports.createSockets = function(app, io, AM){
 
 	  // this is the function that gets called when the bulb sends data
 		socket.on('data', function(data){
-			data = JSON.parse(data)
-			console.log(data)
-			var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
-			console.log("INCOMING: " + mac );
-				
-				//**NOTE** MAC ADDRESS VALIDATOR
-
-				AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
-					console.log('check bulb' + o);
+			try { 
+				data = JSON.parse(data) 
+				console.log(data)
+				var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
+				console.log("INCOMING: " + mac );
 					
-					if(!o){ // we didn't find a bulb matching the sent mac address, kill the socket
-					  console.log("NOT AUTHORIZED bulb: " + data);
-					  socket.destroy();
-					}else{
-					  var cleanbulbID = sanitize(o._id).trim(); // we got a bulb object that matches the sent mac address
-					  console.log("returned id " + cleanbulbID);
-					  
-					  //create Bulbs obj
-					  if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
-					  	console.log('Bulbs['+cleanbulbID+'] not defined');
-					  	
-					  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
-					  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
+					//**NOTE** MAC ADDRESS VALIDATOR
 
-					  }else{
+					AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
+						console.log('check bulb' + o);
+						
+						if(!o){ // we didn't find a bulb matching the sent mac address, kill the socket
+						  console.log("NOT AUTHORIZED bulb: " + data);
+						  socket.destroy();
+						}else{
+						  var cleanbulbID = sanitize(o._id).trim(); // we got a bulb object that matches the sent mac address
+						  console.log("returned id " + cleanbulbID);
+						  
+						  //create Bulbs obj
+						  if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
+						  	console.log('Bulbs['+cleanbulbID+'] not defined');
+						  	
+						  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+						  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
-					  	if(!data.hasOwnProperty('h')){ //check if we get heartbeat from device
-					  		console.log('Bulbs['+cleanbulbID+'] is defined');
-					  		Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
-					  		delete Bulbs[cleanbulbID];
+						  }else{
 
-					  		Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
-					  		connection_id = cleanbulbID;
-					  	}else{
+						  	if(!data.hasOwnProperty('h')){ //check if we get heartbeat from device
+						  		console.log('Bulbs['+cleanbulbID+'] is defined');
+						  		Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
+						  		delete Bulbs[cleanbulbID];
 
-					  		socket.write('H'); //writing to the socket
+						  		Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+						  		connection_id = cleanbulbID;
+						  	}else{
 
-					  	}
+						  		socket.write('H'); //writing to the socket
 
-					  }
-					  console.log("AUTHORIZED bulb: " + data);
-				  }// o is valid
+						  	}
+
+						  }
+						  console.log("AUTHORIZED bulb: " + data);
+					  }// o is valid
+					 }catch(e){
+					 	console.error("Bad Data")
+					 	console.error(e)
+					 }
 				});
 
 		});	
