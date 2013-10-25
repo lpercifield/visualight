@@ -66,7 +66,7 @@ var netserver = net.createServer(function(socket) {
 				  console.log("returned id " + cleanbulbID);
 				  
 				  //create Bulbs obj
-				  if(Bulbs.hasOwnProperty(cleanbulbID)){ //check if Bulbs[] exists
+				  if(Bulbs.hasOwnProperty(cleanbulbID.toString())){ //check if Bulbs[] exists
 				  	console.log('Bulbs['+cleanbulbID+'] not defined');
 				  	Blubs[cleanbulbID] = {mac: mac, netsocket: socket };
 	
