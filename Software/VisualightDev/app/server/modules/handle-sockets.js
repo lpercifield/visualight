@@ -26,6 +26,8 @@ exports.createSockets = function(app, io, AM){
 		socket.setEncoding('utf8');
 		socket.setKeepAlive(true); // heartbeat timer... This doesnt really work...
 		socket.setTimeout(1000,function(){
+
+
 			Bulbs[connection_id].netsocket.destroy();
 		})
 	 	//this is called when the bulb socket closes
@@ -50,6 +52,7 @@ exports.createSockets = function(app, io, AM){
 
 	  // this is the function that gets called when the bulb sends data
 		socket.on('data', function(data){
+			console.log(data)
 			var mac = sanitize(data).trim(); // we hope that we are getting a mac address
 			console.log("INCOMING: " + mac );
 				
@@ -82,7 +85,8 @@ exports.createSockets = function(app, io, AM){
 
 					  }
 					  console.log("AUTHORIZED bulb: " + data);
-				  }
+					  socket.write('H'); //writing to the socket
+				  }// o is valid
 				});
 
 		});	
