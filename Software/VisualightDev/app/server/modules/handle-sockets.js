@@ -37,11 +37,15 @@ exports.createSockets = function(app, io, AM){
 		socket.on('close', function() {
 			//inform clients that bulbs are lost
 			console.log('visualight closed id: '+connection_id);
+			Bulbs[connection_id].netsocket.destroy(); //destroy socket 
+			delete Bulbs[connection_id]; //delete obj
 		});
 		// this is called when the bulb socket ends
 		socket.on('end',function(){
 			//inform clients that bulb is gone
 			console.log('visualight ended id: '+connection_id);
+			Bulbs[connection_id].netsocket.destroy(); //destroy socket 
+			delete Bulbs[connection_id]; //delete obj
 		});
 		// this is called when there is an error on the bulb socket
 		socket.on('error',function(err){
@@ -88,6 +92,7 @@ exports.createSockets = function(app, io, AM){
 							}else{
 
 							  	if(!data.hasOwnProperty('h')){ //check if we get heartbeat from device
+							  		
 							  		console.log('Bulbs['+cleanbulbID+'] is defined');
 							  		Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
 							  		delete Bulbs[cleanbulbID];
@@ -132,13 +137,13 @@ exports.createSockets = function(app, io, AM){
 		var cleanbulbID = sanitize(bulbObject._id).trim();
 
 		if(Bulbs.hasOwnProperty(cleanbulbID) && !heartbeat){ // if we have a bulb and the message is not a heartbeat
-
+			console.log("WRITING DATA: "+data+" id: "+cleanbulbID);
 			Bulbs[cleanbulbID].netsocket.write("a"); // start character
 			Bulbs[cleanbulbID].netsocket.write(data); // data
 			Bulbs[cleanbulbID].netsocket.write("x"); // stop character
 			
 		}else if(Bulbs.hasOwnProperty(cleanbulbID) && heartbeat){ // we are sending a heartbeat
-			Bulbs[cleanbulbID].netsocket.write("h");
+			Bulbs[cleanbulbID].netsocket.write("H");
 		}else{
 			console.log("Visulight NOT CONNECTED: " + bulbObject._id); // the visualight is not connected
 		}
