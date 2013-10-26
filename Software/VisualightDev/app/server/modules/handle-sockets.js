@@ -28,8 +28,11 @@ exports.createSockets = function(app, io, AM){
 		socket.setTimeout(60000,function(){ //if we don't hear anything from the server for a minute then we kill the connection
 			console.log('connection_id: '+connection_id+" TIMEOUT");
 			//socket.write('H');
-			Bulbs[connection_id].netsocket.destroy(); //destroy socket 
-			delete Bulbs[connection_id]; //delete obj
+			if( Bulbs.hasOwnProperty(cleanbulbID) ){
+
+				Bulbs[connection_id].netsocket.destroy(); //destroy socket 
+				delete Bulbs[connection_id]; //delete obj
+			}
 		})
 	 	//this is called when the bulb socket closes
 
@@ -37,15 +40,20 @@ exports.createSockets = function(app, io, AM){
 		socket.on('close', function() {
 			//inform clients that bulbs are lost
 			console.log('visualight closed id: '+connection_id);
-			Bulbs[connection_id].netsocket.destroy(); //destroy socket 
-			delete Bulbs[connection_id]; //delete obj
+			if( Bulbs.hasOwnProperty(cleanbulbID) ){
+				Bulbs[connection_id].netsocket.destroy(); //destroy socket 
+				delete Bulbs[connection_id]; //delete obj
+			}	
 		});
 		// this is called when the bulb socket ends
 		socket.on('end',function(){
 			//inform clients that bulb is gone
 			console.log('visualight ended id: '+connection_id);
-			Bulbs[connection_id].netsocket.destroy(); //destroy socket 
-			delete Bulbs[connection_id]; //delete obj
+			if( Bulbs.hasOwnProperty(cleanbulbID) ){
+				Bulbs[connection_id].netsocket.destroy(); //destroy socket 
+				delete Bulbs[connection_id]; //delete obj
+			}
+
 		});
 		// this is called when there is an error on the bulb socket
 		socket.on('error',function(err){
@@ -63,8 +71,9 @@ exports.createSockets = function(app, io, AM){
 					var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
 					console.log("INCOMING: " + mac );
 				}catch(e){
-				 	console.error("Bad Data")
-				 	console.error(e)
+				 	console.error("Bad Data");
+				 	console.error(e);
+				 	socket.destroy();
 				}
 						
 				//**NOTE** MAC ADDRESS VALIDATOR
