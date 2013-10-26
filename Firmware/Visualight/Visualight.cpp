@@ -4,7 +4,6 @@
 *
 *
 */
-
 #if (ARDUINO >= 100)
     #include "Arduino.h"
 #else
@@ -14,11 +13,7 @@
 
 #include "Visualight.h"
 
-
 Visualight::Visualight(){
-
-	//devID[] = "Visualight";
-
 	_red = 255;
 	_green = 255;
 	_blue = 255;
@@ -26,6 +21,7 @@ Visualight::Visualight(){
 	_blinkMe = 0;
 
 	connectTime = 0;
+  lastHeartbeat = 0;
 	_debug = false;
 	resetButtonState = 1;
 
@@ -76,7 +72,7 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 		if(_debug) Serial.println(F("Failed to start wifly"));
 		//RESET WIFI MODULE -- Toggle reset pin
 	}
-  //wifly.factoryRestore(); /***** **/
+  //wifly.factoryRestore(); /*******/
 
 	wifly.getDeviceID(devID,sizeof(devID));
 	if(strcmp(devID, "Visualight")==0){
@@ -88,16 +84,7 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	}
 
 	//wifly.terminal();
-	// if(digitalRead(resetButton) == LOW){ //TAKE OUT??
-	// 	//if(_debug) Serial.println("RESET");
-	// 	if (MODEL > 0) colorLED(255,0,0,255);
- //    else colorLED(255,0,0);
-	// 	isServer = true;
-	// } 
-	//else{
-		//EEPROM.write(0, 1);
-
-		isServer = EEPROM.read(0);
+	isServer = EEPROM.read(0);
 		//isServer = true;
 	//}
 
@@ -120,10 +107,8 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 		wifly.save();
 		if(_debug) Serial.println(F("Set port to 80"));
 			//wifly.reboot();
-			//delay(3000);
 	}
 	if(_debug) Serial.println(F("Ready"));
-
 
 	if(isServer){
 		/* Create AP*/
@@ -136,10 +121,8 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	}
 	else{
 		if(_debug) Serial.println(F("Already Configured"));
-
 		//isServer = false;
 		connectToServer();
-		//Already Joined
 	}
 }
 
@@ -147,24 +130,14 @@ void Visualight::joinWifi(){
   /* Setup the WiFly to connect to a wifi network */
   if(_debug) Serial.println(F("From joinWifi"));
   wifly.reboot();
-  //if (!wifly.isAssociated()) {
-
-  //wifly.startCommand();
-  //wifly.setSpaceReplace('+');
-
   wifly.setSSID(network);
   wifly.setPassphrase(password);
   wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
-  //wifly.join();
-
-
   //wifly.setIpProtocol(WIFLY_PROTOCOL_TCP);
   wifly.save();
   //wifly.finishCommand();
   wifly.reboot();
   //delay(1000);
-
-  //}
 
   if(!wifly.isAssociated()){
     if(_debug) Serial.println(F("Joining network"));
@@ -196,9 +169,8 @@ void Visualight::joinWifi(){
 void Visualight::connectToServer(){
   wifly.flushRx();
   //MAC = wifly.getMAC(buf, sizeof(buf));
-  if(!wifly.isAssociated()) { //|| 
+  if(!wifly.isAssociated()) { //
       if(_debug) Serial.println(F("Joining"));
-      //Serial.println(wifly.isAssociated());
       if(!wifly.join()){
         if(_debug) Serial.println(F("Join Failed"));
         if(_debug) Serial.println(wifly.isAssociated());
@@ -212,12 +184,11 @@ void Visualight::connectToServer(){
   //   wifly.close();
   // }
   if(_debug) Serial.println(F("Connecting"));
-  //if (wifly.open("dev.visualight.org", 5001)) {
+
   if (wifly.open(URL, PORT)) {
-  //if (wifly.open("10.0.1.39",5001)) {
     if(reconnect){
-      if(MODEL>0)colorLED(_red,_green,_blue,_white); // white is connected
-      else colorLED(_red,_green,_blue); // white is connected
+      if(MODEL>0)colorLED(_red,_green,_blue,_white); // RGBW
+      else colorLED(_red,_green,_blue); // RGB
     }else{
       if(MODEL>0)colorLED(255,255,255,255); // white is connected
       else colorLED(255,255,255); // white is connected
@@ -227,12 +198,15 @@ void Visualight::connectToServer(){
     //Serial.print(F("Free memory: "));
     //Serial.println(wifly.getFreeMemory(),DEC);
     //Serial.flush();
-    //Serial1.flush();
-    //Serial.println(MAC);
-    //wifly.flush();
-    wifly.write(MAC);
+
+    //wifly.write(MAC); //HOW DID THIS WORK
+    wifly.print("{\"mac\":\"");
+    wifly.print(MAC);
+    wifly.println("\"}");
+
     reconnect = false;
     connectTime = millis();
+    lastHeartbeat = millis();
   } 
   else {
     if(_debug) Serial.println(F("Failed to open"));
@@ -240,6 +214,14 @@ void Visualight::connectToServer(){
     //delay(1000);
 
   }
+}
+
+void Visualight::sendHeartbeat(){
+    if(_debug)Serial.println(F("sending heartBeat"));
+    wifly.print("{\"mac\":\"");
+    wifly.print(MAC);
+    wifly.println("\",\"h\":\"h\"}");
+    lastHeartbeat = millis();
 }
 
 
@@ -259,7 +241,8 @@ void Visualight::configureWifi(){
   if(_debug){
     Serial.println(F("From Config"));
   } 
-  //wifly.factoryRestore();
+  wifly.factoryRestore();
+  delay(2000);
   wifly.setBroadcastInterval(0);	// Turn off UPD broadcast
   wifly.setDeviceID("Visualight");
   wifly.setProtocol(WIFLY_PROTOCOL_TCP);
@@ -285,52 +268,28 @@ void Visualight::replaceAll(char *buf_,const char *find_,const char *replace_)
 }
 
 void Visualight::processClient(){
-  ////Serial.println("Process Client");
-  //delay(100);
   int available;
 
-
-//  if((millis() - wifiTimer) > connectServerInterval){
-//    if(!wifly.isAssociated()) { //|| 
-//      Serial.println(F("Joining"));
-//      //Serial.println(wifly.isAssociated());
-//      if(!wifly.join()){
-//        Serial.println("Join Failed");
-//        Serial.println(wifly.isAssociated());
-//      }
-//      //else{
-//      //wifiTimer = millis();
-//      //}
-//    }
-//    else{
-//      Serial.println("Already Assoc");
-//    }
-//  }
-
-  boolean _isConn = wifly.isConnected();
-  //if(_debug)Serial.println(_isConn);
-
-  //if (wifly.isConnected() == false) {
-  //if(!_isConn){
-    //if(_debug) Serial.println("Not Connected to Server");
+  if(millis()-lastHeartbeat > heartBeatInterval){
+    sendHeartbeat();
+  }
 
   if(millis()-connectTime > connectServerInterval){
-    if(_debug) Serial.println(F("reconnect"));
+    if(_debug) Serial.println(F("reconnect from timeout"));
     reconnect = true;
     connectTime = millis();
     connectToServer();
   }
-  //} 
   else {
     available = wifly.available();
     if (available < 0) {
-      //Serial.println(F("Disconnected"));
-      wifly.close();
+      if(_debug)Serial.println(F("reconnect from available()"));
+      connectToServer();
     } 
     else if (available > 1) {
-      //Print incoming data...
       connectTime = millis();
-      if(wifly.read() == 120){  // 'a'
+      char lastChar = wifly.read();
+      if(lastChar == 120){  // 'a'
         _red = wifly.parseInt();
         _green = wifly.parseInt();
         _blue = wifly.parseInt();
@@ -340,50 +299,28 @@ void Visualight::processClient(){
         if(MODEL > 0) colorLED(_red,_green,_blue, _white);
         else colorLED(_red,_green,_blue);
       }
-//      if(wifly.read() == 104 && sentHeartBeat){ // 'h'
-//       if(_debug) Serial.println("Heartbeat TRUE");
-//        sentHeartBeat = false;
-//      }
+      else{
+        Serial.println(lastChar);
+        //wifly.flushRx();
+      }
     } 
-    // else {
-    //   //This sends a checkin to the server to ensure the connection is live
-    //   // if ((millis()-connectTime)>heartBeatInterval) {
-    //   //   if(_debug) Serial.println(F("heartBeat"));
-    //   //   sentHeartBeat=true;
-    //   //   wifly.write(MAC);
-    //   //   connectTime = millis();
-    //   // }
-    //   if (wifly.isConnected() == false) {
-    //     if(_debug) Serial.println(F("Not Connected in loop"));
-    //     // go white
-    //     connectToServer();
-    //   } 
-    // }
   }
 }
 
 void Visualight::processServer(){
   if (wifly.available() > 0) {
-
-    /* See if there is a request */
-    if (wifly.gets(buf, sizeof(buf))) {
-      //if (strncmp_P(buf, PSTR("GET / "), 6) == 0) {
-      if (strstr_P(buf, PSTR("GET /mac")) > 0) {
-        /* GET request */
+    if (wifly.gets(buf, sizeof(buf))) { /* See if there is a request */
+      if (strstr_P(buf, PSTR("GET /mac")) > 0) { /* GET request */
         if(_debug) Serial.println(F("Got GET MAC request"));
-        while (wifly.gets(buf, sizeof(buf)) > 0) {
-          /* Skip rest of request */
+        while (wifly.gets(buf, sizeof(buf)) > 0) { /* Skip rest of request */
         }
         //int numNetworks = wifly.getNumNetworks();
-
         sendMac();
         wifly.flushRx();		// discard rest of input
         if(_debug) Serial.println(F("Sent Mac address"));
-        //wifly.flush();
         wifly.close();
       } 
-      else if (strstr_P(buf, PSTR("GET / ")) > 0) {
-        /* GET request */
+      else if (strstr_P(buf, PSTR("GET / ")) > 0) { // GET request
         if(_debug) Serial.println(F("Got GET request"));
         while (wifly.gets(buf, sizeof(buf)) > 0) {
           /* Skip rest of request */

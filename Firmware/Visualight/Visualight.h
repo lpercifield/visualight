@@ -35,7 +35,7 @@
 #define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];})) 
 
 #define heartBeatInterval 25000
-#define connectServerInterval 60000 //
+#define connectServerInterval 90000 //
 
 #define redLED 9
 #define greenLED 13
@@ -77,6 +77,7 @@ class Visualight {
 		void colorLED(int red, int green, int blue);
 		void colorLED(int red, int green, int blue, int white);
 		void fadeOn();
+		void sendHeartbeat();
 
 		char buf[80];
 		//char scanList[350];
@@ -106,6 +107,7 @@ class Visualight {
 		int resetTime;
 
 		uint32_t connectTime;
+		uint32_t lastHeartbeat;
 };
 
 #endif

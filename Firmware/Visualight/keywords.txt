@@ -31,6 +31,7 @@ processButton	KEYWORD2
 replaceAll		KEYWORD2
 colorLED		KEYWORD2
 fadeOn			KEYWORD2
+sendHeartbet	KEYWORD2
 
 
 #######################################

@@ -2678,7 +2678,7 @@ boolean WiFly::open(const char *addr, int port, boolean block)
 
     /* Already connected? Close the connection first */
     if (connected) {
-	//close();
+	close();
     }
 
     simple_utoa(port, 10, buf, sizeof(buf));
