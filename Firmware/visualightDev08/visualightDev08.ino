@@ -70,7 +70,7 @@ boolean sink = false;
 const int resetButton = 7;
 const int resetPin = 11;
 
-const boolean DEBUG = false;
+const boolean DEBUG = true;
 
 void setup()
 {
