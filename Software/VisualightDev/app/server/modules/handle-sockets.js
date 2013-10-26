@@ -58,9 +58,13 @@ exports.createSockets = function(app, io, AM){
 					console.log(data)
 					var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
 					console.log("INCOMING: " + mac );
+				}catch(e){
+				 	console.error("Bad Data")
+				 	console.error(e)
+				}
 						
-						//**NOTE** MAC ADDRESS VALIDATOR
-
+				//**NOTE** MAC ADDRESS VALIDATOR
+				if(mac){		
 					AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
 						console.log('check bulb' + o);
 						
@@ -73,9 +77,10 @@ exports.createSockets = function(app, io, AM){
 							  
 							  //create Bulbs obj
 							if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
-							  	console.log('Bulbs['+cleanbulbID+'] not defined');
+							  	console.log('Bulbs['+cleanbulbID+'] not defined - CREATING Bulbs['+cleanbulbID+']');
 							  	
 							  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+							  	console.log(Bulbs[cleanbulbID]);
 							  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
 							}else{
@@ -97,11 +102,8 @@ exports.createSockets = function(app, io, AM){
 					  	}// o is valid
 					
 					});
-
-				}catch(e){
-				 	console.error("Bad Data")
-				 	console.error(e)
 				}
+
 		});	
 	});
 	// end of net socket setup
