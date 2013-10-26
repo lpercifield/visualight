@@ -2678,7 +2678,7 @@ boolean WiFly::open(const char *addr, int port, boolean block)
 
     /* Already connected? Close the connection first */
     if (connected) {
-	close();
+	//close();
     }
 
     simple_utoa(port, 10, buf, sizeof(buf));
@@ -2692,7 +2692,7 @@ boolean WiFly::open(const char *addr, int port, boolean block)
      if (!getPrompt(10000)) {
 	debug.println(F("Failed to get prompt"));
 	debug.println(F("WiFly has crashed and will reboot..."));
-	while (1); /* wait for the reboot */
+	//while (1) /* wait for the reboot */
 	return false;
     }
 
