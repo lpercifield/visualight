@@ -72,6 +72,8 @@ exports.createSockets = function(app, io, AM){
 						  console.log("NOT AUTHORIZED bulb: " + data);
 						  socket.destroy();
 						}else{
+
+							  console.log("AUTHORIZED bulb: " + data);
 							  var cleanbulbID = sanitize(o._id).trim(); // we got a bulb object that matches the sent mac address
 							  console.log("returned id " + cleanbulbID);
 							  
@@ -80,7 +82,7 @@ exports.createSockets = function(app, io, AM){
 							  	console.log('Bulbs['+cleanbulbID+'] not defined - CREATING Bulbs['+cleanbulbID+']');
 							  	
 							  	Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
-							  	console.log(Bulbs[cleanbulbID]);
+							  	//console.log(Bulbs[cleanbulbID]);
 							  	connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
 							}else{
@@ -97,7 +99,6 @@ exports.createSockets = function(app, io, AM){
 							  		socket.write('H'); //writing to the socket
 
 							  	}
-								console.log("AUTHORIZED bulb: " + data);
 							}
 					  	}// o is valid
 					
