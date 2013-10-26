@@ -138,6 +138,7 @@ exports.createSockets = function(app, io, AM){
 
 		if(Bulbs.hasOwnProperty(cleanbulbID) && !heartbeat){ // if we have a bulb and the message is not a heartbeat
 			console.log("WRITING DATA: "+data+" id: "+cleanbulbID);
+			console.log(Bulbs);
 			Bulbs[cleanbulbID].netsocket.write("a"); // start character
 			Bulbs[cleanbulbID].netsocket.write(data); // data
 			Bulbs[cleanbulbID].netsocket.write("x"); // stop character
