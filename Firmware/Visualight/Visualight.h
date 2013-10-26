@@ -35,7 +35,7 @@
 #define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];})) 
 
 #define heartBeatInterval 25000
-#define connectServerInterval 90000 //
+#define connectServerInterval 60000 //
 
 #define redLED 9
 #define greenLED 13
@@ -71,7 +71,7 @@ class Visualight {
 		void configureWifi();
 		void processServer();
 		void processClient();
-		void connectToServer();
+		boolean connectToServer();
 		void processButton(); //needs to be static for attachInterrupt()
 		void replaceAll(char *buf_,const char *find_,const char *replace_);
 		void colorLED(int red, int green, int blue);
@@ -80,6 +80,7 @@ class Visualight {
 		void sendHeartbeat();
 
 		char buf[80];
+		char serBuf[16];
 		//char scanList[350];
 		char network[25];
 		char password[25];
@@ -105,6 +106,7 @@ class Visualight {
 		//const int resetButtonTime = 2000;
 		uint8_t resetButtonState;
 		int resetTime;
+		uint8_t reconnectCount;
 
 		uint32_t connectTime;
 		uint32_t lastHeartbeat;

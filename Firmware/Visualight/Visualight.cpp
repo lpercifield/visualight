@@ -27,12 +27,14 @@ Visualight::Visualight(){
 
 	isServer = true;
   reconnect = false;
+  reconnectCount = 0;
 	//maybe move some of the setup to here...
 }
 
 void Visualight::setVerbose(boolean set){
 	if(set) _debug = true;
 	else _debug = false;
+  delay(50);
 }
 
 void Visualight::update(){
@@ -122,7 +124,9 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	else{
 		if(_debug) Serial.println(F("Already Configured"));
 		//isServer = false;
-		connectToServer();
+		if(!connectToServer()){
+      reconnectCount++;
+    }
 	}
 }
 
@@ -143,7 +147,9 @@ void Visualight::joinWifi(){
     if(_debug) Serial.println(F("Joining network"));
     if (wifly.join()) {
       if(_debug) Serial.println(F("Joined wifi network"));
-      connectToServer();
+      if(!connectToServer()){
+        reconnectCount++;
+      }
     } 
     else {
       if(_debug) Serial.println(F("Failed to join wifi network"));
@@ -162,11 +168,18 @@ void Visualight::joinWifi(){
       isServer = false;
       //colorLED(0,0,255);
     }
-    connectToServer();
+    if(!connectToServer()){
+      reconnectCount++;
+    }
   }
 }
 
-void Visualight::connectToServer(){
+boolean Visualight::connectToServer(){
+  if(reconnectCount > 4){
+    wifly.reboot();
+    delay(1000);
+    reconnectCount = 0;
+  }
   wifly.flushRx();
   //MAC = wifly.getMAC(buf, sizeof(buf));
   if(!wifly.isAssociated()) { //
@@ -174,6 +187,7 @@ void Visualight::connectToServer(){
       if(!wifly.join()){
         if(_debug) Serial.println(F("Join Failed"));
         if(_debug) Serial.println(wifly.isAssociated());
+        return false;
       }
     }
     else{
@@ -207,9 +221,12 @@ void Visualight::connectToServer(){
     reconnect = false;
     connectTime = millis();
     lastHeartbeat = millis();
+    return true;
   } 
   else {
+
     if(_debug) Serial.println(F("Failed to open"));
+    return false;
     //wifly.connected = false;
     //delay(1000);
 
@@ -217,11 +234,13 @@ void Visualight::connectToServer(){
 }
 
 void Visualight::sendHeartbeat(){
-    if(_debug)Serial.println(F("sending heartBeat"));
-    wifly.print("{\"mac\":\"");
-    wifly.print(MAC);
-    wifly.println("\",\"h\":\"h\"}");
-    lastHeartbeat = millis();
+  if(_debug)Serial.println(F("sending heartBeat"));
+  wifly.print("{\"mac\":\"");
+  wifly.print(MAC);
+  wifly.println("\",\"h\":\"h\"}");
+  lastHeartbeat = millis();
+  if(_debug) Serial.print(F("Free memory: "));
+  if(_debug) Serial.println(wifly.getFreeMemory(),DEC);
 }
 
 
@@ -277,35 +296,135 @@ void Visualight::processClient(){
   if(millis()-connectTime > connectServerInterval){
     if(_debug) Serial.println(F("reconnect from timeout"));
     reconnect = true;
-    connectTime = millis();
-    connectToServer();
+    //connectTime = millis();
+    if(!connectToServer()){
+      reconnectCount++;
+    }
   }
   else {
     available = wifly.available();
+    // if(_debug){
+    //   Serial.print("available: ");
+    //   Serial.println(available);
+    //   delay(1);
+    // }
     if (available < 0) {
       if(_debug)Serial.println(F("reconnect from available()"));
-      connectToServer();
-    } 
-    else if (available > 1) {
+      if(!connectToServer()){
+        reconnectCount++;
+      }
+    }
+    else if(available > 0){
       connectTime = millis();
-      char lastChar = wifly.read();
-      if(lastChar == 120){  // 'a'
-        _red = wifly.parseInt();
-        _green = wifly.parseInt();
-        _blue = wifly.parseInt();
-        //if(MODEL > 0) _white = wifly.parseInt();
-        //_blinkMe = wifly.parseInt();
-        _white = wifly.parseInt();
+
+      //char buf[16];
+      char thisChar;
+      thisChar = wifly.read();
+      if( thisChar == 97){
+        int numBytes = wifly.readBytesUntil('x', serBuf, 16);
+        sscanf(serBuf,"%i,%i,%i,%i",&_red,&_green,&_blue,&_white);
         if(MODEL > 0) colorLED(_red,_green,_blue, _white);
         else colorLED(_red,_green,_blue);
+
+
+        if(_debug){
+          Serial.print("numBytes: ");
+          Serial.println(numBytes);
+          Serial.print("buf: ");
+          Serial.println(serBuf);
+          delay(5);
+        }
+        memset(serBuf,0,sizeof(serBuf));
+      } else {
+        if(_debug)Serial.println(thisChar);
+        delay(5);
       }
-      else{
-        Serial.println(lastChar);
-        //wifly.flushRx();
-      }
-    } 
+    }
   }
 }
+
+      // char lastChar = wifly.peek();
+      // if(_debug){
+      //   Serial.print("peek: ");
+      //   Serial.println(lastChar);
+      //   delay(1);
+      // }
+      // if(lastChar == 72){ // 'H'
+      //   lastChar = wifly.read();
+      //   if(_debug){
+      //     Serial.println("got H eartbeat");
+      //   }
+      // }
+      // else if(lastChar == 120){  // 'x'
+      //   if(_debug){
+      //     //int avail = wifly.available();
+      //     //Serial.print("available: ");
+      //     //Serial.println(avail);
+      //     for(int i=0; i<available; i++){
+      //       Serial.print(wifly.read());
+      //       delay(10);
+      //     }
+      //     Serial.println("-----");
+      //   }
+        //_red = wifly.parseInt();
+        //_green = wifly.parseInt();
+        //_blue = wifly.parseInt();
+        //if(MODEL > 0) _white = wifly.parseInt();
+        //_blinkMe = wifly.parseInt();
+        //_white = wifly.parseInt();
+      //   if(MODEL > 0) colorLED(_red,_green,_blue, _white);
+      //   else colorLED(_red,_green,_blue);
+      // }
+      // else{
+      //   lastChar = wifly.read();
+      //   if(_debug){
+      //     Serial.print("NOT H OR x : ");
+      //     Serial.println(lastChar);
+      //   }
+      //   //wifly.flushRx();
+      // }
+//    }
+//  } 
+//}//end process client()
+
+
+    // else if (available == 1){
+    //   connectTime = millis();
+    //   char thisChar = wifly.read();
+    //   if(_debug){
+    //     Serial.print(F("avail==1: "));
+    //     Serial.println(thisChar);
+    //   }
+    // }
+  //   else if (available > 1) {
+  //     connectTime = millis();
+  //     char lastChar = wifly.peek();
+  //     if(_debug)Serial.println(lastChar);
+  //     if(lastChar == 72){
+  //       lastChar = wifly.read();
+  //       if(_debug)Serial.println(lastChar);
+  //     }
+  //     else if(lastChar == 120){  // 'a'
+  //       _red = wifly.parseInt();
+  //       _green = wifly.parseInt();
+  //       _blue = wifly.parseInt();
+  //       //if(MODEL > 0) _white = wifly.parseInt();
+  //       //_blinkMe = wifly.parseInt();
+  //       _white = wifly.parseInt();
+  //       if(MODEL > 0) colorLED(_red,_green,_blue, _white);
+  //       else colorLED(_red,_green,_blue);
+  //     }
+  //     else{
+  //       lastChar = wifly.read();
+  //       if(_debug){
+  //         Serial.print("NOT H OR x : ");
+  //         Serial.println(lastChar);
+  //       }
+  //       //wifly.flushRx();
+  //     }
+  //   } 
+  // }
+//}
 
 void Visualight::processServer(){
   if (wifly.available() > 0) {
