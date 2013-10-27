@@ -37,11 +37,16 @@ Visualight::Visualight(){
   }
 }
 
+
 void Visualight::setVerbose(boolean set){
 	if(set) _debug = true;
 	else _debug = false;
   delay(50);
 }
+
+/**********************************************************************************/
+//--------------------------------- SETUP & UPDATE -------------------------------//
+/**********************************************************************************/
 
 void Visualight::update(){
 
@@ -51,9 +56,8 @@ void Visualight::update(){
   	else{
     	processClient();
   	}
-  	processButton(); // test to see if this is getting blocked somewhere...
+  	processButton(); //TODO: test to see how much blockage this has...
 }
-
 
 void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
   MODEL = _MODEL;
@@ -125,6 +129,10 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	}
 }
 
+/**********************************************************************************/
+//-------------------------- VISUALIGHT-AS-CLIENT METHODS ------------------------//
+/**********************************************************************************/
+
 void Visualight::configureWifi(){
   if(_debug) Serial.println(F("From Config"));
   wifly.factoryRestore();
@@ -137,6 +145,18 @@ void Visualight::configureWifi(){
   wifly.save();
   wifly.reboot();
 }
+
+void Visualight::wifiReset(){
+  wifly.close();
+  if(_debug) Serial.println(F("Wifi RESET"));
+  if(MODEL>0) colorLED(0,0,255,255);
+  else colorLED(0,0,255);
+  isServer = true;
+  EEPROM.write(0, 1);
+  wifly.reboot();
+  wifly.setSoftAP();
+}
+
 
 void Visualight::joinWifi(){
   /* Setup the WiFly to connect to a wifi network */
@@ -189,6 +209,16 @@ void Visualight::joinWifi(){
   }
 }
 
+void Visualight::sendHeartbeat(){
+  if(_debug) Serial.println(F("sending heartBeat"));
+  wifly.print("{\"mac\":\"");
+  wifly.print(MAC);
+  wifly.println("\",\"h\":\"h\"}");
+  lastHeartbeat = millis();
+  if(_debug) Serial.print(F("Free memory: "));
+  if(_debug) Serial.println(wifly.getFreeMemory(),DEC);
+}
+
 boolean Visualight::connectToServer(){
   if(reconnectCount > 4){
     if(_debug) Serial.println(F("rebooting wifly..."));
@@ -236,27 +266,6 @@ boolean Visualight::connectToServer(){
   }
 }
 
-void Visualight::sendHeartbeat(){
-  if(_debug) Serial.println(F("sending heartBeat"));
-  wifly.print("{\"mac\":\"");
-  wifly.print(MAC);
-  wifly.println("\",\"h\":\"h\"}");
-  lastHeartbeat = millis();
-  if(_debug) Serial.print(F("Free memory: "));
-  if(_debug) Serial.println(wifly.getFreeMemory(),DEC);
-}
-
-
-void Visualight::wifiReset(){
-  wifly.close();
-  if(_debug) Serial.println(F("Wifi RESET"));
-  if(MODEL>0) colorLED(0,0,255,255);
-  else colorLED(0,0,255);
-  isServer = true;
-  EEPROM.write(0, 1);
-  wifly.reboot();
-  wifly.setSoftAP();
-}
 
 
 void Visualight::processClient(){
@@ -308,7 +317,6 @@ void Visualight::processClient(){
   }
 }
 
-
 /**********************************************************************************/
 //------------------------------ BUTTON & LED METHODS ----------------------------//
 /**********************************************************************************/
@@ -352,9 +360,9 @@ void Visualight::fadeOn(){
   }
 }
 
-/****************************************************************************/
-//------------------------ VISUALIGHT-AS-SERVER METHODS --------------------//
-/****************************************************************************/
+/**********************************************************************************/
+//------------------------- VISUALIGHT-AS-SERVER METHODS -------------------------//
+/**********************************************************************************/
 
 void Visualight::processServer() {
   if (wifly.available() > 0) {
