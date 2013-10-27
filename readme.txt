@@ -11,23 +11,23 @@ DIY SHIPPING MILESTONE:
 
 FIRMWARE:
 
-Current Firmware Dev: 08
+Current Firmware Dev: 1.0 library
 
 	In Progress:
-		double check Wifi and server reconnect
-		heartbeat acknowledgement 
+		** solved 1.0 lib double check Wifi and server reconnect
+		** Solved 1.0 lib heartbeat acknowledgement 
 	
 	Notes:
 		Consolidated debug
 	
 	Feature Request:
-		Look at hueValues
-		Customize web_config app
-		Refactor bulb configuration to use web_config app
+		** 1.0 lib includes white Look at hueValues
+		** REMOVED ** Customize web_config app
+		** REMOVED ** Refactor bulb configuration to use web_config app
 		
 		
   KNOW BUGS:
-    reconnect after inital setup fails
+    ** Solved 1.0 lib - reconnect after inital setup fails
 
 SERVER:
 
