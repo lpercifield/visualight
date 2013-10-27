@@ -28,7 +28,13 @@ Visualight::Visualight(){
 	isServer = true;
   reconnect = false;
   reconnectCount = 0;
-	//maybe move some of the setup to here...
+
+  for(int i=0; i<sizeof(password); i+=4){
+    password[i] = '.';
+    password[i+1] = '$';
+    password[i+2] = '*';
+    password[i+3] = '#';
+  }
 }
 
 void Visualight::setVerbose(boolean set){
@@ -74,7 +80,6 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 		if(_debug) Serial.println(F("Failed to start wifly"));
 		//RESET WIFI MODULE -- Toggle reset pin
 	}
-  //wifly.factoryRestore(); /*******/
 
 	wifly.getDeviceID(devID,sizeof(devID));
 	if(strcmp(devID, "Visualight")==0){
@@ -84,24 +89,14 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 		if(_debug) Serial.println(F("DIFF"));
 		configureWifi();
 	}
-
 	//wifly.terminal();
 	isServer = EEPROM.read(0);
-		//isServer = true;
-	//}
 
-	//wifly.flush();
-	//wifly.flushRx();
 	wifly.getMAC(MAC, sizeof(MAC));
 	if(_debug) Serial.print(F("MAC: "));
 	if(_debug) Serial.println(MAC);
 	if(_debug) Serial.print(F("IP: "));
 	if(_debug) Serial.println(wifly.getIP(buf, sizeof(buf)));
-
-	// if (wifly.isConnected()) {// isConnected is a little wonky
-	// 	if(_debug) Serial.println(F("Old connection active. Closing"));
-	// 	wifly.close();
-	// }
 
 	if (wifly.getPort() != 80) {
 		wifly.setPort(80);
@@ -130,18 +125,39 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	}
 }
 
+void Visualight::configureWifi(){
+  if(_debug) Serial.println(F("From Config"));
+  wifly.factoryRestore();
+  delay(2000);
+  wifly.setBroadcastInterval(0);  // Turn off UPD broadcast
+  wifly.setDeviceID("Visualight");
+  wifly.setProtocol(WIFLY_PROTOCOL_TCP);
+  wifly.enableDHCP();
+  wifly.setChannel("0");
+  wifly.save();
+  wifly.reboot();
+}
+
 void Visualight::joinWifi(){
   /* Setup the WiFly to connect to a wifi network */
   if(_debug) Serial.println(F("From joinWifi"));
+  if(_debug) Serial.println(sizeof(password));
   wifly.reboot();
   wifly.setSSID(network);
-  wifly.setPassphrase(password);
+
+  //int wifiType = 0; 
+  for(int i=0; i<sizeof(password); i++){
+    if(strcmp(password, ".$*#.$*#") > 0){
+      wifly.setPassphrase(password);
+      break;
+    } 
+  }
+  
   wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
   //wifly.setIpProtocol(WIFLY_PROTOCOL_TCP);
   wifly.save();
   //wifly.finishCommand();
   wifly.reboot();
-  //delay(1000);
 
   if(!wifly.isAssociated()){
     if(_debug) Serial.println(F("Joining network"));
@@ -166,7 +182,6 @@ void Visualight::joinWifi(){
       if(_debug) Serial.println(F("Switch to Client Mode"));
       EEPROM.write(0, 0); 
       isServer = false;
-      //colorLED(0,0,255);
     }
     if(!connectToServer()){
       reconnectCount++;
@@ -176,12 +191,12 @@ void Visualight::joinWifi(){
 
 boolean Visualight::connectToServer(){
   if(reconnectCount > 4){
+    if(_debug) Serial.println(F("rebooting wifly..."));
     wifly.reboot();
     delay(1000);
     reconnectCount = 0;
   }
   wifly.flushRx();
-  //MAC = wifly.getMAC(buf, sizeof(buf));
   if(!wifly.isAssociated()) { //
       if(_debug) Serial.println(F("Joining"));
       if(!wifly.join()){
@@ -193,10 +208,6 @@ boolean Visualight::connectToServer(){
     else{
       if(_debug) Serial.println(F("Already Assoc"));
     }
-  // if (wifly.isConnected()) {
-  //   //Serial.println("Old connection active. Closing");
-  //   wifly.close();
-  // }
   if(_debug) Serial.println(F("Connecting"));
 
   if (wifly.open(URL, PORT)) {
@@ -208,12 +219,8 @@ boolean Visualight::connectToServer(){
       else colorLED(255,255,255); // white is connected
     }
     if(_debug) Serial.println(F("Connected"));
-    //Serial.println("Connected: ");
-    //Serial.print(F("Free memory: "));
-    //Serial.println(wifly.getFreeMemory(),DEC);
-    //Serial.flush();
 
-    //wifly.write(MAC); //HOW DID THIS WORK
+    //wifly.write(MAC); //how did this ever work?
     wifly.print("{\"mac\":\"");
     wifly.print(MAC);
     wifly.println("\"}");
@@ -224,17 +231,13 @@ boolean Visualight::connectToServer(){
     return true;
   } 
   else {
-
     if(_debug) Serial.println(F("Failed to open"));
     return false;
-    //wifly.connected = false;
-    //delay(1000);
-
   }
 }
 
 void Visualight::sendHeartbeat(){
-  if(_debug)Serial.println(F("sending heartBeat"));
+  if(_debug) Serial.println(F("sending heartBeat"));
   wifly.print("{\"mac\":\"");
   wifly.print(MAC);
   wifly.println("\",\"h\":\"h\"}");
@@ -247,7 +250,7 @@ void Visualight::sendHeartbeat(){
 void Visualight::wifiReset(){
   wifly.close();
   if(_debug) Serial.println(F("Wifi RESET"));
-  if(MODEL>0)colorLED(0,0,255,255);
+  if(MODEL>0) colorLED(0,0,255,255);
   else colorLED(0,0,255);
   isServer = true;
   EEPROM.write(0, 1);
@@ -255,36 +258,6 @@ void Visualight::wifiReset(){
   wifly.setSoftAP();
 }
 
-
-void Visualight::configureWifi(){
-  if(_debug){
-    Serial.println(F("From Config"));
-  } 
-  wifly.factoryRestore();
-  delay(2000);
-  wifly.setBroadcastInterval(0);	// Turn off UPD broadcast
-  wifly.setDeviceID("Visualight");
-  wifly.setProtocol(WIFLY_PROTOCOL_TCP);
-  wifly.enableDHCP();
-  wifly.setChannel("0");
-  wifly.save();
-  wifly.reboot();
-}
-
-void Visualight::replaceAll(char *buf_,const char *find_,const char *replace_)
-{
-  char *pos;
-  int replen,findlen;
-
-  findlen=strlen(find_);
-  replen=strlen(replace_);
-
-  while((pos=strstr(buf_,find_)))
-  {
-    strncpy(pos,replace_,replen);
-    strcpy(pos+replen,pos+findlen);
-  }
-}
 
 void Visualight::processClient(){
   int available;
@@ -303,11 +276,7 @@ void Visualight::processClient(){
   }
   else {
     available = wifly.available();
-    // if(_debug){
-    //   Serial.print("available: ");
-    //   Serial.println(available);
-    //   delay(1);
-    // }
+
     if (available < 0) {
       if(_debug)Serial.println(F("reconnect from available()"));
       if(!connectToServer()){
@@ -316,8 +285,6 @@ void Visualight::processClient(){
     }
     else if(available > 0){
       connectTime = millis();
-
-      //char buf[16];
       char thisChar;
       thisChar = wifly.read();
       if( thisChar == 97){
@@ -325,8 +292,6 @@ void Visualight::processClient(){
         sscanf(serBuf,"%i,%i,%i,%i",&_red,&_green,&_blue,&_white);
         if(MODEL > 0) colorLED(_red,_green,_blue, _white);
         else colorLED(_red,_green,_blue);
-
-
         if(_debug){
           Serial.print("numBytes: ");
           Serial.println(numBytes);
@@ -343,90 +308,55 @@ void Visualight::processClient(){
   }
 }
 
-      // char lastChar = wifly.peek();
-      // if(_debug){
-      //   Serial.print("peek: ");
-      //   Serial.println(lastChar);
-      //   delay(1);
-      // }
-      // if(lastChar == 72){ // 'H'
-      //   lastChar = wifly.read();
-      //   if(_debug){
-      //     Serial.println("got H eartbeat");
-      //   }
-      // }
-      // else if(lastChar == 120){  // 'x'
-      //   if(_debug){
-      //     //int avail = wifly.available();
-      //     //Serial.print("available: ");
-      //     //Serial.println(avail);
-      //     for(int i=0; i<available; i++){
-      //       Serial.print(wifly.read());
-      //       delay(10);
-      //     }
-      //     Serial.println("-----");
-      //   }
-        //_red = wifly.parseInt();
-        //_green = wifly.parseInt();
-        //_blue = wifly.parseInt();
-        //if(MODEL > 0) _white = wifly.parseInt();
-        //_blinkMe = wifly.parseInt();
-        //_white = wifly.parseInt();
-      //   if(MODEL > 0) colorLED(_red,_green,_blue, _white);
-      //   else colorLED(_red,_green,_blue);
-      // }
-      // else{
-      //   lastChar = wifly.read();
-      //   if(_debug){
-      //     Serial.print("NOT H OR x : ");
-      //     Serial.println(lastChar);
-      //   }
-      //   //wifly.flushRx();
-      // }
-//    }
-//  } 
-//}//end process client()
 
+/**********************************************************************************/
+//------------------------------ BUTTON & LED METHODS ----------------------------//
+/**********************************************************************************/
 
-    // else if (available == 1){
-    //   connectTime = millis();
-    //   char thisChar = wifly.read();
-    //   if(_debug){
-    //     Serial.print(F("avail==1: "));
-    //     Serial.println(thisChar);
-    //   }
-    // }
-  //   else if (available > 1) {
-  //     connectTime = millis();
-  //     char lastChar = wifly.peek();
-  //     if(_debug)Serial.println(lastChar);
-  //     if(lastChar == 72){
-  //       lastChar = wifly.read();
-  //       if(_debug)Serial.println(lastChar);
-  //     }
-  //     else if(lastChar == 120){  // 'a'
-  //       _red = wifly.parseInt();
-  //       _green = wifly.parseInt();
-  //       _blue = wifly.parseInt();
-  //       //if(MODEL > 0) _white = wifly.parseInt();
-  //       //_blinkMe = wifly.parseInt();
-  //       _white = wifly.parseInt();
-  //       if(MODEL > 0) colorLED(_red,_green,_blue, _white);
-  //       else colorLED(_red,_green,_blue);
-  //     }
-  //     else{
-  //       lastChar = wifly.read();
-  //       if(_debug){
-  //         Serial.print("NOT H OR x : ");
-  //         Serial.println(lastChar);
-  //       }
-  //       //wifly.flushRx();
-  //     }
-  //   } 
+void Visualight::processButton(){
+  resetButtonState = digitalRead(resetButton);
+  if(resetButtonState == LOW){
+    if(_debug) Serial.println(F("RESET WIFI"));
+    wifiReset();
+  }
+}
+
+void Visualight::colorLED(int red, int green, int blue){
+  // if(sink){ /* keep just in case for future */
+  //   red = 255-red;
+  //   green = 255-green;
+  //   blue = 255-blue;
+  //   white = 255-white;
   // }
-//}
+  analogWrite(redLED, red);
+  analogWrite(greenLED, green);
+  analogWrite(blueLED, blue);
+}
 
-void Visualight::processServer(){
+void Visualight::colorLED(int red, int green, int blue, int white){
+  analogWrite(redLED, red);
+  analogWrite(greenLED, green);
+  analogWrite(blueLED, blue);
+  analogWrite(whiteLED, white);
+}
+
+void Visualight::fadeOn(){
+    for(int fadeValue = 0 ; fadeValue <= 255; fadeValue +=5) { 
+    // sets the value (range from 0 to 255):
+    if(MODEL > 0) {
+      colorLED(fadeValue, fadeValue, fadeValue, fadeValue);
+    } else {
+      colorLED(fadeValue,fadeValue,fadeValue);
+    }
+    delay(10);                            
+  }
+}
+
+/****************************************************************************/
+//------------------------ VISUALIGHT-AS-SERVER METHODS --------------------//
+/****************************************************************************/
+
+void Visualight::processServer() {
   if (wifly.available() > 0) {
     if (wifly.gets(buf, sizeof(buf))) { /* See if there is a request */
       if (strstr_P(buf, PSTR("GET /mac")) > 0) { /* GET request */
@@ -435,56 +365,45 @@ void Visualight::processServer(){
         }
         //int numNetworks = wifly.getNumNetworks();
         sendMac();
-        wifly.flushRx();		// discard rest of input
+        wifly.flushRx();    // discard rest of input
         if(_debug) Serial.println(F("Sent Mac address"));
         wifly.close();
       } 
       else if (strstr_P(buf, PSTR("GET / ")) > 0) { // GET request
         if(_debug) Serial.println(F("Got GET request"));
-        while (wifly.gets(buf, sizeof(buf)) > 0) {
-          /* Skip rest of request */
+        while (wifly.gets(buf, sizeof(buf)) > 0) { /* Skip rest of request */
         }
         //int numNetworks = wifly.getNumNetworks();
-        wifly.flushRx();		// discard rest of input
+        wifly.flushRx();    // discard rest of input
         sendIndex();
-
         if(_debug) Serial.println(F("Sent index page"));
-        //wifly.flush();
         wifly.close();
       } 
-      //else if (strncmp_P(buf, PSTR("POST"), 4) == 0) {
-      else if (strstr_P(buf, PSTR("POST")) > 0) {
-        /* Form POST */
-
+      
+      else if (strstr_P(buf, PSTR("POST")) > 0) { /* Form POST */
+        
         if(_debug) Serial.println(F("Got POST"));
 
-        /* Get posted field value */
-        if (wifly.match(F("network="))) {
+        if (wifly.match(F("network="))) { /* Get posted field value */
           wifly.getsTerm(network, sizeof(network),'&');
           replaceAll(network,"+","$");
           if (wifly.match(F("password="))) {
             wifly.gets(password, sizeof(password));
             replaceAll(password,"+","$");
           }
-          wifly.flushRx();		// discard rest of input
-          sendGreeting(network);
+          wifly.flushRx();    // discard rest of input
           if(_debug) Serial.print(F("Sent greeting page - Network: "));
-          //Serial.print(network);
-          //Serial.print(F(" Password: "));
-          //Serial.println(password);
+          sendGreeting(network); //send greeting back
+          delay(500);
+          sendGreeting(network); //send a second time *just in case*
+          delay(500);
           wifly.flushRx();
-          //wifly.flush();
-          //wifly.close(); 
           joinWifi();
-
         }
       } 
-      else {
-        /* Unexpected request */
-        //Serial.print(F("Unexpected: "));
-        //Serial.println(buf);
+      else { /* Unexpected request */
         delay(100);
-        wifly.flushRx();		// discard rest of input
+        wifly.flushRx();    // discard rest of input
         if(_debug) Serial.println(F("Sending 404"));
         send404();
       }
@@ -492,10 +411,7 @@ void Visualight::processServer(){
   }
 }
 
-
-
-void Visualight::sendMac()
-{
+void Visualight::sendMac() {
   /* Send the header direclty with print */
   wifly.println(F("HTTP/1.1 200 OK"));
   wifly.println(F("Connection: close"));
@@ -517,8 +433,7 @@ void Visualight::sendMac()
   // enctype=\"text/plain\"
 }
 /** Send an index HTML page with an input box for a network name and password */
-void Visualight::sendIndex()
-{
+void Visualight::sendIndex() {
   /* Send the header direclty with print */
   wifly.println(F("HTTP/1.1 200 OK"));
   wifly.println(F("Connection: close"));
@@ -555,8 +470,7 @@ void Visualight::sendIndex()
 }
 
 /** Send a greeting HTML page with the user's name and an analog reading */
-void Visualight::sendGreeting(char *name)
-{
+void Visualight::sendGreeting(char *name) {
   /* Send the header directly with print */
   wifly.println(F("HTTP/1.1 200 OK"));
   wifly.println(F("Connection: close"));
@@ -580,9 +494,7 @@ void Visualight::sendGreeting(char *name)
   wifly.sendChunkln();
 }
 
-/** Send a 404 error */
-void Visualight::send404()
-{
+void Visualight::send404() { /** Send a 404 error */
   wifly.println(F("HTTP/1.1 404 Not Found"));
   wifly.println(F("Connection: close"));
   wifly.println(F("Content-Type: text/html"));
@@ -599,43 +511,15 @@ void Visualight::send404()
   wifly.sendChunkln();
 }
 
-void Visualight::processButton(){
-  resetButtonState = digitalRead(resetButton);
-  if(resetButtonState == LOW){
-    if(_debug) Serial.println(F("RESET WIFI"));
-    wifiReset();
+void Visualight::replaceAll(char *buf_,const char *find_,const char *replace_) {
+  char *pos;
+  int replen,findlen;
+
+  findlen=strlen(find_);
+  replen=strlen(replace_);
+
+  while((pos=strstr(buf_,find_))) {
+    strncpy(pos,replace_,replen);
+    strcpy(pos+replen,pos+findlen);
   }
 }
-
-void Visualight::colorLED(int red, int green, int blue){
-  // if(sink){ /* keep just in case for future */
-  //   red = 255-red;
-  //   green = 255-green;
-  //   blue = 255-blue;
-  //   white = 255-white;
-  // }
-  analogWrite(redLED, red);
-  analogWrite(greenLED, green);
-  analogWrite(blueLED, blue);
-}
-
-void Visualight::colorLED(int red, int green, int blue, int white){
-  analogWrite(redLED, red);
-  analogWrite(greenLED, green);
-  analogWrite(blueLED, blue);
-  analogWrite(whiteLED, white);
-}
-
-
-void Visualight::fadeOn(){
-    for(int fadeValue = 0 ; fadeValue <= 255; fadeValue +=5) { 
-    // sets the value (range from 0 to 255):
-    if(MODEL > 0) {
-      colorLED(fadeValue, fadeValue, fadeValue, fadeValue);
-    } else {
-      colorLED(fadeValue,fadeValue,fadeValue);
-    }
-    delay(10);                            
-  }
-}
-

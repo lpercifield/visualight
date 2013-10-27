@@ -81,9 +81,9 @@ class Visualight {
 
 		char buf[80];
 		char serBuf[16];
-		//char scanList[350];
-		char network[25];
-		char password[25];
+		
+		char network[64];
+		char password[64];
 		boolean isServer;
 		boolean	reconnect;
 		char MAC[18];

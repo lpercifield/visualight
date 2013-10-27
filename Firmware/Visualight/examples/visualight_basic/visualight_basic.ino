@@ -9,7 +9,7 @@ Visualight visualight;
 void setup(){
 
   visualight.setVerbose(true); // only set true if you know what's up
-  visualight.setup(TYPE_RGBW, "dev.visualight.org", 5001);  // setup(TYPE, "URL", PORT)
+  visualight.setup(TYPE_RGB, "dev.visualight.org", 5001);  // setup(TYPE, "URL", PORT)
 }
 
 void loop(){
