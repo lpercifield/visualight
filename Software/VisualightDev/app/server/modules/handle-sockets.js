@@ -28,11 +28,7 @@ exports.createSockets = function(app, io, AM){
 		socket.setTimeout(60000,function(){ //if we don't hear anything from the server for a minute then we kill the connection
 			console.log('connection_id: '+connection_id+" TIMEOUT");
 			//socket.write('H');
-			if( Bulbs.hasOwnProperty(connection_id) ){
-
-				Bulbs[connection_id].netsocket.destroy(); //destroy socket 
-				delete Bulbs[connection_id]; //delete obj
-			}
+			removeBulb(connection_id);
 		})
 	 	//this is called when the bulb socket closes
 
@@ -40,19 +36,14 @@ exports.createSockets = function(app, io, AM){
 		socket.on('close', function() {
 			//inform clients that bulbs are lost
 			console.log('visualight closed id: '+connection_id);
-			if( Bulbs.hasOwnProperty(connection_id) ){
-				Bulbs[connection_id].netsocket.destroy(); //destroy socket 
-				delete Bulbs[connection_id]; //delete obj
-			}	
+			removeBulb(connection_id);	
 		});
 		// this is called when the bulb socket ends
 		socket.on('end',function(){
 			//inform clients that bulb is gone
 			console.log('visualight ended id: '+connection_id);
-			if( Bulbs.hasOwnProperty(connection_id) ){
-				Bulbs[connection_id].netsocket.destroy(); //destroy socket 
-				delete Bulbs[connection_id]; //delete obj
-			}
+			//probably not needed but well see.
+			//removeBulb(connection_id);
 
 		});
 		// this is called when there is an error on the bulb socket
@@ -127,8 +118,29 @@ exports.createSockets = function(app, io, AM){
 	netserver.listen(5001, function() { //'listening' listener
 		console.log('tcp server bound');
 	});
+	/**
+	*	Remove A Bulb From Handle-sockets Bulbs{}
+	*
+	*	@method removeBulb
+	*	@type {String} string ID of bulb object we are connecting to used as Bulb[key]
+	*
+	**/
 
-
+	function removeBulb(bulbID){
+			console.log('Attempting to clear bulb: '+ bulbID);
+			if( Bulbs.hasOwnProperty(bulbID) ){
+				console.log('Attempting to remove Bulb: '+bulbID);
+				console.log(Bulbs);
+				
+				Bulbs[bulbID].netsocket.destroy(); //destroy socket 
+				delete Bulbs[bulbID]; //delete obj
+				console.log(Bulbs);
+				console.log('Attempting to remove Bulb: '+bulbID);
+	
+			}else{
+				console.log('Bulb '+bulbID+' no longer exists');
+			}
+	}
 	/**
 	* Send data to a visualight 
 	* 
