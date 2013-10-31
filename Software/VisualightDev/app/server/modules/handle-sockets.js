@@ -56,6 +56,8 @@ exports.createSockets = function(app, io, AM){
 
 	  // this is the function that gets called when the bulb sends data
 		socket.on('data', function(data){
+			//console.log(data); // debug only see exactly what is sent from netsocket
+
 			try { 
 					data = JSON.parse(data) 
 					console.log(data)
@@ -101,7 +103,8 @@ exports.createSockets = function(app, io, AM){
 							  		connection_id = cleanbulbID;
 							  	}else{
 
-							  		socket.write('H'); //writing to the socket
+							  		sendToVisualight(o,true);
+							  		//socket.write('H'); //writing to the socket
 
 							  	}
 							}
@@ -130,12 +133,12 @@ exports.createSockets = function(app, io, AM){
 			console.log('Attempting to clear bulb: '+ bulbID);
 			if( Bulbs.hasOwnProperty(bulbID) ){
 				console.log('Attempting to remove Bulb: '+bulbID);
-				console.log(Bulbs);
+				//console.log(Bulbs);
 				
 				Bulbs[bulbID].netsocket.destroy(); //destroy socket 
 				delete Bulbs[bulbID]; //delete obj
-				console.log(Bulbs);
-				console.log('Attempting to remove Bulb: '+bulbID);
+				//console.log(Bulbs);
+				console.log('Bulb '+bulbID+' Removed Successfully!');
 	
 			}else{
 				console.log('Bulb '+bulbID+' no longer exists');
@@ -159,7 +162,7 @@ exports.createSockets = function(app, io, AM){
 
 		if(Bulbs.hasOwnProperty(cleanbulbID) && !heartbeat){ // if we have a bulb and the message is not a heartbeat
 			console.log("WRITING DATA: "+data+" id: "+cleanbulbID);
-			console.log(Bulbs);
+			//console.log(Bulbs);
 			Bulbs[cleanbulbID].netsocket.write("a"); // start character
 			Bulbs[cleanbulbID].netsocket.write(data); // data
 			Bulbs[cleanbulbID].netsocket.write("x"); // stop character
@@ -212,6 +215,11 @@ exports.createSockets = function(app, io, AM){
 	  });
 	  // handle client disconnect
 	  socket.on('disconnect', function(){
+		  //clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
+	  });
+	});//end io.sockets.on
+
+}nect', function(){
 		  //clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
 	  });
 	});//end io.sockets.on
