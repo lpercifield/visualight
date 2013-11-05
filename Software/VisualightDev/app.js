@@ -13,7 +13,9 @@ var app = exp.createServer();
 
 
 
-var io = require('socket.io').listen(app,'log level',1); // Setup socket IO
+var io = require('socket.io').listen(app); // Setup socket IO
+
+io.set('log level', 1);
 
 var MongoStore = require('connect-mongo')(exp);// Setup mongo store to store user sessions in the db
 
