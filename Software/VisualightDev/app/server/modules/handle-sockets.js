@@ -218,10 +218,4 @@ exports.createSockets = function(app, io, AM){
 		  //clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
 	  });
 	});//end io.sockets.on
-
-}nect', function(){
-		  //clients.splice(arrayObjectIndexOf(clients,socket,'iosocket'),1);
-	  });
-	});//end io.sockets.on
-
 }
