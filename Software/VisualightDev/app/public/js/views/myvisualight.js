@@ -127,10 +127,11 @@ $(document).ready(function(){
     
     //$('#color').css({backgroundColor:e}).val(e);
     $('#color').css({backgroundColor:e});
-	//console.log(rgb);
+	console.log(rgb);
 	//socket.send(rgb);
+	//var newBri = Math.map(h.l,0,204,0,255);
 	var state =
-	{
+	{   
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04

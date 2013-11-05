@@ -18,7 +18,7 @@ Current Firmware Dev: 1.0 library
 		** Solved 1.0 lib heartbeat acknowledgement 
 	
 	Notes:
-		Consolidated debug
+		** Consolidated debug
 	
 	Feature Request:
 		** 1.0 lib includes white Look at hueValues
@@ -35,9 +35,18 @@ SERVER:
 		Heartbeat timeout and DB state
 	
 	Todo:
-		MONGO - Check out local server vs remote
+		** MONGO - Check out local server vs remote
+		
 		Create API for both socket and REST (json -- based on HUE)
+		  ** socket api working
+		  create REST routes for api
+		  
+		  bugs:
+		  check what happens if the json doesnt contain an id
+      add better error callback for unknown params
+      
 		Create API key setup
+		
 		Apply API to apps:
 			Weather
 			Tides (Wunderground? NOAA?)
@@ -54,21 +63,36 @@ SERVER:
       - subscribe: this app can change the color of your bulb at any time
       - alert: this app can send a colored alert to your bulb at any time
   
-      only one subscribe app can be active
+      only one subscribe app can be active??
       multiple alert apps can be active
+    
+    Handle re adding bulb to account:
+      better handle routing from account manager when bulb
+  
+    Add delete bulb from account
+      add to route
+      
+    Bulb groups:
+      add collection for groups
+      add loop for sending data to all bulbs in group
+      add route to add/delete bulb from group
+        add route to add/delete group
 
 INTERFACE:
 
 	In Progress:
-		Tweeks to Visualight action bar to collapse on small screens
+		** Tweeks to Visualight action bar to collapse on small screens
 		
 	TODO:
 		Impliment "apps" sidebar
 		Impliment icon for each bulb to show state(online/offline) and color
 		Impliment API key interface
+		add password verification
+    change connect text to show "blue"
+    join a network if you more than one
 	
 	KNOW BUGS:
-		Collapsed State dropdown button fails on mobile
+		** Collapsed State dropdown button fails on mobile
 		
 		
 HARDWARE:
