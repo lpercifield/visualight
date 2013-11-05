@@ -18,6 +18,7 @@ div.navbar
 			div.nav-collapse.hidden-phone
 				div#blub-buttons(data-toggle='buttons-radio', style="float:left").btn-group
 				button#btn-add.btn.btn-primary ADD VISUALIGHT
+				button#btn-group-add.btn.btn-primary ADD GROUP
 #account-form-container
 	h1#nobulbs(style="display:none")
 		| No Visualights Found
@@ -50,6 +51,7 @@ include modals/alert
 include modals/confirm
 include modals/setupbulb
 include modals/network
+include modals/addgroup
 
 script(type='text/javascript', src='/vendor/jquery.min.js')
 script(type='text/javascript', src='/vendor/jquery.form.js')

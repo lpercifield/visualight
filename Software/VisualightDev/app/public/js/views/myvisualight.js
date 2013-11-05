@@ -149,35 +149,6 @@ $(document).ready(function(){
       	console.log("click");
       	connectSocket();
       });
-/*
-      function connectSocket(){
-      		console.log("here");
-	      socket = new WebSocket("ws://leifp.com:8080", "echo-protocol");
-      socket.addEventListener("open", function(event) {
-          close.disabled = false;
-          open.disabled = true;
-          //send.disabled = false;
-          status.textContent = "Connected";
-        });
-
-        // Display messages received from the server
-        socket.addEventListener("message", function(event) {
-         // message.textContent = "Server Says: " + event.data;
-         	console.log(event.data);
-         	alert(event.data);
-        });
-
-        // Display any errors that occur
-        socket.addEventListener("error", function(event) {
-          //message.textContent = "Error: " + event;
-        });
-
-        socket.addEventListener("close", function(event) {
-          open.disabled = false;
-          status.textContent = "Not Connected";
-        });
-      }
-*/
       
 
       // Close the connection when the Disconnect button is clicked
@@ -231,39 +202,7 @@ $(document).ready(function(){
       	}
       });
       
-      /*
-power.addEventListener("click", function(event) {
-        //close.disabled = true;
-        if(poweron == false){
-        	$('#slider-red').val(255);
-        	$('#slider-red').slider('refresh');
-        	$('#slider-green').val(255);
-        	$('#slider-green').slider('refresh');
-        	$('#slider-blue').val(255);
-        	$('#slider-blue').slider('refresh');
-        	poweron = true;
-        }else{
-        	$('#slider-red').val(0);
-        	$('#slider-red').slider('refresh');
-        	$('#slider-green').val(0);
-        	$('#slider-green').slider('refresh');
-        	$('#slider-blue').val(0);
-        	$('#slider-blue').slider('refresh');
-        	poweron = false;
-        }
-
-        //console.log("Power");
-        //send.disabled = true;
-        //message.textContent = "";
-        //socket.close();
-      });*/
-
-      // Send text to the server when the Send button is clicked
-      //send.addEventListener("click", function(event) {
-        //socket.send(text.value);
-        //text.value = "";
-      //});
-      $('#slider-red').change(function(){
+    $('#slider-red').change(function(){
     		var slider_value = $(this).val();
     		console.log(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val());
     		socket.send(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val()+",0"+","+currBulb);
