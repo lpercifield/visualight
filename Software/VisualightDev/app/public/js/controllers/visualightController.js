@@ -226,6 +226,7 @@ $('div.btn-group .btn').click(function(){
 				console.log(data);
 				console.log(data.length);
 				addBulbButtons(data,callback);
+				addBulbGroupList(data);
 				$('#account-form-container #main').css("display", "block");
 				$('#account-form-container #nobulbs').css("display","none");
 	 			//that.showLockedAlert('Your account has been deleted.<br>Redirecting you back to the homepage.');
@@ -297,7 +298,7 @@ if ( checked ) {
 		callback(buttonDiv);
     }
 
-    function addBulbGroup(bulbData){
+    function addBulbGroupList(bulbData){
 
     	//$('.modal-group-setup form');
     	for(var i=0; i<bulbData.length; i++){
