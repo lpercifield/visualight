@@ -328,7 +328,7 @@ if ( checked ) {
 		callback(buttonDiv);
     }
 
-    function addGroupButtons(groupData){
+    function addGroupButtons(groupData,callback){
 
     	for(var i = 0; i<groupData.length; i++){
     		var html ='<button type="Button" data-toggle="button" class="btn btn-primary group-btn" data-group="'+groupData[i]._id+'">';
