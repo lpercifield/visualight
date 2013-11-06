@@ -236,7 +236,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }else{
 		    AM.getGroups(req.session.user.user, function(o){
 			    if(o){
-				    res.send(o,200);
+				    res.send(JSON.stringify(o),200);
 			    }else{
 				    res.send('bulbs-not-found', 400);
 			    }
