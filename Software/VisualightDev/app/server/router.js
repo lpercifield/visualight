@@ -235,8 +235,9 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    		res.send('not-authorized',400);
 	    }else{
 		    AM.getGroups(req.session.user.user, function(o){
+			    console.log('AM.getGroups');console.log(o);
 			    if(o){
-				    res.send(JSON.stringify(o),200);
+				    res.send(o,200);
 			    }else{
 				    res.send('bulbs-not-found', 400);
 			    }
