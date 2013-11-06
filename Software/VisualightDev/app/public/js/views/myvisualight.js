@@ -42,19 +42,19 @@ $(document).ready(function(){
 		});
     vc.getGroups(function(r){
       $('span#group-btns .group-btn').click(function(){
-        alert('click')
+        //alert('click')
         //console.log($(this).find('input'))
         currBulbName = 'Group';
 
         var inputs = $(this).find(':hidden');
-        console.log(inputs)
+        //console.log(inputs)
 
         currBulbId = new Array();
 
         for(var i =0; i<inputs.length; i++){
           currBulbId.push($(inputs[i]).val())
         }
-        console.log(currBulbId)
+        //console.log(currBulbId)
 
 
       });
@@ -107,12 +107,22 @@ $(document).ready(function(){
 		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
 
 		//console.log(currBulbId);
+    if(currBulbId instanceof Array){
+      console.log('Group')
+      for(var i=0; i< currBulbId; i++){
+        state.id = currBulbId[i];
+        var jsonObj = JSON.stringify(state);
+        console.log(jsonObj);
+        socket.send(jsonObj);  
+      }
+    }else{
+      state.id = currBulbId;
+      //convert it to json:
+      var jsonObj = JSON.stringify(state);
+      console.log(jsonObj);
+      socket.send(jsonObj);
+    }
 
-		state.id = currBulbId;
-		//convert it to json:
-		var jsonObj = JSON.stringify(state);
-		console.log(jsonObj);
-		socket.send(jsonObj);
 	}
 // handle bulb button change
 		
