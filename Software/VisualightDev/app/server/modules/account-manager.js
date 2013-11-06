@@ -182,7 +182,7 @@ exports.addNewGroup = function(user, post, callback){
 	//find user 
 	accounts.findOne({user:user},function(e,o){
 		if(e){ 
-			callback('Database Error: '+e);
+			callback('Accounts Database Error: '+e);
 		}else if(o == null){
 			callback('user-not-found');
 		}else if(post.name === ''){
@@ -196,7 +196,7 @@ exports.addNewGroup = function(user, post, callback){
 			var obj = {name:post.name, bulbs:bulbs, user: o._id, created: new Date()}
 			groups.insert(obj,function(e,g){
 				if(e){
-					callback('Database Insert Error: '+e);
+					callback('Groups Database Insert Error: '+e);
 				}else{
 					callback();
 				}
