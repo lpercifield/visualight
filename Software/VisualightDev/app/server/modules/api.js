@@ -23,14 +23,14 @@ exports.parseMessage = function(message,Bulbs,callback){
         //console.log("INCOMING MESSAGE: " + message);
         if(parsed.id != null){
 				if( Bulbs.hasOwnProperty(parsed.id) == false ){ //check if Bulbs[] exists
-					callback(null,"BULB LOOKUP FAILED");
+					callback(null,"BULB LOOKUP FAILED Bulb.id:"+parsed.id);
 				}else{
 					switch(parsed.method){
 						case 'put':
-							putAPICall(parsed,o,callback);
+							putAPICall(parsed,Bulbs[parsed.id],callback);
 							break;
 						case 'get':
-							callback(o);
+							callback(Bulbs[parsed.id]);
 							break;
 						default:
 							callback(null,"API TYPE NOT DEFINED");
