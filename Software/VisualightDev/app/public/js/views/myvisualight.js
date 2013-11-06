@@ -48,6 +48,15 @@ $(document).ready(function(){
 
         var inputs = $(this).find(':hidden');
         console.log(inputs)
+
+        currBulbId = new Array();
+
+        for(var i =0; i<inputs.length; i++){
+          currBulbId.push(inputs[i].val())
+        }
+        console.log(currBulbId)
+
+
       });
 
     });
