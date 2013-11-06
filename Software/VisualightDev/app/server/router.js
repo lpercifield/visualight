@@ -220,8 +220,31 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+
+/**
+* get the registered  groups for a user
+* This route is called to get the groups for a user
+* ---THIS NEEDS AN UPDATE
+* should take either the session or an API key
+*
+* @method get /get-groups
+*/	
+	app.get('/get-groups', function(req,res){
+		//console.log;
+		if(req.session.user == null){
+	    		res.send('not-authorized',400);
+	    }else{
+		    AM.getGroups(req.session.user.user, function(o){
+			    if(o){
+				    res.send(o,200);
+			    }else{
+				    res.send('bulbs-not-found', 400);
+			    }
+		    });
+	    }
+		
+	});
 	
-	// add bulb to user
 /**
 * adds a bulb to DB
 * This route is called to add a bulb
