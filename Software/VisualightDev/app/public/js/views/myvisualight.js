@@ -52,7 +52,7 @@ $(document).ready(function(){
         currBulbId = new Array();
 
         for(var i =0; i<inputs.length; i++){
-          currBulbId.push(inputs[i].val())
+          currBulbId.push($(inputs[i]).val())
         }
         console.log(currBulbId)
 
