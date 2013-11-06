@@ -253,6 +253,29 @@ exports.addNewBulb = function(user, bulbMac, callback)
 	});
 
 }
+
+exports.getGroups = function(user,callback)
+{
+
+	accounts.findOne({user:user},function(e,o){
+		if(o==null){
+			callback('user-not-found');
+		}else{
+
+			groups.find({user:o._id},function(e,g){
+				if(g==null){
+					callback('group-not-found')
+				}else if(e){
+					callback('DB ERROR: '+e);
+				}else{
+					//good to go
+					callback(g);
+				}
+			})
+		}
+	})
+}
+
 exports.getBulbs = function(user, callback)
 {	
 	//console.log(user);

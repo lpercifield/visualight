@@ -227,6 +227,23 @@ $('div.btn-group .btn').click(function(){
 		setTimeout(function(){window.location.href = '/';}, 3000);
 	}
 	
+	this.getGroups = function(callback){
+
+		$.ajax(
+				url:'/get-groups',
+				type:'get',
+				success: function(data){
+					console.log(data)
+
+				},
+				error:function(jqXHR){
+					console.log('AJAX ERROR: ')
+					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
+
+				}
+			);
+	}
+
 	this.getBulbs = function(callback)
 	{
 		//$('.modal-confirm').modal('hide');
@@ -308,6 +325,12 @@ if ( checked ) {
 	    	buttonDiv.appendChild(createRadioElement(bulbData[i].name,bulbData[i].id,checked));
 		}
 		callback(buttonDiv);
+    }
+
+    function addGroupButtons(groupData){
+
+
+
     }
 
     function addBulbGroupList(bulbData){
