@@ -177,10 +177,27 @@ exports.addNewGroup = function(user, post, callback){
 
 	//collect post data 
 	//process post data
-	console.log("Incoming Data: ".data+JSON.stringify(post).info);
+	console.log("Incoming Data: ".help+JSON.stringify(post).data);
+
+	//find user 
+	accounts.findOne({user:user},function(e,o){
+		if(e){ 
+			callback('Database Error: '+e);
+		}else if(o == null){
+			callback('user-not-found');
+		}else if(post.name == null){
+			callback('no group name');
+		}else if(post.bulbs == null){
+			callback('no bulbs selected');
+		}else{
+
+			//have all our data to make a group
+			console.log(JSON.stringify(o).info);
+		}
+	})
+
 
 	//check group name 
-
 	callback();
 }
 

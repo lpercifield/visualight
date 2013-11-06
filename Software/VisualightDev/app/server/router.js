@@ -1,9 +1,20 @@
-
 var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
 var WS = require('./modules/handle-sockets');
 var API = require('./modules/api');
+
+var colors = require('colors');
+
+colors.setTheme({
+
+	data: 	'grey',
+	info: 	'green',
+	warm: 	'yellow',
+	debug: 	'blue',
+	help:  	'cyan',
+	error: 	'red'
+});
 
 
 module.exports = function(app, io, sStore) { // this gets called from the main app
@@ -225,13 +236,13 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    		res.send('not-authorized',400);
 	    }else{
 		    AM.addNewBulb(req.session.user.user,req.param('bulb'), function(e){
-		    	console.log("add bulb request ");
+		    	console.log("add bulb request".help);
 			    if(e){
 				    res.send(e,400);
-				    console.log('denied');
+				    console.log('denied'.error);
 			    }else{
 				    res.send('ok', 200);
-				    console.log('accepted');
+				    console.log('accepted'.data);
 			    }
 		    });
 	    }
@@ -253,14 +264,14 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
   			res.send('not-authorized',400);
   		}else{
   			AM.addNewGroup(req.session.user.user,req.body,function(e){
-  				console.log('add group request');
+  				console.log('add group request'.help);
   				if(e){
   					res.send(e,400);
-  					console.log('denied');
+  					console.log('denied'.error);
   				}else{
   					//res.send('ok',200);
   					res.redirect('/myvisualight');
-  					console.log('accepted');
+  					console.log('accepted'.data);
   				}
   			});
   		}
