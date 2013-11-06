@@ -166,7 +166,7 @@ exports.addNewGroup = function(user, post, callback){
 
 	//collect post data 
 	//process post data
-	console.log(post);
+	console.log(post.error);
 
 	//check group name 
 
@@ -209,7 +209,7 @@ exports.addNewBulb = function(user, bulbMac, callback)
 				}
 			});
 		}else{
-			console.log("bulb already exists");
+			console.log("bulb already exists".warn);
 			callback("bulb-already-registered");
 			//bulbExists = true;
 		}

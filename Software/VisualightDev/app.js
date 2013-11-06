@@ -37,5 +37,5 @@ require('./app/server/router')(app, io, MongoStore);// run the server/router.js
 
 //Start the express app on the port listed and console log
 app.listen(8080, function(){
-	console.log("Express server listening on port".data+"%d".info+" in".data+" %s".help+" mode".data, app.address().port, app.settings.env);
+	console.log("Express server listening on port".data+" %d ".info+"in".data+" %s ".help+"mode".data, app.address().port, app.settings.env);
 });
