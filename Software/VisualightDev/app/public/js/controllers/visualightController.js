@@ -315,7 +315,7 @@ if ( checked ) {
     	//$('.modal-group-setup form');
     	for(var i=0; i<bulbData.length; i++){
 
-    		var html = '<p><input type="checkbox" name="'+bulbData[i].name+'" value="'+bulbData[i].id+'"/></p>';
+    		var html = '<p>'+bulbData[i].name+'<input type="checkbox" name="'+bulbData[i].name+'" value="'+bulbData[i].id+'"/></p>';
     		$('.modal-group-setup form').append(html);
     	}
     }
