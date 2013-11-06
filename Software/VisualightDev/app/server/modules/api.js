@@ -30,7 +30,7 @@ exports.parseMessage = function(message,Bulbs,callback){
 							putAPICall(parsed,Bulbs[parsed.id],callback);
 							break;
 						case 'get':
-							callback(Bulbs[parsed.id]);
+							callback(Bulbs[parsed.id]); //must ensure the rgbw gets set before sending back this object
 							break;
 						default:
 							callback(null,"API TYPE NOT DEFINED");

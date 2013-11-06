@@ -87,7 +87,7 @@ exports.createSockets = function(app, io, AM){
                                                         if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
                                                                   console.log('Bulbs['+cleanbulbID+'] not defined - CREATING Bulbs['+cleanbulbID+']');
                                                                   
-                                                                  Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+                                                                  Bulbs[cleanbulbID] = {_id: cleanbulbID, mac: mac, netsocket: socket };
                                                                   //console.log(Bulbs[cleanbulbID]);
                                                                   connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
