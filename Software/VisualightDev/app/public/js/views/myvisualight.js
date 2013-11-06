@@ -17,6 +17,7 @@ $(document).ready(function(){
       var currBulb = 0;
       var currBulbId = null;
       var currBulbName = null;
+      var currBulbType = 'bulb';
       var poweron = true;
       var bulbArray = null;
       var reconnect = false;
@@ -34,11 +35,15 @@ $(document).ready(function(){
 				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
 				currBulbId = $('input[name=bulb-button]:checked').val();
 				currBulbName = $('input[name=bulb-button]:checked').attr('bulbname');
+        
 				//socket.emit('current-bulb', currBulbId);
 				});
 		});
     vc.getGroups(function(r){
-      
+      $('button.btn-group').click(function(){
+        console.log($(this).find('input'))
+      })
+
     })
 		//connectSocket();
 		console.log("connect");

@@ -331,7 +331,12 @@ if ( checked ) {
     function addGroupButtons(groupData){
 
     	for(var i = 0; i<groupData.length; i++){
-    		var html ='<button type="Button" data-toggle="button" class="btn btn-primary" data-group="'+groupData[i]._id+'">'+groupData[i].name+'</button>'
+    		var html ='<button type="Button" data-toggle="button" class="btn btn-primary btn-group" data-group="'+groupData[i]._id+'">';
+    		html+=groupData[i].name;
+    		for(var b = 0; b< groupData[i].bulbs.length;b++){
+    			html += '<input type="radio" name="bulbs[]" value="'+groupData[i].bulbs[b]+'" />'
+    		}
+    		html+='</button>';
     		$('#btn-group').prepend(html);
     	}
 
