@@ -31,7 +31,7 @@ $(document).ready(function(){
 		vc.getBulbs(function(r){
 		//console.log("getting complete");
 			$('div.btn-group .btn').click(function(){
-        alert('click')
+        //alert('click')
 				//console.log($(this).find('input:radio').attr('checked', true).val());
 				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
 				currBulbId = $('input[name=bulb-button]:checked').val();
@@ -108,13 +108,15 @@ $(document).ready(function(){
 
 		//console.log(currBulbId);
     if(currBulbId instanceof Array){
-      console.log('Group')
-      for(var i=0; i< currBulbId; i++){
+      console.log('Group');
+
+      for(var i=0; i< currBulbId.length; i++){
         state.id = currBulbId[i];
         var jsonObj = JSON.stringify(state);
         console.log(jsonObj);
         socket.send(jsonObj);  
       }
+
     }else{
       state.id = currBulbId;
       //convert it to json:
