@@ -234,6 +234,7 @@ $('div.btn-group .btn').click(function(){
 				type:'get',
 				success: function(data){
 					console.log(data)
+					addGroupButtons(data)
 
 				},
 				error:function(jqXHR){
@@ -329,6 +330,10 @@ if ( checked ) {
 
     function addGroupButtons(groupData){
 
+    	for(var i = 0; i<groupData.length; i++){
+    		var html ='<button type="Button" data-toggle="button" class="btn btn-primary" data-group="'+groupData[i]._id+'">'+groupData[i].name+'</button>'
+    		$('#btn-group').prepend(html);
+    	}
 
 
     }

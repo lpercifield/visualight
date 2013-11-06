@@ -37,6 +37,9 @@ $(document).ready(function(){
 				//socket.emit('current-bulb', currBulbId);
 				});
 		});
+    vc.getGroups(function(r){
+      
+    })
 		//connectSocket();
 		console.log("connect");
 	}
