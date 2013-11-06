@@ -177,7 +177,7 @@ exports.addNewGroup = function(user, post, callback){
 
 	//collect post data 
 	//process post data
-	console.log(JSON.stringify(post).error+"".error);
+	console.log("Incoming Data: ".data+JSON.stringify(post).info);
 
 	//check group name 
 
