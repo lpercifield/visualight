@@ -40,7 +40,7 @@ $(document).ready(function(){
 				});
 		});
     vc.getGroups(function(r){
-      $('button.btn-group').click(function(){
+      $('.btn-group').click(function(){
         console.log($(this).find('input'))
       })
 
