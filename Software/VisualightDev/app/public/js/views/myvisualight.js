@@ -41,6 +41,7 @@ $(document).ready(function(){
 				});
 		});
     vc.getGroups(function(r){
+      console.log('Got Groups')
       $('span#group-btns .group-btn').click(function(){
         alert('click')
         //console.log($(this).find('input'))
