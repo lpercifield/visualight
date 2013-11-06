@@ -264,7 +264,7 @@ exports.getGroups = function(user,callback)
 			callback('user-not-found');
 		}else{
 
-			groups.find({user:o._id},function(e,g){
+			groups.find({user:o._id}).toArray(function(e,g){
 				if(g==null){
 					callback('group-not-found')
 				}else if(e){
