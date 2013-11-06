@@ -234,7 +234,7 @@ $('div.btn-group .btn').click(function(){
 				type:'get',
 				success: function(data){
 					console.log(data)
-					addGroupButtons(data)
+					addGroupButtons(data,callback)
 
 				},
 				error:function(jqXHR){
@@ -339,7 +339,7 @@ if ( checked ) {
     		html+='</button>';
     		$('#group-btns').prepend(html);
     	}
-
+    	callback(null);
 
     }
 
