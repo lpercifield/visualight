@@ -229,7 +229,7 @@ $('div.btn-group .btn').click(function(){
 	
 	this.getGroups = function(callback){
 
-		$.ajax(
+		$.ajax({
 				url:'/get-groups',
 				type:'get',
 				success: function(data){
@@ -241,7 +241,7 @@ $('div.btn-group .btn').click(function(){
 					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
 
 				}
-			);
+			});
 	}
 
 	this.getBulbs = function(callback)
