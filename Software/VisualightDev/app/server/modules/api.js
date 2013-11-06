@@ -54,7 +54,7 @@ exports.parseMessage = function(message,Bulbs,callback){
 				// 					//issue API error: NO TYPE DEFINED
 				// 			}
 				//      }
-	        });
+	        	//});
         }
         
     }catch(e){
