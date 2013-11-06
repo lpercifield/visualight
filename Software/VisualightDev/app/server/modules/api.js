@@ -11,12 +11,12 @@ exports.setup = function(AM){
 	bulbobject: json containing bulb status and details
 	errormessage: verbose error string
 */
-exports.parseMessage = function(message,callback){
+exports.parseMessage = function(message,Bulbs,callback){
 
 	
 	//DEAL WITH API KEY
 	//build response json?
-	console.log(IO.Bulbs)
+	console.log(Bulbs)
 
 	try{
         var parsed = JSON.parse(message);
