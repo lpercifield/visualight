@@ -318,6 +318,8 @@ if ( checked ) {
     		var html = '<p>'+bulbData[i].name+'<input type="checkbox" name="'+bulbData[i].name+'" value="'+bulbData[i].id+'"/></p>';
     		$('.modal-group-setup form').append(html);
     	}
+    	var html = '<button type="submit">Add Group</button>';
+    	$('.modal-group-setup form').append(html)
     }
 
 
