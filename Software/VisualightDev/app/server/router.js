@@ -267,7 +267,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
   				console.log('add group request'.help);
   				if(e){
   					res.send(e,400);
-  					console.log('denied'.error);
+  					console.log('denied: '.error+e.data);
   				}else{
   					//res.send('ok',200);
   					res.redirect('/myvisualight');
