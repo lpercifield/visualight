@@ -185,7 +185,7 @@ exports.addNewGroup = function(user, post, callback){
 			callback('Database Error: '+e);
 		}else if(o == null){
 			callback('user-not-found');
-		}else if(post.name == null){
+		}else if(post.name === ''){
 			callback('no group name');
 		}else if(post.bulbs == null){
 			callback('no bulbs selected');
