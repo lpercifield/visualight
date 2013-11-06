@@ -179,6 +179,7 @@ exports.addNewGroup = function(user, post, callback){
 	//collect post data 
 	//process post data
 	console.log(post);
+	callback();
 }
 
 exports.addNewBulb = function(user, bulbMac, callback)
