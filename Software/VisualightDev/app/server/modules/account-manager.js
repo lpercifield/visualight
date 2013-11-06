@@ -195,7 +195,7 @@ exports.addNewGroup = function(user, post, callback){
 			console.log(JSON.stringify(o).info);
 			var obj = {name:post.name, bulbs:bulbs, user: o._id, created: new Date()}
 
-			console.log(JSON.stringify(obj).data)
+			console.log(obj)
 			groups.insert(obj,function(e,g){
 				if(e){
 					callback('Groups Database Insert Error: '+e);
