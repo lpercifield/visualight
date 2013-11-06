@@ -22,7 +22,7 @@ exports.parseMessage = function(message,Bulbs,callback){
         var parsed = JSON.parse(message);
         //console.log("INCOMING MESSAGE: " + message);
         if(parsed.id != null){
-				if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
+				if( Bulbs.hasOwnProperty(parsed.id) == false ){ //check if Bulbs[] exists
 					callback(null,"BULB LOOKUP FAILED");
 				}else{
 					switch(parsed.method){
