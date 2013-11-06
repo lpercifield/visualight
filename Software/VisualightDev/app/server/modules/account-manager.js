@@ -198,7 +198,6 @@ exports.addNewGroup = function(user, post, callback){
 
 
 	//check group name 
-	callback();
 }
 
 exports.addNewBulb = function(user, bulbMac, callback)
