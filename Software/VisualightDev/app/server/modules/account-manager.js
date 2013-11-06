@@ -4,6 +4,17 @@ var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 var Mongo 		= require('mongodb').MongoClient;
+var colors = require('colors');
+
+colors.setTheme({
+
+	data: 	'grey',
+	info: 	'green',
+	warm: 	'yellow',
+	debug: 	'blue',
+	help:  	'cyan',
+	error: 	'red'
+});
 
 
 var dbPort 		= 27017;
