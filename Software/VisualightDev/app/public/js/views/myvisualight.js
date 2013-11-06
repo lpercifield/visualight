@@ -41,9 +41,9 @@ $(document).ready(function(){
 				});
 		});
     vc.getGroups(function(r){
-      $('div.btn-group span#group-btns .group-btn').click(function(){
+      $('span#group-btns .btn.group-btn').click(function(){
         alert('click')
-        console.log($(this).find('input'))
+        //console.log($(this).find('input'))
       });
 
     });
