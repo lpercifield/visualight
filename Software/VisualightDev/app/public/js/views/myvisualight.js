@@ -41,7 +41,7 @@ $(document).ready(function(){
 				});
 		});
     vc.getGroups(function(r){
-      $('span#group-btns .btn.group-btn').click(function(){
+      $('span#group-btns .group-btn').click(function(){
         alert('click')
         //console.log($(this).find('input'))
       });
