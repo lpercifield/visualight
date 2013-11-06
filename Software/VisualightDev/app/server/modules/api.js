@@ -16,29 +16,44 @@ exports.parseMessage = function(message,Bulbs,callback){
 	
 	//DEAL WITH API KEY
 	//build response json?
-	console.log(Bulbs)
+	//console.log(Bulbs)
 
 	try{
         var parsed = JSON.parse(message);
         //console.log("INCOMING MESSAGE: " + message);
         if(parsed.id != null){
-	        AM.getBulbInfo(parsed.id, function(o){
-		        if(!o){
-			        callback(null,"BULB ID LOOKUP FAILED");
-		        }else{
-			        //Check which api method is called and execute on that
+				if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
+					callback(null,"BULB LOOKUP FAILED");
+				}else{
 					switch(parsed.method){
 						case 'put':
-							putAPICall(parsed, o, callback);
+							putAPICall(parsed,o,callback);
 							break;
 						case 'get':
 							callback(o);
 							break;
 						default:
-							callback(null,"NO API TYPE DEFINED");
-						//issue API error: NO TYPE DEFINED
+							callback(null,"API TYPE NOT DEFINED");
+							break;
 					}
-		        }
+				}
+				//     AM.getBulbInfo(parsed.id, function(o){
+				//      if(!o){
+				//       callback(null,"BULB ID LOOKUP FAILED");
+				//      }else{
+				//       //Check which api method is called and execute on that
+				// 			switch(parsed.method){
+				// 				case 'put':
+				// 					putAPICall(parsed, o, callback);
+				// 					break;
+				// 				case 'get':
+				// 					callback(o);
+				// 					break;
+				// 				default:
+				// 					callback(null,"NO API TYPE DEFINED");
+				// 					//issue API error: NO TYPE DEFINED
+				// 			}
+				//      }
 	        });
         }
         
