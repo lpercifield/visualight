@@ -228,13 +228,42 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		    	console.log("add bulb request ");
 			    if(e){
 				    res.send(e,400);
+				    console.log('denied');
 			    }else{
 				    res.send('ok', 200);
+				    console.log('accepted');
 			    }
 		    });
 	    }
 		
 	});
+
+/** 
+ *
+ *  add bulbs to groups
+ *	This route is called to add bulbs into new group
+ *
+ *	@method post /bind-group
+ *  @param {Object} 
+ *
+ */	
+
+  app.post('/bind-group', function(req,res){
+  		if(req.session.user==null){
+
+  		}else{
+  			AM.addNewGroup(req.session.user.user,req.body,function(e){
+  				console.log('add group request');
+  				if(e){
+  					res.send(e,400);
+  					console.log('denied');
+  				}else{
+  					res.send('ok',200);
+  					console.log('accepted');
+  				}
+  			});
+  		}
+  });
 
 // password reset //
 /**

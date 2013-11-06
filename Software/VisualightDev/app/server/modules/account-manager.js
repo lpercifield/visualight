@@ -174,6 +174,12 @@ exports.addNewAccount = function(newData, callback)
 	});
 }
 
+exports.addNewGroup = function(user, post, callback){
+
+	//collect post data 
+	//process post data
+	console.log(post);
+}
 
 exports.addNewBulb = function(user, bulbMac, callback)
 {
