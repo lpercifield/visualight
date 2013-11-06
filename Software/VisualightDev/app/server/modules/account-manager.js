@@ -12,6 +12,7 @@ var dbName 		= 'node-login';
 var accounts;
 var bulbs;
 var sessions;
+var groups;
 
 
 
@@ -43,24 +44,11 @@ exports.connectServer = function(callback){
 				accounts = db.collection('accounts');
 				bulbs = db.collection('bulbs');
 				sessions = db.collection('sessions');
+				groups = db.collection('groups');
 				callback(null);
 			}
 		}); 
 	}
-
-/*
-var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
-	db.open(function(e, d){
-	if (e) {
-		console.log(e);
-	}	else{
-		console.log('connected to database :: ' + dbName);
-	}
-});
-var accounts = db.collection('accounts');
-var bulbs = db.collection('bulbs');
-var sessions = db.collection('sessions');
-*/
 
 /* socket validation methods */
 
@@ -179,6 +167,9 @@ exports.addNewGroup = function(user, post, callback){
 	//collect post data 
 	//process post data
 	console.log(post);
+
+	//check group name 
+
 	callback();
 }
 

@@ -250,7 +250,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 
   app.post('/bind-group', function(req,res){
   		if(req.session.user==null){
-
+  			res.send('not-authorized',400);
   		}else{
   			AM.addNewGroup(req.session.user.user,req.body,function(e){
   				console.log('add group request');
@@ -258,7 +258,8 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
   					res.send(e,400);
   					console.log('denied');
   				}else{
-  					res.send('ok',200);
+  					//res.send('ok',200);
+  					res.redirect('/myvisualight');
   					console.log('accepted');
   				}
   			});
