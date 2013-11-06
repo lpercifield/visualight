@@ -50,7 +50,19 @@ $('div.btn-group .btn').click(function(){
 			$('.modal-bulb-network #showpass').attr("type","password");
 		}
 	});
+
+	//group crap
+
+	$('#btn-group-add').click(function(){
+		that.addBulbGroup();
+	})
 	
+	this.addBulbGroup = function () {
+		// body...
+		var that = this;
+		//$('.modal-group-setup').modal({show:false,keyboard:false,backdrop:'static'});
+		$('.modal-group-setup').modal('show');
+	}
 	
 	this.addVisualight = function()
 	{
