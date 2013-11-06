@@ -43,7 +43,11 @@ $(document).ready(function(){
     vc.getGroups(function(r){
       $('span#group-btns .group-btn').click(function(){
         alert('click')
-        console.log($(this).find('input'))
+        //console.log($(this).find('input'))
+        currBulbName = 'Group';
+
+        var inputs = $(this).find(':hidden');
+        console.log(inputs)
       });
 
     });
