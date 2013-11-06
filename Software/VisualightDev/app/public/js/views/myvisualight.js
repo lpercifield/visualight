@@ -31,6 +31,7 @@ $(document).ready(function(){
 		vc.getBulbs(function(r){
 		//console.log("getting complete");
 			$('div.btn-group .btn').click(function(){
+        alert('click')
 				//console.log($(this).find('input:radio').attr('checked', true).val());
 				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
 				currBulbId = $('input[name=bulb-button]:checked').val();
@@ -41,6 +42,7 @@ $(document).ready(function(){
 		});
     vc.getGroups(function(r){
       $('span#group-btns .group-btn').click(function(){
+        alert('click')
         console.log($(this).find('input'))
       })
 
