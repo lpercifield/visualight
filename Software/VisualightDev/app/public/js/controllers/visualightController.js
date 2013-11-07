@@ -69,7 +69,7 @@ $('div.btn-group .btn').click(function(){
 		var that = this;
 		$('.modal-bulb-setup').modal({ show : false, keyboard : false, backdrop : 'static' });
 		$('.modal-bulb-setup .modal-header h3').text('Add A Visualight');
-		$('.modal-bulb-setup .modal-body h4').html("Ensure that you Visualight is turned on and is glowing red - Then join the 'Visualight' wifi network");
+		$('.modal-bulb-setup .modal-body h4').html("Ensure that you Visualight is turned on and is glowing blue - Then join the 'Visualight' wifi network");
 		$(".modal-bulb-setup .modal-body img").attr("src", 'img/joinvisualight.png');
 		$('.modal-bulb-setup .cancel').html('Cancel');
 		$('.modal-bulb-setup .cancel').addClass('btn-danger');
@@ -234,7 +234,7 @@ $('div.btn-group .btn').click(function(){
 				type:'get',
 				success: function(data){
 					console.log(data)
-					addGroupButtons(data,callback)
+					addGroupsToDropdown(data,callback)
 
 				},
 				error:function(jqXHR){
@@ -255,7 +255,8 @@ $('div.btn-group .btn').click(function(){
 			success: function(data){
 				console.log(data);
 				console.log(data.length);
-				addBulbButtons(data,callback);
+				//addBulbButtons(data,callback);
+				addBulbsToDropdown(data,callback);
 				addBulbGroupList(data);
 				$('#account-form-container #main').css("display", "block");
 				$('#account-form-container #nobulbs').css("display","none");
@@ -275,33 +276,6 @@ $('div.btn-group .btn').click(function(){
 			}
 		});
 	}
-	//http://stackoverflow.com/questions/118693/how-do-you-dynamically-create-a-radio-button-in-javascript-that-works-in-all-bro
-/*
-	function createRadioElement( name, val, checked ) {
-    var radioInput;
-    try {
-        var radioHtml = '<button class="btn btn-primary';
-    	if ( checked ) {
-        	radioHtml += ' active';
-        }
-        radioHtml += '" value="'+val+'">'+name+'</button>';
-        radioInput = document.createElement(radioHtml);
-    } catch( err ) {
-        radioInput = document.createElement('button');
-        var t=document.createTextNode(name);
-        radioInput.setAttribute('class', 'btn btn-primary');
-        radioInput.appendChild(t)
-        //radioInput.html(name);
-        /*
-if ( checked ) {
-            radioInput.setAttribute('checked', 'checked');
-        }
-
-    //}
-*/
-
-    //return radioInput;
-//	}
 	function createRadioElement(name, val, checked) {
 	//<button type="button" class="btn btn-primary">
     	var radioHtml = '<button type="Button" data-toggle="button" class="btn btn-primary';
@@ -315,7 +289,26 @@ if ( checked ) {
 
         return radioFragment.firstChild;
     }
-    
+    function addBulbsToDropdown(bulbData,callback){
+	    //get data about online-offline by storing to db when signing on and logging off
+	    for(var i=0; i<bulbData.length; i++){
+		    var html = '<li><a data-state="" data-name="'+bulbData[i].name+'" data-id='+bulbData[i].id+'>'+bulbData[i].name+'</a></li>';
+			$('ul#bulbs').append(html);
+	    }
+	    callback(null);
+    }
+    function addGroupsToDropdown(groupData,callback){
+	    for(var i=0; i<groupData.length;i++){
+		    var html = '<li><a data-name="'+groupData[i].name+'" data-id="'+groupData[i]._id+'">'+groupData[i].name;
+		    for(var b = 0; b<groupData[i].bulbs.length;b++){
+			    html+= '<input type="hidden" name="bulbs[]" value="'+groupData[i].bulbs[b]+'"/>';
+		    }
+		    html+= '</a></li>';
+    		$('ul#groups').append(html);
+
+	    }
+	    callback(null);
+    }
     function addBulbButtons(bulbData, callback){
     	var checked = true;
     	var buttonDiv = document.getElementById('blub-buttons');

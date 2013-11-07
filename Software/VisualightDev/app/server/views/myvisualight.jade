@@ -6,48 +6,51 @@ input(type='hidden', value= user._id)#userId
 div.navbar
 	div.navbar-inner
 		div.container
-			a(data-toggle='collapse',data-target='.nav-collapse').btn.btn-navbar
-				span.icon-bar
-				span.icon-bar
-				span.icon-bar
-			button#btn-logout.btn.btn-primary.pull-right
-				i.icon-lock.icon-white
-				| Sign Out
-			ul#global-nav.nav.pull-left
-				a(href='/home').brand My Account
-
-div.heads-up-bar
-	div.nav-collapse.hidden-phone
-				div#blub-buttons(data-toggle='buttons-radio', style="float:left").btn-group
+			div.top-nav
+				button#btn-logout.btn.btn-primary.pull-right
+					i.icon-lock.icon-white
+					| Sign Out
+				ul#global-nav.nav.pull-left
+					a(href='/home').brand My Account
+			div.sub-nav
+				//adding button dropdowns
+				div#bulb-btns.btn-group.btn
+					button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown')  YOUR BULBS    
+						span.caret
+					ul.dropdown-menu#bulbs
 				button#btn-add.btn.btn-primary ADD VISUALIGHT
-				span#group-btns
-					button#btn-group-add.btn.btn-primary ADD GROUP
+				
+				div#group-btns.btn-group.btn
+					button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') YOUR GROUPS
+						span.caret
+					ul.dropdown-menu#groups
+				button#btn-group-add.btn.btn-primary ADD GROUP
 
 
 #account-form-container
+	div.current(style="display:none")
+		h1(style="display:inline; vertical-align: middle;")
+		button(type="button", style="display:inline; vertical-align: middle;").btn.btn-danger DELETE	
+
+
 	h1#nobulbs(style="display:none")
 		| No Visualights Found
 		br
 		| Click "Add Visualight" above
-	div#main.container(style='margin:20px; display:block')
+	
+	div#main(style='margin:20px; display:block')
 		form(style="width: 400px;")
 			.form-item
-				label(for="color")
-					input#color(type="text", value="", style="width:300px", name="color")
+				input#color(type="text", value="", style="width:300px", name="color")
 				#picker
+
+		div#title(style="display:none")
+			form(method="post", action="update-bulb")
+				div.input-append
+					input(type="text", name="bulb-name").span2
+					button(type="button").btn.update Update
+			
 		span#status
-		form#form-inline
-			input.cosm-input(type="number", name="feed", id="feed", value="", placeholder="Feed ID")
-			input.cosm-input(type="text", name="datastream", id="datastream", value="", placeholder="Datastream")
-			input.cosm-input(type="number", name="min", id="min", value="", placeholder="Min: 0")
-			input.cosm-input(type="number", name="max", id="max", value="", placeholder="Max: 100")
-			input(id="cosm", type="button", value="COSM")
-		form#form-inline
-			input(type="number", name="stopid", id="stopid", value="", placeholder="Stop ID")
-			input(id="bustime", type="button", value="Show Bus Time");
-		form#form-inline
-			input(type="number", name="zip", id="zip", value="", placeholder="Zipcode")
-			input(id="weather", type="button", value="Get Weather")
 		form#form-inline
 			input(id="open", type="button", value="Connect")
 			input(id="close", type="button", value="Disconnect")
@@ -61,12 +64,13 @@ include modals/addgroup
 script(type='text/javascript', src='/vendor/jquery.min.js')
 script(type='text/javascript', src='/vendor/jquery.form.js')
 script(type='text/javascript', src='/vendor/farbtastic.js')
-script(src='/vendor/bootstrap-modal_222.js')
-script(src='/vendor/bootstrap-transition.js')
-script(src='/vendor/bootstrap-button.js')
-script(src='/vendor/bootstrap-modalmanager.js')
-script(src='/vendor/bootstrap-modal.js')
-script(src="/vendor/bootstrap-collapse.js")
-script(src='/js/views/myvisualight.js')
-script(src='/js/controllers/visualightController.js')
-script(src="/socket.io/socket.io.js")
+script(type='text/javascript', src='/vendor/bootstrap-modal_222.js')
+script(type='text/javascript', src='/vendor/bootstrap-transition.js')
+script(type='text/javascript', src='/vendor/bootstrap-button.js')
+script(type='text/javascript', src='/vendor/bootstrap-modalmanager.js')
+script(type='text/javascript', src='/vendor/bootstrap-modal.js')
+script(type='text/javascript', src="/vendor/bootstrap-collapse.js")
+script(type='text/javascript', src='/vendor/bootstrap-dropdown.js')
+script(type='text/javascript', src='/js/views/myvisualight.js')
+script(type='text/javascript', src='/js/controllers/visualightController.js')
+script(type='text/javascript', src="/socket.io/socket.io.js")

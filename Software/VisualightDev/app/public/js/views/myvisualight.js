@@ -30,32 +30,35 @@ $(document).ready(function(){
 	function setupVisualightButtons(){
 		vc.getBulbs(function(r){
 		//console.log("getting complete");
-			$('div.btn-group .btn').click(function(){
-        //alert('click')
-				//console.log($(this).find('input:radio').attr('checked', true).val());
-				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
-				currBulbId = $('input[name=bulb-button]:checked').val();
-				currBulbName = $('input[name=bulb-button]:checked').attr('bulbname');
-        
-				//socket.emit('current-bulb', currBulbId);
-				});
+			$('#bulbs.dropdown-menu li a').click(function(){
+				//alert($(this).data('name'));
+				currBulbId = $(this).data('id');
+				currBulbName = $(this).data('name');
+				
+				//set header to bulb name
+				$('div#title :text').val(currBulbName);
+				$('div#title').show();
+				$('.current h1').html(currBulbName).parent().show();
+    		});
 		});
     vc.getGroups(function(r){
-      $('span#group-btns .group-btn').click(function(){
+      $('#groups.dropdown-menu li a').click(function(){
         //alert('click')
         //console.log($(this).find('input'))
-        currBulbName = 'Group';
+        currBulbName = $(this).data('name');
 
         var inputs = $(this).find(':hidden');
-        //console.log(inputs)
-
+        
         currBulbId = new Array();
 
         for(var i =0; i<inputs.length; i++){
           currBulbId.push($(inputs[i]).val())
         }
         //console.log(currBulbId)
-
+		
+		$('div#title :text').val(currBulbName);
+		$('div#title').show();
+		$('.current h1').html(currBulbName).parent().show();
 
       });
 
