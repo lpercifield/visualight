@@ -60,12 +60,12 @@ exports.createSockets = function(app, io, AM){
 
                         try { 
                                         data = JSON.parse(data) 
-                                        console.log(data)
+                                        console.log(data.data)
                                         var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
-                                        console.log("INCOMING: " + mac );
+                                        console.log("INCOMING: ".help + mac.data );
                                 }catch(e){
-                                         console.error("Bad Data");
-                                         console.error(e);
+                                         console.error("Bad Data".error);
+                                         console.error(e.error);
                                          socket.destroy();
                                 }
                                                 
