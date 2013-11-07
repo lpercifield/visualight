@@ -102,6 +102,7 @@ var putAPICall = function(parsed, bulbObject, callback){
 	}
 	var rgb = processBulbColors(bulbObject);
 	//console.log(rgb);
+	bulbObject.color = {};
 	bulbObject.color.r = parseInt(rgb.r);
 	bulbObject.color.g = parseInt(rgb.g);
 	bulbObject.color.b = parseInt(rgb.b);
