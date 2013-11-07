@@ -174,6 +174,7 @@ exports.createSockets = function(app, io, AM){
         */
 
         function sendToVisualight(bulbObject,heartbeat){
+        		console.log('Bulb Object'.error);
         		console.log(bulbObject);
                 var data = bulbObject.color.r+","+bulbObject.color.g+","+bulbObject.color.b+","+bulbObject.color.w; // this creates the r,g,b,blink array
                 
