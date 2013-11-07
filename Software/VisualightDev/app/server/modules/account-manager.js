@@ -92,8 +92,8 @@ exports.getBulbInfo = function(id, callback)
 /* bulb logoff */
 
 exports.updateBulbLogoff=function(id,color,callback){
-
-	var obj = { $set: {color: color, lastOnline: moment() }}
+	//set last color state on logoff
+	var obj = { $set: {color: color, lastOnline: new Date() }}
 	bulbs.update({_id: getBulbId(id)},obj,true,function(e,o){
 
 		callback(null);

@@ -99,7 +99,11 @@ exports.createSockets = function(app, io, AM){
                                                         if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
                                                                   console.log('Bulbs['+cleanbulbID+'] not defined - CREATING Bulbs['+cleanbulbID+']');
                                                                   
-                                                                  Bulbs[cleanbulbID] = {_id: cleanbulbID, mac: mac, netsocket: socket };
+                                                                  Bulbs[cleanbulbID] = { _id: cleanbulbID, mac: mac, netsocket: socket };
+                                                                  if(o.hasOwnProperty('color')){
+                                                                  	Bulbs[cleanbulbID].color = o.color;
+                                                                  	sendToVisualight(Bulbs[cleanbulbID])
+                                                                  }
                                                                   //console.log(Bulbs[cleanbulbID]);
                                                                   connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions
 
@@ -111,7 +115,7 @@ exports.createSockets = function(app, io, AM){
                                                                           Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
                                                                           delete Bulbs[cleanbulbID];
 
-                                                                          Bulbs[cleanbulbID] = {mac: mac, netsocket: socket };
+                                                                          Bulbs[cleanbulbID] = {_id: cleanBulbID, mac: mac, netsocket: socket };
                                                                           connection_id = cleanbulbID;
                                                                   }else{
 
