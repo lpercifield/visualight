@@ -70,6 +70,8 @@ var getAPICall = function(bulbObject, callback){
 
 var putAPICall = function(parsed, bulbObject, callback){
 	// Loop through all the keys provided in the api call json object
+	console.log('PUT BULB OBJECT')
+	console.log(bulbObject);
 	for(var keyname in parsed){
     	//console.log(keyname+": "+parsed[keyname]);
     	switch(keyname){
