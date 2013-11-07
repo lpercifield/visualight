@@ -2,6 +2,18 @@ var net = require('net');
 var sanitize        = require('validator').sanitize;
 var API = require('./api');
 
+var colors = require('colors');
+
+colors.setTheme({
+
+	data: 	'grey',
+	info: 	'green',
+	warm: 	'yellow',
+	debug: 	'blue',
+	help:  	'cyan',
+	error: 	'red'
+});
+
 var Bulbs = {}; //temp object of bulbs to start cross referenceing
                            //each object will contain mac address, socket.io client, netsocket client
 
@@ -58,14 +70,14 @@ exports.createSockets = function(app, io, AM){
                 socket.on('data', function(data){
                         //console.log(data); // debug only see exactly what is sent from netsocket
 
-                        try { 
+                        try { 			console.log(data.data)
                                         data = JSON.parse(data) 
-                                        console.log(data.data)
                                         var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
                                         console.log("INCOMING: ".help + mac.data );
                                 }catch(e){
                                          console.error("Bad Data".error);
-                                         console.error(e.error);
+                                         console.error(data.error)
+                                         console.error(JSON.stringify(e));
                                          socket.destroy();
                                 }
                                                 
