@@ -89,6 +89,19 @@ exports.getBulbInfo = function(id, callback)
 	});
 }
 
+/* bulb logoff */
+
+exports.updateBulbLogoff=function(id,color,callback){
+
+	var obj = { $set: {color: color, lastOnline: moment() }}
+	bulbs.update({_id: getBulbId(id)},obj,true,function(e,o){
+
+		callback(null);
+	})
+
+}
+
+
 /* sets current bulb status*/
 exports.updateBulbStatus = function(id, online, callback)
 {	

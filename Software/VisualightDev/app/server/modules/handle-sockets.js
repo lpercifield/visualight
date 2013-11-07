@@ -135,10 +135,31 @@ exports.createSockets = function(app, io, AM){
                                 console.log('Attempting to remove Bulb: '+bulbID);
                                 //console.log(Bulbs);
                                 
-                                Bulbs[bulbID].netsocket.destroy(); //destroy socket 
-                                delete Bulbs[bulbID]; //delete obj
-                                //console.log(Bulbs);
-                                console.log('Bulb '+bulbID+' Removed Successfully!');
+                                //setting bulb
+                                if(Bulbs[bulbID].hasOwnProperty('color')){
+                                	AM.updateBulbLogoff(bulbID,Bulbs[bulbID].color,function(e){
+                                		    Bulbs[bulbID].netsocket.destroy(); //destroy socket 
+                                			try{
+                                				delete Bulbs[bulbID]; //delete obj
+                                				//console.log(Bulbs);
+                                				console.log('Bulb '+bulbID+' Removed Successfully!');
+                                			}catch(e){
+                                				console.log('DELETE ERROR: '+e)
+                                			}
+                                	})
+                                }else{
+
+                                	Bulbs[bulbID].netsocket.destroy(); //destroy socket 
+                                	try{
+                                		delete Bulbs[bulbID]; //delete obj
+                                		//console.log(Bulbs);
+                                		console.log('Bulb '+bulbID+' Removed Successfully!');
+                                		
+                                		}catch(e){
+                                				console.log('DELETE ERROR: '+e)
+                                		}
+                                }
+                                //update bulb color in db
         
                         }else{
                                 console.log('Bulb '+bulbID+' no longer exists');
@@ -154,7 +175,7 @@ exports.createSockets = function(app, io, AM){
 
         function sendToVisualight(bulbObject,heartbeat){
 
-                var data = bulbObject.r+","+bulbObject.g+","+bulbObject.b+","+bulbObject.w; // this creates the r,g,b,blink array
+                var data = bulbObject.color.r+","+bulbObject.color.g+","+bulbObject.color.b+","+bulbObject.color.w; // this creates the r,g,b,blink array
                 
                 heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false; // if we didnt define heartbeat then set it to false
                 
@@ -166,6 +187,8 @@ exports.createSockets = function(app, io, AM){
                         Bulbs[cleanbulbID].netsocket.write("a"); // start character
                         Bulbs[cleanbulbID].netsocket.write(data); // data
                         Bulbs[cleanbulbID].netsocket.write("x"); // stop character
+
+                        Bulbs[cleanbulbID].color = bulbObject.color;
                         
                 }else if(Bulbs.hasOwnProperty(cleanbulbID) && heartbeat){ // we are sending a heartbeat
                         Bulbs[cleanbulbID].netsocket.write("H");

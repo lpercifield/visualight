@@ -37,6 +37,7 @@ exports.parseMessage = function(message,Bulbs,callback){
 							break;
 					}
 				}
+				//     old way of orienting with db call
 				//     AM.getBulbInfo(parsed.id, function(o){
 				//      if(!o){
 				//       callback(null,"BULB ID LOOKUP FAILED");
@@ -99,10 +100,10 @@ var putAPICall = function(parsed, bulbObject, callback){
 	}
 	var rgb = processBulbColors(bulbObject);
 	//console.log(rgb);
-	bulbObject.r = parseInt(rgb.r);
-	bulbObject.g = parseInt(rgb.g);
-	bulbObject.b = parseInt(rgb.b);
-	bulbObject.w = parseInt(rgb.w);
+	bulbObject.color.r = parseInt(rgb.r);
+	bulbObject.color.g = parseInt(rgb.g);
+	bulbObject.color.b = parseInt(rgb.b);
+	bulbObject.color.w = parseInt(rgb.w);
 
 	/*
 if(bulbObject.hue == 0){
