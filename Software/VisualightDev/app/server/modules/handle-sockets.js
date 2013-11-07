@@ -174,8 +174,8 @@ exports.createSockets = function(app, io, AM){
         */
 
         function sendToVisualight(bulbObject,heartbeat){
-        		console.log('Bulb Object'.error);
-        		console.log(bulbObject);
+        		//console.log('Bulb Object'.error);
+        		//console.log(bulbObject);
                 
                 heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false; // if we didnt define heartbeat then set it to false
                 
