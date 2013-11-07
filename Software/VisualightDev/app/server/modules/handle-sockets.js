@@ -101,7 +101,9 @@ exports.createSockets = function(app, io, AM){
                                                                   
                                                                   Bulbs[cleanbulbID] = { _id: cleanbulbID, mac: mac, netsocket: socket };
                                                                   if(o.hasOwnProperty('color')){
+                                                                  	//check if bulb group is different than last stored if so update color
                                                                   	Bulbs[cleanbulbID].color = o.color;
+                                                                  	//update bulb with color
                                                                   	sendToVisualight(Bulbs[cleanbulbID])
                                                                   }
                                                                   //console.log(Bulbs[cleanbulbID]);
