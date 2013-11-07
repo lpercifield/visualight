@@ -70,8 +70,8 @@ var getAPICall = function(bulbObject, callback){
 
 var putAPICall = function(parsed, bulbObject, callback){
 	// Loop through all the keys provided in the api call json object
-	console.log('PUT BULB OBJECT')
-	console.log(bulbObject);
+	//console.log('PUT BULB OBJECT')
+	//console.log(bulbObject);
 	for(var keyname in parsed){
     	//console.log(keyname+": "+parsed[keyname]);
     	switch(keyname){
@@ -102,7 +102,7 @@ var putAPICall = function(parsed, bulbObject, callback){
 	}
 	var rgb = processBulbColors(bulbObject);
 	//console.log(rgb);
-	bulbObject.color = {};
+	bulbObject.color = {}; //must create object before you can create sub objects
 	bulbObject.color.r = parseInt(rgb.r);
 	bulbObject.color.g = parseInt(rgb.g);
 	bulbObject.color.b = parseInt(rgb.b);

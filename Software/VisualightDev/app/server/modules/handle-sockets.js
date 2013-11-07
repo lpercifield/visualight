@@ -176,20 +176,29 @@ exports.createSockets = function(app, io, AM){
         function sendToVisualight(bulbObject,heartbeat){
         		console.log('Bulb Object'.error);
         		console.log(bulbObject);
-                var data = bulbObject.color.r+","+bulbObject.color.g+","+bulbObject.color.b+","+bulbObject.color.w; // this creates the r,g,b,blink array
                 
                 heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false; // if we didnt define heartbeat then set it to false
                 
                 var cleanbulbID = sanitize(bulbObject._id).trim();
 
                 if(Bulbs.hasOwnProperty(cleanbulbID) && !heartbeat){ // if we have a bulb and the message is not a heartbeat
-                        console.log("WRITING DATA: "+data+" id: "+cleanbulbID);
-                        //console.log(Bulbs);
-                        Bulbs[cleanbulbID].netsocket.write("a"); // start character
-                        Bulbs[cleanbulbID].netsocket.write(data); // data
-                        Bulbs[cleanbulbID].netsocket.write("x"); // stop character
 
-                        Bulbs[cleanbulbID].color = bulbObject.color;
+                		if(Bulbs[cleanbulbID].hasOwnProperty('color')){
+                			var data = bulbObject.color.r+","+bulbObject.color.g+","+bulbObject.color.b+","+bulbObject.color.w; // this creates the r,g,b,blink array
+
+	                        console.log("WRITING DATA: "+data+" id: "+cleanbulbID);
+	                        //console.log(Bulbs);
+	                        Bulbs[cleanbulbID].netsocket.write("a"); // start character
+	                        Bulbs[cleanbulbID].netsocket.write(data); // data
+	                        Bulbs[cleanbulbID].netsocket.write("x"); // stop character
+
+	                        Bulbs[cleanbulbID].color = bulbObject.color;
+
+                    	}else{
+                    		//send heartbeat
+                    		Bulbs[cleanbulbID].netsocket.write("H");
+
+                    	}
                         
                 }else if(Bulbs.hasOwnProperty(cleanbulbID) && heartbeat){ // we are sending a heartbeat
                         Bulbs[cleanbulbID].netsocket.write("H");
