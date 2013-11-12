@@ -26,25 +26,7 @@ var sessions;
 var groups;
 
 
-
-/*
 exports.connectServer = function(callback){
-	Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
-				console.log("connecting to DB...");
-			if (err) {
-				console.log(err);
-				callback(err);
-			}	else{
-				console.log('connected to database :: ' + dbName);
-				accounts = db.collection('accounts');
-				bulbs = db.collection('bulbs');
-				sessions = db.collection('sessions');
-				callback(null);
-			}
-		}); 
-	}
-*/
-	exports.connectServer = function(callback){
 	Mongo.connect("mongodb://localhost:27017/visualightdev", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
 			if (err) {
@@ -58,8 +40,8 @@ exports.connectServer = function(callback){
 				groups = db.collection('groups');
 				callback(null);
 			}
-		}); 
-	}
+	}); 
+}
 
 /* socket validation methods */
 
@@ -93,7 +75,8 @@ exports.getBulbInfo = function(id, callback)
 
 exports.updateBulbLogoff=function(id,color,callback){
 	//set last color state on logoff
-	var obj = { $set: {color: color, lastOnline: new Date() }}
+	//set status to 0 aka offline 
+	var obj = { $set: {color: color, lastOnline: new Date(), status:0 }}
 	bulbs.update({_id: getBulbId(id)},obj,true,function(e,o){
 
 		callback(null);
@@ -105,14 +88,37 @@ exports.updateBulbLogoff=function(id,color,callback){
 /* sets current bulb status*/
 exports.updateBulbStatus = function(id, online, callback)
 {	
-	//console.log("bulbId" + id);
-
-	// convert this to an update and modify the object... this currently overwrites the bulb object -- oops...
+	//var online = 0or1
+	//offline = 0
+	//online = 1
+	
+	var obj = {$set: {status: online}};
+	bulbs.update({_id:getBulbId(id)},obj,true,function(e,o){
+		callback(null)
+	})
+/*
 	bulbs.save({_id: getBulbId(id),status:online,lastOnline:moment()},{safe:true}, function(e, o) {
 		if (o == null){
 			callback(null);
 		}
 	});
+*/
+}
+
+exports.updateBulbData = function(key,post,callback)
+{	
+	if(post.options) var obj = {$set:{name:post.name,options:post.options}};
+	else var obj = {$set:{name:post.name}};
+	
+	bulbs.update({_id:getBulbId(key)},obj, true, function(e,o){
+		var result = new Object();
+		
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status = 'success';
+		}
+		callback(result)
+	})
 }
 
 /* get current bulb information*/
@@ -283,7 +289,8 @@ exports.getGroups = function(user,callback)
 				}else if(e){
 					callback('DB ERROR: '+e);
 				}else{
-					//good to go
+					//TO DO:
+					//delete the fields we want to hide from g and send it back
 					callback(g);
 				}
 			})
@@ -298,7 +305,20 @@ exports.getBulbs = function(user, callback)
 		if (o == null){
 			callback('user-not-found');
 		}	else{
-			callback(o.bulbs);
+			bulbs.find({user:o._id}).toArray(function(e,b){
+				if(e){
+					console.error(e)
+					callback('DB ERROR: '+e)
+				}else if(b==null){
+					callback('bulbs-not-found')
+						
+				}else{
+					//TO DO:
+					//delete the fields we want to hide from b and send it back
+					callback(b);
+				}
+			})
+			
 		}
 	});
 }

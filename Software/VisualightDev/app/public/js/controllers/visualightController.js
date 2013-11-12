@@ -253,8 +253,8 @@ $('div.btn-group .btn').click(function(){
 			url: '/get-bulbs',
 			type: 'get',
 			success: function(data){
-				console.log(data);
-				console.log(data.length);
+				//console.log(data);
+				//console.log(data.length);
 				//addBulbButtons(data,callback);
 				addBulbsToDropdown(data,callback);
 				addBulbGroupList(data);
@@ -292,7 +292,12 @@ $('div.btn-group .btn').click(function(){
     function addBulbsToDropdown(bulbData,callback){
 	    //get data about online-offline by storing to db when signing on and logging off
 	    for(var i=0; i<bulbData.length; i++){
-		    var html = '<li><a data-state="" data-name="'+bulbData[i].name+'" data-id='+bulbData[i].id+'>'+bulbData[i].name+'</a></li>';
+	    	var html = '<li';
+			console.log(bulbData[i]);
+	    	if(bulbData[i].status === 0) html += ' class="disabled" ';
+	    
+	    	
+		    html += '><a data-status="'+bulbData[i].status+'" data-name="'+bulbData[i].name+'" data-id='+bulbData[i]._id+'>'+bulbData[i].name+'</a></li>';
 			$('ul#bulbs').append(html);
 	    }
 	    callback(null);
@@ -340,12 +345,14 @@ $('div.btn-group .btn').click(function(){
 
     	//$('.modal-group-setup form');
     	for(var i=0; i<bulbData.length; i++){
-
-    		var html = '<p>'+bulbData[i].name+'<input type="checkbox" name="bulbs[]" value="'+bulbData[i].id+'"/></p>';
-    		$('.modal-group-setup form').append(html);
+			var html  = '<tr>';
+    			html += 	'<td><input type="checkbox" name="bulbs[]" value="'+bulbData[i]._id+'"/></td>';
+    			html += 	'<td>'+bulbData[i].name+'</td>';
+    			html += 	'<td>'+bulbData[i]._id+'</td>';
+    			html += '</tr>'
+    		$('tbody#bulbs').append(html);
     	}
-    	var html = '<button type="submit">Add Group</button>';
-    	$('.modal-group-setup form').append(html)
+ 
     }
 
 

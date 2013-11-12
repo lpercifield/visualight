@@ -16,6 +16,10 @@ body {
   background: radial-gradient(center, ellipse cover, #f2f9fe 0%, #d6f0fd 100%);
 /* W3C */
 }
+div.navbar div.container {
+  background-color: #333;
+  padding: 5px 10px;
+}
 #bulb-btns,
 #group-btns {
   background-image: none !important;
@@ -25,9 +29,8 @@ body {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
 }
-.sub-nav,
-.top-nav {
-  clear: both;
+.farbtastic {
+  margin: 0 auto !important;
 }
 #login-container {
   width: 340px;
@@ -59,7 +62,9 @@ body {
 }
 #account-form-container {
   width: 460px;
-  margin: 100px auto;
+  padding: 40px;
+  margin: 0 auto;
+  background: #fdfdfd;
 }
 #country-list {
   width: 280px;

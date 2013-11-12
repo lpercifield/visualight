@@ -235,7 +235,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    		res.send('not-authorized',400);
 	    }else{
 		    AM.getGroups(req.session.user.user, function(o){
-			    console.log('AM.getGroups');console.log(o);
+			    //console.log('AM.getGroups');console.log(o);
 			    if(o){
 				    res.send(o,200);
 			    }else{
@@ -272,6 +272,30 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+	
+	
+/**
+ *
+ *	Routes for bulb actions - update delete 	
+ *	
+ *
+ *
+ */
+ 
+ app.post('/bulb/:key/update',function(req,res){
+	var key = req.params.key;
+	var post = req.body;
+	 
+	console.log(key.help);
+	console.log(JSON.stringify(post).data);
+
+	AM.updateBulbData(key,post,function(result){
+		//res.send(result);
+		res.writeHead(200, {'content-type':'text/json'})
+		res.end(JSON.stringify(result))
+	})
+
+ })
 
 /** 
  *

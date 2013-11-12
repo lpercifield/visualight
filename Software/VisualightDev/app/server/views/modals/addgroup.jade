@@ -3,5 +3,19 @@
 		h3 Create A New Group
 	div.modal-body
 		form(method='post', action='/bind-group')
-			input(name='name', type='input', placeholder='Enter Group Name')
-			h3 Select Bulbs
+				div.input-append(style="padding-bottom:30px;padding-top:20px;")
+					input.input-xlarge(name='name', type='input', placeholder='Enter Group Name')
+					button.btn.btn-primary(type="submit") Submit
+
+				h3 Select Bulbs
+				table.table.table-striped
+					thead
+						tr
+							th 
+								i.icon-ok
+							th Bulb Name
+							th Bulb Key
+					tbody#bulbs
+				
+	div.modal-footer
+		button.cancel.btn.btn-danger(data-toggle="modal", data-target=".modal-group-setup") Cancel

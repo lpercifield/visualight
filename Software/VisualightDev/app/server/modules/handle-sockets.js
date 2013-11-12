@@ -105,6 +105,9 @@ exports.createSockets = function(app, io, AM){
                                                                   	Bulbs[cleanbulbID].color = o.color;
                                                                   	//update bulb with color
                                                                   	sendToVisualight(Bulbs[cleanbulbID])
+                                                                  	AM.updateBulbStatus(cleanbulbID,1,function(){})
+                                                                  	//log to db that bulb is on.
+                                                                  	
                                                                   }
                                                                   //console.log(Bulbs[cleanbulbID]);
                                                                   connection_id = cleanbulbID; //providing access to the objectID to the rest of the socket functions

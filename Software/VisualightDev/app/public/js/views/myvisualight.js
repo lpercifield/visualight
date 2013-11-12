@@ -13,6 +13,7 @@ $(document).ready(function(){
       var send = document.getElementById("send");
       var text = document.getElementById("text");
       var message = document.getElementById("message");
+      var update = document.getElementById("update");
       var socket;
       var currBulb = 0;
       var currBulbId = null;
@@ -34,11 +35,15 @@ $(document).ready(function(){
 				//alert($(this).data('name'));
 				currBulbId = $(this).data('id');
 				currBulbName = $(this).data('name');
-				
+				$('h1.intro').hide()
 				//set header to bulb name
 				$('div#title :text').val(currBulbName);
-				$('div#title').show();
+				//$('div#title').show();
 				$('.current h1').html(currBulbName).parent().show();
+				$('div#title form').attr('action','/bulb/'+currBulbId+'/update')
+				$('div#title form input.id').val(currBulbId)
+				$('button#delete').data('key',currBulbId);
+				
     		});
 		});
     vc.getGroups(function(r){
@@ -46,7 +51,7 @@ $(document).ready(function(){
         //alert('click')
         //console.log($(this).find('input'))
         currBulbName = $(this).data('name');
-
+		var group=$(this).data('id');
         var inputs = $(this).find(':hidden');
         
         currBulbId = new Array();
@@ -55,10 +60,16 @@ $(document).ready(function(){
           currBulbId.push($(inputs[i]).val())
         }
         //console.log(currBulbId)
+		$('h1.intro').hide()
+		//options menu
+		$('div#options :text').val(currBulbName);
+		$('div#options form').attr('action','/group/'+group+'/update')
+		$('div#options form input.id').val(group);
+		//$('div#options').show();
 		
-		$('div#title :text').val(currBulbName);
-		$('div#title').show();
 		$('.current h1').html(currBulbName).parent().show();
+
+		$('button#delete').data('key',group);
 
       });
 
@@ -82,10 +93,10 @@ $(document).ready(function(){
 		status.textContent = "Connected";
 		close.disabled = false;
         open.disabled = true;
-        currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
-        console.log("currBulbID " + currBulbId);
+        //currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+        //console.log("currBulbID " + currBulbId);
         //if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
-        console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
+        //console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
 	});
 	socket.on('disconnect',function(){
 		status.textContent = "Not Connected";
@@ -164,6 +175,7 @@ $(document).ready(function(){
       ;
     
     //$('#color').css({backgroundColor:e}).val(e);
+    $('body').css({background:e});
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
@@ -197,6 +209,45 @@ $(document).ready(function(){
         socket.disconnect();
       });
       
+      $('button#settings').click(function(e){
+	      $('#options').toggle()
+	      if($(this).html() == 'SETTINGS') $(this).html('HIDE');
+	      else $(this).html('SETTINGS');
+      })
+      $('button#delete').click(function(e){
+	      if(!confirm('Are you sure you want to delete this item')) return;
+	      
+	      
+      })
+      
+      $('button#update').click(function(e){
+	      
+	      var $parents = $(this).parents('form');
+	      var $form = $($parents[0]);
+	      console.log($form);
+	      //make ajax call 
+
+	      $.ajax({
+		      	type:'POST',
+		      	url: $form.attr( 'action' ),
+			  	data: $form.serialize(),
+			  	success: function(data){
+				  	var Name = $form.find('input.name').val();
+				  	var id = $form.find('input.id').val()
+				  	$('a[data-id='+id+']').html(Name)
+				  	$('.current h1').html(Name)
+				  	//console.log(data);
+			  	},
+			  	error:function(jqXHR){
+					console.log('AJAX ERROR: ')
+					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
+				}
+	      })
+
+	      
+	      
+	      
+      })
      /*
  one.addEventListener("click", function(event){
       	//socket.send("weather,"+$('#zip').val());
@@ -214,6 +265,7 @@ $(document).ready(function(){
       	console.log("three");
       });
 */
+/*
       weather.addEventListener("click", function(event){
       	socket.send("weather,"+$('#zip').val()+","+currBulb);
       });
@@ -239,7 +291,7 @@ $(document).ready(function(){
       		socket.send("cosm,"+$('#feed').val()+","+$('#datastream').val()+","+min+","+max+","+currBulb);
       	}
       });
-      
+*/
     $('#slider-red').change(function(){
     		var slider_value = $(this).val();
     		console.log(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val());
