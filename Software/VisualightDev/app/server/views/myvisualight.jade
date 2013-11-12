@@ -5,25 +5,25 @@ input(type='hidden', value= user._id)#userId
 
 div.navbar
 	div.container
-		div.top-nav
-			button#btn-logout.btn.btn-primary.pull-right
-				i.icon-lock.icon-white
-				| Sign Out
+		div.nav-collapse
 			ul#global-nav.nav.pull-left
 				a(href='/home').brand My Account
-	div(style='background-color:white;')
-		//adding button dropdowns
-		div#bulb-btns.btn-group.btn
-			button#btn-add.btn.btn-inverse +
-			button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; BULBS &nbsp; &nbsp;
-				span.caret
-			ul.dropdown-menu#bulbs(role="menu")
-		
-		div#group-btns.btn-group.btn
-			button#btn-group-add.btn.btn-inverse +
-			button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; GROUPS &nbsp; &nbsp; 
-				span.caret
-			ul.dropdown-menu#groups
+		button#btn-logout.btn.btn-primary.pull-right
+			i.icon-lock.icon-white
+			| Sign Out
+		div
+			//adding button dropdowns
+			div#bulb-btns.btn-group.btn
+				button#btn-add.btn.btn-inverse +
+				button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; BULBS &nbsp; &nbsp;
+					span.caret
+				ul.dropdown-menu#bulbs(role="menu")
+			
+			div#group-btns.btn-group.btn
+				button#btn-group-add.btn.btn-inverse +
+				button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; GROUPS &nbsp; &nbsp; 
+					span.caret
+				ul.dropdown-menu#groups
 		
 
 #account-form-container
