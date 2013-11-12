@@ -224,14 +224,14 @@ void Visualight::sendHeartbeat(){
 }
 
 boolean Visualight::connectToServer(){
-  wifly.reboot();
-  delay(1000);
-  // if(reconnectCount > 4){
-  //   if(_debug) Serial.println(F("rebooting wifly..."));
-  //   wifly.reboot();
-  //   delay(1000);
-  //   reconnectCount = 0;
-  // }
+  // wifly.reboot();
+  // delay(1000);
+  if(reconnectCount > 4){
+    if(_debug) Serial.println(F("rebooting wifly..."));
+    wifly.reboot();
+    delay(1000);
+    reconnectCount = 0;
+  }
   wifly.flushRx();
   if(!wifly.isAssociated()) { //
       if(_debug) Serial.println(F("Joining"));
