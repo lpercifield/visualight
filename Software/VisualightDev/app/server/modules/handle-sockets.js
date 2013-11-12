@@ -120,7 +120,7 @@ exports.createSockets = function(app, io, AM){
                                                                           Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
                                                                           delete Bulbs[cleanbulbID];
 
-                                                                          Bulbs[cleanbulbID] = {_id: cleanBulbID, mac: mac, netsocket: socket };
+                                                                          Bulbs[cleanbulbID] = {_id: cleanbulbID, mac: mac, netsocket: socket };
                                                                           connection_id = cleanbulbID;
                                                                   }else{
 

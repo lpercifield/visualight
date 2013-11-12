@@ -40,8 +40,8 @@ $(document).ready(function(){
 				$('div#title :text').val(currBulbName);
 				//$('div#title').show();
 				$('.current h1').html(currBulbName).parent().show();
-				$('div#title form').attr('action','/bulb/'+currBulbId+'/update')
-				$('div#title form input.id').val(currBulbId)
+				$('div#options form').attr('action','/bulb/'+currBulbId+'/update')
+				$('div#options form input.id').val(currBulbId)
 				$('button#delete').data('key',currBulbId);
 				
     		});
