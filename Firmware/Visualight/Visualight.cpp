@@ -13,6 +13,7 @@
 
 #include "Visualight.h"
 
+
 Visualight::Visualight(){
 	_red = 255;
 	_green = 255;
@@ -29,12 +30,12 @@ Visualight::Visualight(){
   reconnect = false;
   reconnectCount = 0;
 
-  for(int i=0; i<sizeof(password); i+=4){
-    password[i] = '.';
-    password[i+1] = '$';
-    password[i+2] = '*';
-    password[i+3] = '#';
-  }
+  // for(int i=0; i<sizeof(password); i+=4){
+  //   password[i] = '.';
+  //   password[i+1] = '$';
+  //   password[i+2] = '*';
+  //   password[i+3] = '#';
+  // }
 }
 
 
@@ -88,6 +89,7 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	wifly.getDeviceID(devID,sizeof(devID));
 	if(strcmp(devID, "Visualight")==0){
 		if(_debug) Serial.println(F("SAME"));
+    
 	}
 	else{
 		if(_debug) Serial.println(F("DIFF"));
@@ -161,17 +163,19 @@ void Visualight::wifiReset(){
 void Visualight::joinWifi(){
   /* Setup the WiFly to connect to a wifi network */
   if(_debug) Serial.println(F("From joinWifi"));
-  if(_debug) Serial.println(sizeof(password));
+  //if(_debug) Serial.println(sizeof(password));
+  if(_debug) Serial.println(password);
+  if(_debug) Serial.println(network);
   wifly.reboot();
   wifly.setSSID(network);
 
   //int wifiType = 0; 
-  for(int i=0; i<sizeof(password); i++){
-    if(strcmp(password, ".$*#.$*#") > 0){
-      wifly.setPassphrase(password);
-      break;
-    } 
-  }
+  // for(int i=0; i<sizeof(password); i++){
+  //   if(strcmp(password, ".$*#.$*#") > 0){
+       wifly.setPassphrase(password);
+  //     break;
+  //   } 
+  // }
   
   wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
   //wifly.setIpProtocol(WIFLY_PROTOCOL_TCP);
@@ -220,12 +224,14 @@ void Visualight::sendHeartbeat(){
 }
 
 boolean Visualight::connectToServer(){
-  if(reconnectCount > 4){
-    if(_debug) Serial.println(F("rebooting wifly..."));
-    wifly.reboot();
-    delay(1000);
-    reconnectCount = 0;
-  }
+  wifly.reboot();
+  delay(1000);
+  // if(reconnectCount > 4){
+  //   if(_debug) Serial.println(F("rebooting wifly..."));
+  //   wifly.reboot();
+  //   delay(1000);
+  //   reconnectCount = 0;
+  // }
   wifly.flushRx();
   if(!wifly.isAssociated()) { //
       if(_debug) Serial.println(F("Joining"));
@@ -265,8 +271,6 @@ boolean Visualight::connectToServer(){
     return false;
   }
 }
-
-
 
 void Visualight::processClient(){
   int available;

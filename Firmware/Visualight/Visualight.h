@@ -40,7 +40,7 @@
 #define redLED 9
 #define greenLED 13
 #define blueLED 10
-#define whiteLED 5 //only for PROD version!
+#define whiteLED 6 //only for PROD version!
 #define blueComp 1.2
 
 #define resetButton 7
