@@ -179,13 +179,14 @@ $(document).ready(function(){
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
+		var newBri = map_range(h.l,0.0,.8,0,1);
 	var state =
 	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(h.l * 254)
+	    bri:(newBri * 254)
 	};
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
@@ -243,11 +244,10 @@ $(document).ready(function(){
 					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
 				}
 	      })
-
-	      
-	      
-	      
       })
+      function map_range(value, low1, high1, low2, high2) {
+        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+      }
      /*
  one.addEventListener("click", function(event){
       	//socket.send("weather,"+$('#zip').val());
