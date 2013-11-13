@@ -134,6 +134,8 @@ $(document).ready(function(){
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
+	var newBri = map_range(h.l,0.0,.8,0,1);
+
 	state =
 	{
 	    on:true,
@@ -231,7 +233,9 @@ $(document).ready(function(){
 		      sendAPICall(state);
 		  }
       })
-  
+      function map_range(value, low1, high1, low2, high2) {
+        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+      }
     });
       function hslToRgb(h, s, l){
     var r, g, b;
