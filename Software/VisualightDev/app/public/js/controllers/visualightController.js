@@ -14,7 +14,7 @@ function VisualightController(mainCallback)
 	that.attemptLogout(); 
 	});
 	
-	that.networkInput;
+	//that.networkInput;
 /*
 // handle bulb button change
 
@@ -102,7 +102,7 @@ $('div.btn-group .btn').click(function(){
 			url: "http://1.2.3.4",
 			type: "POST",
 			timeout: 5000,
-			data: {network : $('.modal-bulb-network #network').val(), password : $('.modal-bulb-network #password').val(), security: $('.modal-bulb-network #security').val},
+			data: {network : $('.modal-bulb-network #network').val(), password : $('.modal-bulb-network #password').val(), security: $('input:radio[name="security"]:checked').val()},
 			success: function(data){
 	 			//that.showLockedAlert('You are now logged out.<br>Redirecting you back to the homepage.');
 	 			console.log("posted");

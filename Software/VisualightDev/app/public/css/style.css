@@ -65,7 +65,7 @@ div.navbar div.container {
   margin-left: 10px;
 }
 #account-form-container {
-  width: 460px;
+  width: 305px;
   padding: 40px;
   margin: 0 auto;
   background: #fdfdfd;
@@ -82,6 +82,9 @@ div.navbar div.container {
   -moz-text-shadow: -1px 1px 0 #fff;
   -webkit-text-shadow: -1px 1px 0 #fff;
   color: #d8000c;
+}
+#account-form-container h1 {
+  font-size: 28px;
 }
 .modal-single-input {
   width: 452px;
