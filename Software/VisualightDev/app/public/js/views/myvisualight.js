@@ -37,12 +37,12 @@ $(document).ready(function(){
 				currBulbName = $(this).data('name');
 				$('h1.intro').hide()
 				//set header to bulb name
-				$('div#title :text').val(currBulbName);
+				$('div#options form :text').val(currBulbName);
 				//$('div#title').show();
 				$('.current h1').html(currBulbName).parent().show();
 				$('div#options form').attr('action','/bulb/'+currBulbId+'/update')
 				$('div#options form input.id').val(currBulbId)
-				$('button#delete').data('key',currBulbId);
+				$('button#delete').attr('data-url','/bulb/'+currBulbId);
 				
     		});
 		});
@@ -62,10 +62,11 @@ $(document).ready(function(){
         //console.log(currBulbId)
 		$('h1.intro').hide()
 		//options menu
-		$('div#options :text').val(currBulbName);
+		$('div#options form :text').val(currBulbName);
 		$('div#options form').attr('action','/group/'+group+'/update')
 		$('div#options form input.id').val(group);
 		//$('div#options').show();
+		$('button#delete').attr('data-url','/group/'+group);
 		
 		$('.current h1').html(currBulbName).parent().show();
 
@@ -179,14 +180,13 @@ $(document).ready(function(){
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
-		var newBri = map_range(h.l,0.0,.8,0,1);
 	var state =
 	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(newBri * 254)
+	    bri:(h.l * 254)
 	};
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
@@ -218,6 +218,12 @@ $(document).ready(function(){
       $('button#delete').click(function(e){
 	      if(!confirm('Are you sure you want to delete this item')) return;
 	      
+/*
+	      $.ajax({
+		      type:'DELETE',
+		      url: 
+	      })
+*/
 	      
       })
       
@@ -244,10 +250,11 @@ $(document).ready(function(){
 					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
 				}
 	      })
+
+	      
+	      
+	      
       })
-      function map_range(value, low1, high1, low2, high2) {
-        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-      }
      /*
  one.addEventListener("click", function(event){
       	//socket.send("weather,"+$('#zip').val());
