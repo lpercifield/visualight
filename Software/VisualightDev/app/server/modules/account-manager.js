@@ -104,7 +104,35 @@ exports.updateBulbStatus = function(id, online, callback)
 	});
 */
 }
+exports.deleteGroup = function(key,callback)
+{
+	groups.remove({_id: getBulbId(key)},function(e){
+		var result = new Object();
+		
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status = 'deleted';
+			   result.details = {key: key};
+		}
+		callback(result)
+	})	
+	
+}
 
+exports.deleteBulb = function(key,callback)
+{
+	bulbs.remove({_id: getBulbId(key)},function(e){
+		var result = new Object();
+		
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status = 'deleted';
+			   result.details = {key: key};
+		}
+		callback(result)
+	})	
+	
+}
 exports.updateBulbData = function(key,post,callback)
 {	
 	if(post.options) var obj = {$set:{name:post.name,options:post.options}};

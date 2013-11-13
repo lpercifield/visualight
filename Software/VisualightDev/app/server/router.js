@@ -278,7 +278,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  *
  *	Routes for bulb actions - update delete 	
  *	
- *
+ *	TODO: AUTHENTICATE ALL OF THIS
  *
  */
  
@@ -296,7 +296,26 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	})
 
  })
+ 
+ app.delete('/bulb/:key',function(req,res){
+	 var key = req.params.key;
+	 
+	 AM.deleteBulb(key,function(result){
+	 	res.writeHead(200,{'content-type':'text/json'})
+	 	res.end(JSON.stringify(result));	
+	 }); 
+	 //delete the bulb 
+ })
 
+ app.delete('/group/:key',function(req,res){
+	 var key = req.params.key;
+	 
+	 AM.deleteGroup(key,function(result){
+	 	res.writeHead(200,{'content-type':'text/json'})
+	 	res.end(JSON.stringify(result));	
+	 }); 
+	 //delete the bulb 
+ })
 /** 
  *
  *  add bulbs to groups
