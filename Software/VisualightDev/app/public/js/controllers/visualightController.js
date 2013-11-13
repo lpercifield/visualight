@@ -102,7 +102,7 @@ $('div.btn-group .btn').click(function(){
 			url: "http://1.2.3.4",
 			type: "POST",
 			timeout: 5000,
-			data: {net : $('.modal-bulb-network #network').val(), pas : $('.modal-bulb-network #password').val(), sec: $('input:radio[name="security"]:checked').val()},
+			data: {net: $('.modal-bulb-network #network').val(), pas: $('.modal-bulb-network #password').val(), sec: $('input:radio[name="security"]:checked').val()},
 			success: function(data){
 	 			//that.showLockedAlert('You are now logged out.<br>Redirecting you back to the homepage.');
 	 			console.log("posted");
