@@ -14,7 +14,7 @@ function VisualightController(mainCallback)
 	that.attemptLogout(); 
 	});
 	
-	//that.getBulbs;
+	that.networkInput;
 /*
 // handle bulb button change
 
@@ -28,6 +28,7 @@ $('div.btn-group .btn').click(function(){
 		that.addVisualight(); 
 		$('.modal-confirm').modal('hide');
 	});
+	
 	$('.modal-bulb-setup .cancel').click(function(){
 		//that.postNetwork();
 		console.log("Aborting")
@@ -35,6 +36,7 @@ $('div.btn-group .btn').click(function(){
 		clearTimeout(timer);
 		$('.modal-bulb-setup').modal('hide');
 	});
+	
 	$('.modal-bulb-network #set-network-form').submit(function(e){
 		e.preventDefault();
 		that.postNetwork();
@@ -100,7 +102,7 @@ $('div.btn-group .btn').click(function(){
 			url: "http://1.2.3.4",
 			type: "POST",
 			timeout: 5000,
-			data: {network : $('.modal-bulb-network #network').val(), password : $('.modal-bulb-network #password').val()},
+			data: {network : $('.modal-bulb-network #network').val(), password : $('.modal-bulb-network #password').val(), security: $('.modal-bulb-network #security').val},
 			success: function(data){
 	 			//that.showLockedAlert('You are now logged out.<br>Redirecting you back to the homepage.');
 	 			console.log("posted");

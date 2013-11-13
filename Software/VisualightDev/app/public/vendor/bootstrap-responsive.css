@@ -422,11 +422,13 @@
   .uneditable-input.span6 {
     width: 556px;
   }
+/*
   input.span5,
   textarea.span5,
   .uneditable-input.span5 {
     width: 456px;
   }
+*/
   input.span4,
   textarea.span4,
   .uneditable-input.span4 {

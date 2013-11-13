@@ -18,6 +18,19 @@
                 div.controls
                     input(type="text", name="password", id='password').span5.required Password
             div.control-group
+                label.control-label(for="security") Security Type
+                div.controls
+                    div.btn-group(datatoggle="buttons-radio")
+                      label WPA/WPA2
+                        input(type="radio",value="1", name="security", id="security") security
+                      label WEP-128
+                        input(type="radio", value="2", name="security", id="security") security
+                      label WEP-64
+                        input(type="radio", value="4", name="security", id="security") security
+                      label Open
+                        input(type="radio", value="3", name="security", id="security") security
+                    
+            div.form-actions
                 div.controls
                     button(type="submit")#submit.btn.btn-primary Submit
             div.alert.alert-error.hide
