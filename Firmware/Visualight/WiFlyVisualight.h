@@ -138,6 +138,8 @@ class WiFly : public Stream {
 public:
     WiFly();
     
+    void init(void);
+
     boolean begin(Stream *serialdev, Stream *debugPrint = NULL);
     
     char *getSSID(char *buf, int size);
@@ -173,6 +175,7 @@ public:
     char *getHostIP(char *buf, int size);
     uint16_t getHostPort();
 
+    boolean setAuth(const char *buf);
     boolean setSSID(const char *buf);
     boolean setIP(const char *buf);
     boolean setIP(const __FlashStringHelper *buf);
@@ -320,7 +323,7 @@ public:
 	const char *filename);
 
   private:
-    void init(void);
+
 
     void dump(const char *str);
 

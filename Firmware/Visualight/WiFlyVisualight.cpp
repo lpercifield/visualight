@@ -397,7 +397,7 @@ boolean WiFly::begin(Stream *serialdev, Stream *debugPrint)
 	return false;
     }
 
-    init();
+    //init();
 
     if (!exitCommandMode()) {
 	debug.println(F("Failed to exit command mode"));
@@ -1832,7 +1832,7 @@ boolean WiFly::factoryRestore()
     if (!startCommand()) {
 	return false;
     }
-    send_P(PSTR("factory RESTORE\r"));
+    send_P(PSTR("factory RESET\r"));
     if (match_P(PSTR("Set Factory Defaults"))) {
 	getPrompt();
 	res = true;
@@ -1932,6 +1932,11 @@ boolean WiFly::setGateway(const char *buf)
 boolean WiFly::setDNS(const char *buf)
 {
     return setopt(PSTR("set dns address"), buf);
+}
+
+boolean WiFly::setAuth(const char *buf)
+{
+    return setopt(PSTR("set wlan auth"), buf);
 }
 
 boolean WiFly::setDHCP(const uint8_t mode)

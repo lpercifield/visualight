@@ -55,6 +55,8 @@ class Visualight {
 		void update();
 		void setup(uint8_t _MODEL, char* _URL, uint16_t _PORT);
 		void setVerbose(boolean set);
+		void setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
+		boolean factoryRestore();
 
 		/* Change these to match your WiFi network */
 		//const char mySSID[] = "myssid";
@@ -84,6 +86,7 @@ class Visualight {
 		
 		char network[64];
 		char password[64];
+		char security[2];
 		boolean isServer;
 		boolean	reconnect;
 		char MAC[18];
