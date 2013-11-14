@@ -4,8 +4,13 @@
 Visualight visualight;
 
 void setup(){
-
-  visualight.setVerbose(true); // leave on true, open serial monitor to run
+  
+  // if set true, board will wait for serial  
+  // monitor to be opened before executing any code
+  visualight.setVerbose(true); 
+  
+  // resets EEPROM flags on the Visualight, 
+  // wipes all WiFly flash memory, settings
   visualight.factoryRestore();  
 }
 

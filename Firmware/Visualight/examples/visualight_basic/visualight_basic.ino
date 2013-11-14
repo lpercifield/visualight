@@ -3,15 +3,22 @@
 
 Visualight visualight;
 
+
 #define TYPE_RGB 0
 #define TYPE_RGBW 1
 
 void setup(){
-
-  visualight.setVerbose(true); // only set true if you know what's up
-//  visualight.setup(TYPE_RGB, "dev.visualight.org", 5001);  // setup(TYPE, "URL", PORT)
-  visualight.setStartColor(50, 255, 50, 255); //r,g,b,w
-  visualight.setup(TYPE_RGB, "54.204.16.233", 5001);  // setup(TYPE, "URL", PORT)
+  // if set true, board will wait for serial  
+  // monitor to be opened before executing any code
+  visualight.setVerbose(false); 
+  
+  // set the initial color of bulb when turned on 
+  // and waiting for server instruction (0,0,0) for off
+  visualight.setStartColor(255, 0, 255, 0); //r,g,b,w
+  
+  // bulb type, server address, port
+  // visualight.setup(TYPE_RGB, "dev.visualight.org", 5001);  // setup(TYPE, "URL", PORT)
+  visualight.setup(TYPE_RGBW, "54.204.16.233", 5001);  // setup(TYPE, "URL", PORT)
 }
 
 void loop(){

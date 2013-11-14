@@ -179,7 +179,7 @@ void Visualight::configureWifi(){
 void Visualight::wifiReset(){
   wifly.close();
   if(_debug) Serial.println(F("Wifi RESET"));
-  if(MODEL>0) colorLED(0,0,255,255);
+  if(MODEL>0) colorLED(0,0,255,0);
   else colorLED(0,0,255);
   isServer = true;
   EEPROM.write(0, 1);
