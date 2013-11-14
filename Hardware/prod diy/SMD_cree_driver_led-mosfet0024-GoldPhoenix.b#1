@@ -132,7 +132,6 @@ LED</text>
 <text x="15.748" y="23.622" size="0.889" layer="21" font="vector" rot="SR180">vcc</text>
 <text x="15.748" y="21.59" size="0.889" layer="21" font="vector" rot="SR180">gnd</text>
 <text x="22.352" y="25.654" size="1.016" layer="21" font="vector" rot="SR90">v0.24</text>
-<wire x1="11.43" y1="53.076" x2="11.43" y2="19.05" width="0" layer="20"/>
 </plain>
 <libraries>
 <library name="on-semiconductor">

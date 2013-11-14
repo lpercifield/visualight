@@ -26,7 +26,7 @@
     #include "WProgram.h"
 #endif
  
-#include <WiFlyHQ.h>
+#include <WiFlyVisualight.h>
 #include "../EEPROM/EEPROM.h"
 
 #undef PROGMEM 
@@ -35,13 +35,12 @@
 #define PSTR(s) (__extension__({static prog_char __c[] PROGMEM = (s); &__c[0];})) 
 
 #define heartBeatInterval 25000
-#define wifiCheckInterval 30000
-#define connectServerInterval 10000
+#define connectServerInterval 60000 //
 
 #define redLED 9
 #define greenLED 13
 #define blueLED 10
-#define whiteLED 5 //only for PROD version!
+#define whiteLED 6 //only for PROD version!
 #define blueComp 1.2
 
 #define resetButton 7
@@ -56,6 +55,8 @@ class Visualight {
 		void update();
 		void setup(uint8_t _MODEL, char* _URL, uint16_t _PORT);
 		void setVerbose(boolean set);
+		void setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
+		boolean factoryRestore();
 
 		/* Change these to match your WiFi network */
 		//const char mySSID[] = "myssid";
@@ -72,17 +73,20 @@ class Visualight {
 		void configureWifi();
 		void processServer();
 		void processClient();
-		void connectToServer();
+		boolean connectToServer();
 		void processButton(); //needs to be static for attachInterrupt()
 		void replaceAll(char *buf_,const char *find_,const char *replace_);
 		void colorLED(int red, int green, int blue);
 		void colorLED(int red, int green, int blue, int white);
 		void fadeOn();
+		void sendHeartbeat();
 
 		char buf[80];
-		//char scanList[350];
-		char network[25];
-		char password[25];
+		char serBuf[16];//21 for blink
+		
+		char network[64];
+		char password[64];
+		char security[2];
 		boolean isServer;
 		boolean	reconnect;
 		char MAC[18];
@@ -105,8 +109,10 @@ class Visualight {
 		//const int resetButtonTime = 2000;
 		uint8_t resetButtonState;
 		int resetTime;
+		uint8_t reconnectCount;
 
 		uint32_t connectTime;
+		uint32_t lastHeartbeat;
 };
 
 #endif

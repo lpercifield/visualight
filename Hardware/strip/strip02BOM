@@ -1,0 +1,44 @@
+Partlist
+
+Exported from stripPCB002.brd at 10/30/13 11:21 AM
+
+EAGLE Version 6.4.0 Copyright (c) 1988-2013 CadSoft
+
+Assembly variant: 
+
+Part       Value                 Package                   Library                    Position (mil)        Orientation
+
+3.3VREG    MIC5219 3.3V          SOT23-5                   SparkFun-PowerIC           (2140 2470)           R90
+ATMEGA32U4 ATMEGA32U4            SPARKFUN-DIGITALIC_TQFP44 SparkFun-DigitalIC         (2220 1860)           R315.1
+C1         0.1uF                 0402-CAP                  SparkFun                   (2380 2230)           R270
+C2         22pF                  0402-CAP                  SparkFun                   (2480 1570)           R0
+C4         22pF                  0402-CAP                  SparkFun                   (2190 1420)           R180
+C5         1uF                   0402-CAP                  SparkFun                   (1940 2260)           R0
+C6         1uF                   0402-CAP                  SparkFun                   (2280 2230)           R180
+C8         10uF                  EIA3216                   SparkFun                   (1940 2430)           R0
+C9         0.1uF                 0402-CAP                  SparkFun                   (2000 2350)           R180
+C10        1uF                   0402-CAP                  SparkFun                   (2310 2430)           R180
+C13        10uF                  EIA3216                   SparkFun                   (2340 2340)           R0
+F1         500mA                 PTC-1206                  SparkFun                   (2170 2280)           R90
+ISP1       AVRISP-6              AVRISP                    adafruit                   (1510 1510)           R180
+J1         POWER_JACKPTH         POWER_JACK_PTH            SparkFun-Connectors        (1430 2740)           R180
+POWER      Red                   LED-0603                  SparkFun                   (1930 2520)           R90
+Q1         N-HEXFET-2D_SOT232-   SOT223                    transistor-power           (2890 1660)           R0
+Q2         N-HEXFET-2D_SOT232-   SOT223                    transistor-power           (2890 2140)           R0
+Q3         N-HEXFET-2D_SOT232-   SOT223                    transistor-power           (2890 1230)           R0
+R1         2.2K                  0402-RES                  SparkFun                   (1710 1610)           R180
+R2         10K                   0402-RES                  SparkFun                   (1910 1700)           R0
+R3         3.3K                  0402-RES                  SparkFun                   (1690 1530)           R90
+R4         2.2K                  0402-RES                  SparkFun                   (1900 2140)           R180
+R5         22                    0402-RES                  SparkFun                   (2520 2390)           R0
+R6         330                   0402-RES                  SparkFun                   (2070 1540)           R180
+R7         22                    0402-RES                  SparkFun                   (2080 2180)           R90
+R8         3.3K                  0402-RES                  SparkFun                   (1900 2190)           R180
+R11        1K                    0402-RES                  SparkFun                   (2340 2520)           R270
+S1         SWITCH-MOMENTARY-2SMD TACTILE_SWITCH_SMD        SparkFun-Electromechanical (1270 1240)           R270
+TX         Green                 LED-0603                  SparkFun                   (1560 1290)           R270
+U$1        XBEE-1B3              XBEE-SMD                  SparkFun-RF                (2210 1530)           R0
+U$2        MIC5239               SOT223                    v-reg                      (1370 1880)           R0
+X1                               W237-4                    con-wago-500               (2100 1120)           R0
+X2         USB-MICROB            USB-MICROB                SparkFun-Connectors        (2710 2570)           R180
+Y1         16MHz                 CRYSTAL-SMD-5X3           SparkFun                   (2380 1460)           R0

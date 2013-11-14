@@ -132,10 +132,9 @@ $(document).ready(function(){
     //$('#color').css({backgroundColor:e}).val(e);
     $('body').css({background:e});
     $('#color').css({backgroundColor:e});
-	//console.log(rgb);
+	console.log(rgb);
 	//socket.send(rgb);
 	var newBri = map_range(h.l,0.0,.8,0,1);
-
 	state =
 	{
 	    on:true,

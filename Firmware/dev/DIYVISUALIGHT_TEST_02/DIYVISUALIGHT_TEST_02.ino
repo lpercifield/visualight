@@ -1,20 +1,7 @@
 /*
- Fading
- 
- This example shows how to fade an LED using the analogWrite() function.
- 
- The circuit:
- * LED attached from digital pin 9 to ground.
- 
- Created 1 Nov 2008
- By David A. Mellis
- modified 30 Aug 2011
- By Tom Igoe
- 
- http://arduino.cc/en/Tutorial/Fading
- 
- This example code is in the public domain.
- 
+Test WiFly and LED connections
+
+
  */
 #include <WiFlyHQ.h>
 
@@ -27,7 +14,7 @@ int bluePin = 10;
 int maxFade = 255;
 float redScale = 1;
 const int resetButton = 7;
-const int resetPin = 11;
+const int resetPin = 11; //WiFly reset pin
 volatile int resetButtonState = HIGH;
 
 boolean wiflyFailed = false;
@@ -45,8 +32,8 @@ void setup()  {
   digitalWrite(redPin,LOW);
   digitalWrite(greenPin,LOW);
   digitalWrite(bluePin,LOW);
+  
   attachInterrupt(4, resetWifi, CHANGE);
-
 
   Serial1.begin(9600);
   if (!wifly.begin(&Serial1,&Serial)) {
@@ -56,32 +43,14 @@ void setup()  {
 
   while(wiflyFailed){
     digitalWrite(redPin, HIGH);
-    delay(750);
+    delay(250);
     digitalWrite(redPin, LOW);
-    delay(750); 
+    delay(250); 
   }
 } 
 
 void loop()  { 
-  // green
-  for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
-    analogWrite(greenPin, fadeValue);         
-    delay(30);                            
-  } 
-  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
-    analogWrite(greenPin, fadeValue);         
-    delay(30);                            
-  }
 
-  // blue
-//  for(int fadeValue = 0 ; fadeValue <= maxFade; fadeValue +=5) { 
-//    analogWrite(bluePin, fadeValue);         
-//    delay(30);                            
-//  }
-//  for(int fadeValue = maxFade ; fadeValue >= 0; fadeValue -=5) { 
-//    analogWrite(bluePin, fadeValue);         
-//    delay(30);                            
-//  }
   fadeLED(greenPin);
   fadeLED(bluePin);
   fadeLED(redPin);
@@ -116,6 +85,11 @@ void fadeLED(int ledPin){
 void resetWifi() {
   resetButtonState = digitalRead(resetButton);
   digitalWrite(resetPin, resetButtonState);
+  
+  digitalWrite(redPin, LOW);
+  digitalWrite(greenPin, LOW);
+  digitalWrite(bluePin, LOW);
+  delay(2500);
 }
 
 
