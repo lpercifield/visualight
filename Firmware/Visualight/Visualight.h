@@ -82,7 +82,7 @@ class Visualight {
 		void sendHeartbeat();
 
 		char buf[80];
-		char serBuf[16];
+		char serBuf[16];//21 for blink
 		
 		char network[64];
 		char password[64];

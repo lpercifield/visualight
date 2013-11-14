@@ -32,7 +32,7 @@ Visualight::Visualight(){
 
   password[0] = '0';
   network[0] = '0';
-  security[0] = '3'; //open
+  security[0] = '0';
 }
 
 
@@ -201,7 +201,7 @@ void Visualight::joinWifi(){
 
   wifly.reboot();
   wifly.setSSID(network);
-  Serial.println(wifly.setAuth("0"));
+  wifly.setAuth(0);
 
   if (security[0] == '1'){ //WPA2
     if(_debug) Serial.println(F("type: WPA2"));
@@ -219,7 +219,8 @@ void Visualight::joinWifi(){
   }
   else if(security[0] == '4'){ //WEP-64
    if(_debug)Serial.print(F("CONFIGURE WEP-64: "));
-   Serial.println(wifly.setAuth("8"));
+   Serial.println(wifly.setAuth(8));
+   wifly.setKey(password);
  }
   else {
     if(_debug) Serial.print(F("type UNKNOWN: "));
@@ -361,8 +362,9 @@ void Visualight::processClient(){
       char thisChar;
       thisChar = wifly.read();
       if( thisChar == 97){
-        int numBytes = wifly.readBytesUntil('x', serBuf, 16);
+        int numBytes = wifly.readBytesUntil('x', serBuf, 16);//21 for blink
         sscanf(serBuf,"%i,%i,%i,%i",&_red,&_green,&_blue,&_white);
+        //sscanf(serBuf,"%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_blinkMe);
         if(MODEL > 0) colorLED(_red,_green,_blue, _white);
         else colorLED(_red,_green,_blue);
         if(_debug){
@@ -424,7 +426,8 @@ void Visualight::fadeOn(){ // turns all LEDs on to full white
   }
 }
 
-void Visualight::setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){ // turns all LEDs on to full white
+// color of LED on start up, while waiting for instruction from server
+void Visualight::setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){ 
   _red = _r;
   _green = _g;
   _blue = _b;
@@ -478,7 +481,7 @@ void Visualight::processServer() {
         //   }
         // }
 
-        if (wifly.match(F("network="))) { /* Get posted field value */
+        if (wifly.match(F("net="))) { /* Get posted field value */
           //Serial.println(buf);
 
           wifly.getsTerm(network, sizeof(network),'&');
@@ -486,14 +489,14 @@ void Visualight::processServer() {
           if(_debug) Serial.println(F("Got network: "));
           if(_debug) Serial.println(network);
 
-            if (wifly.match(F("password="))) {
+            if (wifly.match(F("pas="))) {
               wifly.getsTerm(password, sizeof(password),'&');
               replaceAll(password,"+","$");
               //wifly.gets(security, 1); //no need for sizeof() -- it's a 1 or 2
               if(_debug) Serial.println(F("Got password: "));
               if(_debug) Serial.println(password);
 
-            if (wifly.match(F("security="))) {
+            if (wifly.match(F("sec="))) {
               wifly.gets(security, sizeof(security));
               
               if(_debug) Serial.println(F("Got security: "));
@@ -516,7 +519,7 @@ void Visualight::processServer() {
         delay(100);
         wifly.flushRx();    // discard rest of input
         if(_debug) Serial.println(F("Sending 404"));
-        //send404();
+        send404();
       }
     }
   }
@@ -560,23 +563,23 @@ void Visualight::sendIndex() {
   //  */
   wifly.sendChunkln(F("<html>"));
   wifly.sendChunkln(F("<head><title>Visualight Setup</title>"));
-  wifly.sendChunkln(F("<style>body{width:100%;margin:0;padding:0;background:#999;font-family:sans-serif;}"));
-  wifly.sendChunkln(F("h1,h3{margin:2% auto;width:80%;}div{margin: 10% auto 0;width:60%;padding:4%;background:#f9f9f9;border-radius:15px;}"));
+  wifly.sendChunkln(F("<style>body{width:100%;margin:0;padding:0;background:#999;}"));
+  wifly.sendChunkln(F("h1,h3{margin:2% auto;width:80%;}div{margin: 10% auto 0;width:60%;padding:4%;background:#f9f9f9;}"));
   wifly.sendChunkln(F("input{display:block;width:80%;margin:4% auto;font-size:1.2em;padding:1%;background:#fff;}"));
   wifly.sendChunkln(F("input[type='radio']{display:inline; width:30px}"));
   wifly.sendChunkln(F("select{display:block;width:80%;margin:4% auto;height:40px;font-size:1em;background:#fff;}"));
-  wifly.sendChunkln(F("input[type=\"submit\"]{width:30%;padding:1%;background:#222;color:#ddd;border-radius:15px;}form{width:90%;margin:0 auto;}"));
+  wifly.sendChunkln(F("input[type=\"submit\"]{width:30%;padding:1%;background:#222;color:#ddd;}form{width:90%;margin:0 auto;}"));
   wifly.sendChunkln(F("</style></head>"));
   wifly.sendChunkln(F("<body><div>"));
   wifly.sendChunkln(F("<form name=\"input\" action=\"/\" method=\"post\">"));
   wifly.sendChunkln(F("<h1>Visualight</h1>"));
   wifly.sendChunkln(F("<h3>We&rsquo;ll need a little data to get started</h3>"));
-  wifly.sendChunkln(F("<input type=\"text\" name=\"network\" placeholder=\"YOUR WIFI SSID\" />"));
-  wifly.sendChunkln(F("<input type=\"text\" name=\"password\" placeholder=\"YOUR WIFI PASS\" />"));
-  wifly.sendChunkln(F("<label style='margin-left: 80px;'> WPA/WPA2 <input type=\"radio\" name=\"security\" value=\"1\" checked /></label>"));
-  wifly.sendChunkln(F("<label> WEP-128 <input type=\"radio\" name=\"security\" value=\"2\" /></label>"));
-  wifly.sendChunkln(F("<label> WEP-64 <input type=\"radio\" name=\"security\" value=\"4\" /></label>"));
-  wifly.sendChunkln(F("<label> Open <input type=\"radio\" name=\"security\" value=\"3\" /></label>"));
+  wifly.sendChunkln(F("<input type=\"text\" name=\"net\" placeholder=\"YOUR WIFI SSID\" />"));
+  wifly.sendChunkln(F("<input type=\"text\" name=\"pas\" placeholder=\"YOUR WIFI PASS\" />"));
+  wifly.sendChunkln(F("<label style='margin-left: 80px;'> WPA/WPA2 <input type=\"radio\" name=\"sec\" value=\"1\" checked /></label>"));
+  wifly.sendChunkln(F("<label> WEP-128 <input type=\"radio\" name=\"sec\" value=\"2\" /></label>"));
+  wifly.sendChunkln(F("<label> WEP-64 <input type=\"radio\" name=\"sec\" value=\"4\" /></label>"));
+  wifly.sendChunkln(F("<label> Open <input type=\"radio\" name=\"sec\" value=\"3\" /></label>"));
 
   wifly.sendChunkln(F("<input type=\"submit\" value=\"Submit\" />"));
   wifly.sendChunkln(F("</form></div>")); 
@@ -593,14 +596,18 @@ void Visualight::sendGreeting(char *name) {
   wifly.println(F("Content-Type: text/html"));
   wifly.println(F("Transfer-Encoding: chunked"));
   wifly.println(F("Access-Control-Allow-Origin: *"));
+  // wifly.println("OK");
+  // wifly.println();
   wifly.println();
+
+
 
   /* Send the body using the chunked protocol so the client knows when
    * the message is finished.
    */
   wifly.sendChunkln(F("<html>"));
   wifly.sendChunkln(F("<title>Visualight Setup</title>"));
-  /* No newlines on the next parts */
+  // No newlines on the next parts 
   wifly.sendChunk(F("<h1><p>Hello "));
   wifly.sendChunk(name);
   /* Finish the paragraph and heading */
@@ -610,22 +617,22 @@ void Visualight::sendGreeting(char *name) {
   wifly.sendChunkln();
 }
 
-// void Visualight::send404() { /** Send a 404 error */
-//   wifly.println(F("HTTP/1.1 404 Not Found"));
-//   wifly.println(F("Connection: close"));
-//   wifly.println(F("Content-Type: text/html"));
-//   wifly.println(F("Transfer-Encoding: chunked"));
-//   wifly.println(F("Access-Control-Allow-Origin: *"));
-//   wifly.println();
-//   wifly.sendChunkln(F("<html><head>"));
-//   wifly.sendChunkln(F("<title>404 Not Found</title>"));
-//   wifly.sendChunkln(F("</head><body>"));
-//   wifly.sendChunkln(F("<h1>Not Found</h1>"));
-//   wifly.sendChunkln(F("<hr>"));
-//   wifly.sendChunkln(F("</body></html>"));
-//   wifly.sendChunkln();
-//   wifly.sendChunkln();
-// }
+void Visualight::send404() { /** Send a 404 error */
+  wifly.println(F("HTTP/1.1 404 Not Found"));
+  wifly.println(F("Connection: close"));
+  wifly.println(F("Content-Type: text/html"));
+  wifly.println(F("Transfer-Encoding: chunked"));
+  wifly.println(F("Access-Control-Allow-Origin: *"));
+  wifly.println();
+  wifly.sendChunkln(F("<html><head>"));
+  wifly.sendChunkln(F("<title>404 Not Found</title>"));
+  wifly.sendChunkln(F("</head><body>"));
+  wifly.sendChunkln(F("<h1>Not Found</h1>"));
+  wifly.sendChunkln(F("<hr>"));
+  wifly.sendChunkln(F("</body></html>"));
+  wifly.sendChunkln();
+  wifly.sendChunkln();
+}
 
 void Visualight::replaceAll(char *buf_,const char *find_,const char *replace_) {
   char *pos;

@@ -175,7 +175,7 @@ public:
     char *getHostIP(char *buf, int size);
     uint16_t getHostPort();
 
-    boolean setAuth(const char *buf);
+    boolean setAuth(uint8_t mode);
     boolean setSSID(const char *buf);
     boolean setIP(const char *buf);
     boolean setIP(const __FlashStringHelper *buf);
