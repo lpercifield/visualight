@@ -144,9 +144,11 @@ $(document).ready(function(){
 	    alert: {duration: 0, frequency: 0, type: 0}
 	};
 	
+/*
 	if(state.hasOwnProperty('alert')){
 		delete state.alert;
 	}
+*/
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
   });
