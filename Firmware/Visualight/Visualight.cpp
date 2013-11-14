@@ -5,7 +5,7 @@
 *
 */
 #if (ARDUINO >= 100)
-    #include "Arduino.h"
+   #include "Arduino.h"
 #else
     #include <avr/io.h>
     #include "WProgram.h"
@@ -13,13 +13,17 @@
 
 #include "Visualight.h"
 
-
 Visualight::Visualight(){
 	_red = 255;
 	_green = 255;
 	_blue = 255;
   _white = 255;
-	_blinkMe = 0;
+  _blinkType = 0;
+  _frequency = 10;
+  _duration = 1;
+  alerting = false;
+  alertBeginTimeStamp = 0;
+  blinkState = 255;
 
 	connectTime = 0;
   lastHeartbeat = 0;
@@ -34,7 +38,6 @@ Visualight::Visualight(){
   network[0] = '0';
   security[0] = '0';
 }
-
 
 void Visualight::setVerbose(boolean set){
 	if(set) _debug = true;
@@ -66,8 +69,10 @@ boolean Visualight::factoryRestore(){
     //reset visualight eeprom
     EEPROM.write(0, 1); 
     if(_debug) Serial.println(F("Visualight Factory Reset Complete."));
+    return true;
   } else {
     if(_debug) Serial.println(F("Failed to factoryRestore wifly"));
+    return false;
   }
 }
 
@@ -82,11 +87,13 @@ void Visualight::update(){
   	}
   	else{
     	processClient();
+      if(alerting) alert();
   	}
   	processButton(); //TODO: test to see how much blockage this has...
 }
 
 void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
+  if(_debug) Serial.println(F("-SETUP-"));
   MODEL = _MODEL;
   URL = _URL;
   PORT = _PORT;
@@ -161,7 +168,7 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 /**********************************************************************************/
 
 void Visualight::configureWifi(){
-  if(_debug) Serial.println(F("From Config"));
+  if(_debug) Serial.println(F("-CONFIGUREWIFI-"));
   wifly.factoryRestore();
   wifly.reboot();
   delay(500);
@@ -178,7 +185,7 @@ void Visualight::configureWifi(){
 
 void Visualight::wifiReset(){
   wifly.close();
-  if(_debug) Serial.println(F("Wifi RESET"));
+  if(_debug) Serial.println(F("-WIFIRESET-"));
   if(MODEL>0) colorLED(0,0,255,0);
   else colorLED(0,0,255);
   isServer = true;
@@ -189,6 +196,7 @@ void Visualight::wifiReset(){
 
 
 void Visualight::joinWifi(){
+  if(_debug) Serial.println(F("-JOINWIFI-"));
   /* Setup the WiFly to connect to a wifi network */
   if(_debug) Serial.println(F(" - joinWifi() - "));
 
@@ -275,7 +283,7 @@ void Visualight::joinWifi(){
 }
 
 void Visualight::sendHeartbeat(){
-  if(_debug) Serial.println(F("sending heartBeat"));
+  if(_debug) Serial.println(F("-SENDHEARTBEAT-"));
   wifly.print("{\"mac\":\"");
   wifly.print(MAC);
   wifly.println("\",\"h\":\"h\"}");
@@ -285,6 +293,7 @@ void Visualight::sendHeartbeat(){
 }
 
 boolean Visualight::connectToServer(){
+  if(_debug) Serial.println(F("-CONNECTTOSERVER-"));
   // wifly.reboot();
   // delay(1000);
   if(reconnectCount > 4){
@@ -336,7 +345,7 @@ boolean Visualight::connectToServer(){
 void Visualight::processClient(){
   int available;
 
-  if(millis()-lastHeartbeat > heartBeatInterval){
+  if(millis()-lastHeartbeat > heartBeatInterval && reconnectCount == 0){
     sendHeartbeat();
   }
 
@@ -362,22 +371,34 @@ void Visualight::processClient(){
       char thisChar;
       thisChar = wifly.read();
       if( thisChar == 97){
-        int numBytes = wifly.readBytesUntil('x', serBuf, 16);//21 for blink
-        sscanf(serBuf,"%i,%i,%i,%i",&_red,&_green,&_blue,&_white);
-        //sscanf(serBuf,"%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_blinkMe);
-        if(MODEL > 0) colorLED(_red,_green,_blue, _white);
-        else colorLED(_red,_green,_blue);
+        int numBytes = wifly.readBytesUntil('x', serBuf, 31);
+        sscanf(serBuf,"%i,%i,%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_duration,&_frequency,&_blinkType); // INDIGO v0.1.1
+        //sscanf(serBuf,"%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_blinkMe); // PURPLE v0.1.0
         if(_debug){
-          Serial.print("numBytes: ");
-          Serial.println(numBytes);
-          Serial.print("buf: ");
+          // Serial.print("numBytes: ");
+          // Serial.println(numBytes);
+          // Serial.print("buf: ");
           Serial.println(serBuf);
-          delay(5);
+          delay(1);
         }
-        memset(serBuf,0,sizeof(serBuf));
-      } else {
-        if(_debug)Serial.println(thisChar);
-        delay(5);
+        if(_duration > 0){ //we are BLINKING\
+          if(_debug)Serial.print(F("BLINK RECEIVED"));
+          Serial.println(F("BLINK RECEIVED"));
+          _duration = _duration*1000;
+          _frequency = (_frequency+100); //* 100; //get the right freq out //100 - 1000
+          blinkState = 100;
+          alertBeginTimeStamp = millis();
+          alerting = true;
+          alert();
+        } 
+
+        else { //simple set color
+          if(MODEL > 0) colorLED(_red, _green, _blue, _white); 
+          else colorLED(_red,_green,_blue);
+          if(_debug) Serial.println(thisChar);
+          delay(5);
+        } 
+        memset(serBuf,0,31);
       }
     }
   }
@@ -418,7 +439,7 @@ void Visualight::fadeOn(){ // turns all LEDs on to full white
   for(int fadeValue = 100; fadeValue >=1; fadeValue -=5) { 
     // sets the value (range from 0 to 255):
     if(MODEL > 0) {
-      colorLED(_red/fadeValue, _green/fadeValue, _blue/fadeValue, _white/fadeValue);
+      colorLED(_red/(_red*fadeValue), _green/fadeValue, _blue/fadeValue, _white/fadeValue);
     } else {
       colorLED(_red/fadeValue, _green/fadeValue, _blue/fadeValue);
     }
@@ -432,6 +453,40 @@ void Visualight::setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){
   _green = _g;
   _blue = _b;
   _white = _w;
+}
+
+void Visualight::alert(){
+
+  long elapsedBlinkTime = millis() - alertBeginTimeStamp;
+
+  if ( elapsedBlinkTime >= _duration){
+    alerting = false;
+    //return;
+  } 
+
+  else {  // update the current blink
+    //Serial.println("BLINKING");
+    if (blinkState < 2 || blinkState > 255) _frequency * -1;
+    blinkState -= _frequency;
+
+    switch(_blinkType){
+      case 0: //FADING blink
+        colorLED( _red/blinkState, _green/blinkState, _blue/blinkState, _white/blinkState);
+      break;
+
+      case 1: //HARD blink
+        if(_frequency > 0 ){
+          colorLED(_red, _green, _blue, _white);
+        } else {
+          colorLED(0, 0, 0, 0);
+        }
+      break;
+
+      default:
+
+      break;
+    }
+  }
 }
 
 
@@ -556,11 +611,11 @@ void Visualight::sendIndex() {
   wifly.println(F("Access-Control-Allow-Origin: *"));
   wifly.println();
 
-  // /* Send the body using the chunked protocol so the client knows when
-  //  * the message is finished.
-  //  * Note: we're not simply doing a close() because in version 2.32
-  //  * firmware the close() does not work for client TCP streams.
-  //  */
+  /* Send the body using the chunked protocol so the client knows when
+   * the message is finished.
+   * Note: we're not simply doing a close() because in version 2.32
+   * firmware the close() does not work for client TCP streams.
+   */
   wifly.sendChunkln(F("<html>"));
   wifly.sendChunkln(F("<head><title>Visualight Setup</title>"));
   wifly.sendChunkln(F("<style>body{width:100%;margin:0;padding:0;background:#999;}"));

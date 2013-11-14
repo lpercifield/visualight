@@ -21,10 +21,10 @@
 
 #if (ARDUINO >= 100)
     #include "Arduino.h"
-#else
-    #include <avr/io.h>
-    #include "WProgram.h"
-#endif
+ #else
+     #include <avr/io.h>
+     #include "WProgram.h"
+ #endif
  
 #include <WiFlyVisualight.h>
 #include "../EEPROM/EEPROM.h"
@@ -80,9 +80,13 @@ class Visualight {
 		void colorLED(int red, int green, int blue, int white);
 		void fadeOn();
 		void sendHeartbeat();
+		void alert();
+		boolean alerting;
+		long alertBeginTimeStamp;
+		uint16_t blinkState; //counts from 0 - 100
 
 		char buf[80];
-		char serBuf[16];//21 for blink
+		char serBuf[31];//21 for blink
 		
 		char network[64];
 		char password[64];
@@ -98,11 +102,13 @@ class Visualight {
 		uint16_t PORT;
 		uint8_t MODEL; // 0 = RGB // 1 = RGBW //
 
-		uint16_t _red;
-		uint16_t _green;
-		uint16_t _blue;
-		uint16_t _white;
-		uint16_t _blinkMe;
+		int _red;
+		int _green;
+		int _blue;
+		int _white;
+		int _duration;
+		int _frequency;
+		int _blinkType;
 
 		boolean _debug;
 
