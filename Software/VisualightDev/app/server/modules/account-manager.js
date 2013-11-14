@@ -302,7 +302,18 @@ exports.addNewBulb = function(user, bulbMac, callback)
 	});
 
 }
+exports.getGroupBulbs = function(id,callback)
+{	
+//console.log("INCOMING Group ID: "+id )
+	groups.findOne({_id: getGroupId(id)}, function(e,g){
+		if(g ==null){
+			callback(null)
+		}else{
+			callback(g)
+		}
+	})
 
+}
 exports.getGroups = function(user,callback)
 {
 
@@ -443,6 +454,9 @@ var validatePassword = function(plainPass, hashedPass, callback)
 }
 
 /* auxiliary methods */
+var getGroupId =function(id){
+	return groups.db.bson_serializer.ObjectID.createFromHexString(id)
+}
 
 var getObjectId = function(id)
 {

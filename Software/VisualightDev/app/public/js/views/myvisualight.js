@@ -35,6 +35,7 @@ $(document).ready(function(){
 				//alert($(this).data('name'));
 				currBulbId = $(this).data('id');
 				currBulbName = $(this).data('name');
+				currBulbType = 'bulb';
 				$('h1.intro').hide()
 				//set header to bulb name
 				$('div#options form :text').val(currBulbName);
@@ -55,11 +56,15 @@ $(document).ready(function(){
 		var group=$(this).data('id');
         var inputs = $(this).find(':hidden');
         
+        currBulbId = group;
+        currBulbType = 'group';
+/*
         currBulbId = new Array();
 
         for(var i =0; i<inputs.length; i++){
           currBulbId.push($(inputs[i]).val())
         }
+*/
         //console.log(currBulbId)
 		$('h1.intro').hide()
 		//options menu
@@ -122,6 +127,7 @@ $(document).ready(function(){
 		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
 
 		//console.log(currBulbId);
+/*
     if(currBulbId instanceof Array){
       console.log('Group');
 
@@ -133,12 +139,14 @@ $(document).ready(function(){
       }
 
     }else{
+*/
       state.id = currBulbId;
+      state.type = currBulbType;
       //convert it to json:
       var jsonObj = JSON.stringify(state);
       console.log(jsonObj);
       socket.send(jsonObj);
-    }
+    //}
 
 	}
 // handle bulb button change
@@ -172,8 +180,7 @@ $(document).ready(function(){
     var c   = hexToRgb(e)
       , h   = rgbToHsl(c.r,c.g,c.b)
       , r   = hslToRgb(h.h,h.s,h.l)
-      , rgb = +c.r+','+c.g+','+c.b+',0'
-      ;
+      , rgb = +c.r+','+c.g+','+c.b+',0';
     
     //$('#color').css({backgroundColor:e}).val(e);
     $('body').css({background:e});

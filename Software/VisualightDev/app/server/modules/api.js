@@ -22,41 +22,54 @@ exports.parseMessage = function(message,Bulbs,callback){
         var parsed = JSON.parse(message);
         //console.log("INCOMING MESSAGE: " + message);
         if(parsed.id != null){
-				if( Bulbs.hasOwnProperty(parsed.id) == false ){ //check if Bulbs[] exists
-					callback(null,"BULB LOOKUP FAILED Bulb.id:"+parsed.id);
+				//console.log("PARSED: "+parsed.type);
+				if(parsed.type === 'group'){
+					
+					AM.getGroupBulbs(parsed.id,function(g){
+					if(g==null) callback(null,"GROUPS ERROR");
+					
+					g.bulbs.forEach(function(bulb){
+					
+						if(Bulbs.hasOwnProperty(bulb)==false){ 
+							callback(null,"BULB LOOKUP FAILED Bulb.id:"+bulb+" Group.id:"+parsed.id);
+						}else{
+							
+							switch(parsed.method){
+								case 'put':
+									putAPICall(parsed,Bulbs[bulb],callback);
+									break;
+								case 'get':
+									callback(Bulbs[bulb]);//must ensure the rgbw gets set before sending back this object
+									break;
+								default:
+									callback(null,"API TYPE NOT DEFINED")
+									break;
+							}
+						}//end if Bubls
+						
+						
+					})//end for each
+					})//end am.getGroupBulbs
 				}else{
-					switch(parsed.method){
-						case 'put':
-							putAPICall(parsed,Bulbs[parsed.id],callback);
-							break;
-						case 'get':
-							callback(Bulbs[parsed.id]); //must ensure the rgbw gets set before sending back this object
-							break;
-						default:
-							callback(null,"API TYPE NOT DEFINED");
-							break;
-					}
-				}
-				//     old way of orienting with db call
-				//     AM.getBulbInfo(parsed.id, function(o){
-				//      if(!o){
-				//       callback(null,"BULB ID LOOKUP FAILED");
-				//      }else{
-				//       //Check which api method is called and execute on that
-				// 			switch(parsed.method){
-				// 				case 'put':
-				// 					putAPICall(parsed, o, callback);
-				// 					break;
-				// 				case 'get':
-				// 					callback(o);
-				// 					break;
-				// 				default:
-				// 					callback(null,"NO API TYPE DEFINED");
-				// 					//issue API error: NO TYPE DEFINED
-				// 			}
-				//      }
-	        	//});
-        }
+					if( Bulbs.hasOwnProperty(parsed.id) == false ){ //check if Bulbs[] exists
+						callback(null,"BULB LOOKUP FAILED Bulb.id:"+parsed.id);
+					}else{
+						switch(parsed.method){
+							case 'put':
+								putAPICall(parsed,Bulbs[parsed.id],callback);
+								break;
+							case 'get':
+								callback(Bulbs[parsed.id]); //must ensure the rgbw gets set before sending back this object
+								break;
+							default:
+								callback(null,"API TYPE NOT DEFINED");
+								break;
+						}
+					}//endifBulbs
+
+				}//end if group
+
+       }//ifparsed.id!=null
         
     }catch(e){
     	console.log("PARSE ERROR: " + e);
@@ -95,6 +108,8 @@ var putAPICall = function(parsed, bulbObject, callback){
 			case 'method':
 				break;
 			case 'id':
+				break;
+			case 'type':
 				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
