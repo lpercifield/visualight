@@ -22,6 +22,7 @@ $(document).ready(function(){
       var poweron = true;
       var bulbArray = null;
       var reconnect = false;
+      var state; //this is bad.
       
 	$('#demo').hide();
 	setupVisualightButtons();
@@ -50,22 +51,14 @@ $(document).ready(function(){
 		});
     vc.getGroups(function(r){
       $('#groups.dropdown-menu li a').click(function(){
-        //alert('click')
-        //console.log($(this).find('input'))
+
         currBulbName = $(this).data('name');
 		var group=$(this).data('id');
         var inputs = $(this).find(':hidden');
         
         currBulbId = group;
         currBulbType = 'group';
-/*
-        currBulbId = new Array();
 
-        for(var i =0; i<inputs.length; i++){
-          currBulbId.push($(inputs[i]).val())
-        }
-*/
-        //console.log(currBulbId)
 		$('h1.intro').hide()
 		//options menu
 		$('div#options form :text').val(currBulbName);
@@ -75,7 +68,6 @@ $(document).ready(function(){
 		$('button#delete').attr('data-url','/group/'+group);
 		
 		$('.current h1').html(currBulbName).parent().show();
-
 
       });
 
@@ -115,67 +107,22 @@ $(document).ready(function(){
 	});
 	
 	function sendAPICall(state){
-/*
-		//build our State object
-		var state = new
-		{
-		    type = value
-		    //hue = (int)(hsv.Hue * 182.04), //we convert the hue value into degrees by multiplying the value by 182.04
-		    //sat = (int)(hsv.Saturation * 254)
-		};
-*/	
-		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
 
-		//console.log(currBulbId);
-/*
-    if(currBulbId instanceof Array){
-      console.log('Group');
-
-      for(var i=0; i< currBulbId.length; i++){
-        state.id = currBulbId[i];
-        var jsonObj = JSON.stringify(state);
-        console.log(jsonObj);
-        socket.send(jsonObj);  
-      }
-
-    }else{
-*/
       state.id = currBulbId;
       state.type = currBulbType;
       //convert it to json:
       var jsonObj = JSON.stringify(state);
       console.log(jsonObj);
       socket.send(jsonObj);
-    //}
 
 	}
-// handle bulb button change
-		
 
-/*
-	bulbArray = vc.getBulbs();
-	if(bulbArray!=null){
-		
-	}else{
-		$('#main').style.display = "none";
-	}
-*/
-	
-  //var svgDoc, darkshade, lightshade;
 
   function updateHTML5LogoColor( color1, color2 ){
     darkshade.setProperty("fill", color1, "");
     lightshade.setProperty("fill", color2, "");
   };
 
-  //var svglogo = document.getElementById("html5svg");
-
-  /*svglogo.addEventListener("load",function(){
-    svgDoc = svglogo.contentDocument;
-    darkshade = svgDoc.getElementById('darkshade').style;
-    lightshade = svgDoc.getElementById('lightshade').style;
-  },false);*/
-  
   $('#picker').farbtastic(function(e){
     var c   = hexToRgb(e)
       , h   = rgbToHsl(c.r,c.g,c.b)
@@ -187,14 +134,19 @@ $(document).ready(function(){
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
-	var state =
+	state =
 	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(h.l * 254)
+	    bri:(h.l * 254),
+	    alert: {duration: 0, frequency: 0, type: 0}
 	};
+	
+	if(state.hasOwnProperty('alert')){
+		delete state.alert;
+	}
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
   });
@@ -267,69 +219,17 @@ $(document).ready(function(){
 				}
 	      })
 
-	      
-	      
-	      
       })
-     /*
- one.addEventListener("click", function(event){
-      	//socket.send("weather,"+$('#zip').val());
-      	currBulb = 0;
-      	console.log("one");
-      });
-      two.addEventListener("click", function(event){
-      	//socket.send("weather,"+$('#zip').val());
-      	currBulb = 1;
-      	console.log("two");
-      });
-      three.addEventListener("click", function(event){
-      	//socket.send("weather,"+$('#zip').val());
-      	currBulb = 2;
-      	console.log("three");
-      });
-*/
-/*
-      weather.addEventListener("click", function(event){
-      	socket.send("weather,"+$('#zip').val()+","+currBulb);
-      });
-      bustime.addEventListener("click", function(event){
-      if($('#stopid').val() == ""){
-      	alert("Please enter both a Stop ID - See bustime.mta.info for details");
-      }else{
-      	socket.send("bustime,"+$('#stopid').val()+","+currBulb);
-      	}
-      });
-      cosm.addEventListener("click", function(event){
-      	if($('#feed').val() =="" || $('#datastream').val() ==""){
-      		alert("Please enter both a Feed ID and Datastream");
-      	}else{
-      		var min = 0;
-      		var max = 100;
-      		if($('#min').val() != ""){
-      			var min = $('#min').val();
-      		}
-      		if($('#max').val() != ""){
-      			var max = $('#max').val();
-      		}
-      		socket.send("cosm,"+$('#feed').val()+","+$('#datastream').val()+","+min+","+max+","+currBulb);
-      	}
-      });
-*/
-    $('#slider-red').change(function(){
-    		var slider_value = $(this).val();
-    		console.log(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val());
-    		socket.send(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val()+",0"+","+currBulb);
-		});
-		$('#slider-green').change(function(){
-    		var slider_value = $(this).val();
-    		console.log($('#slider-red').val() +","+ slider_value + "," +$('#slider-blue').val());
-    		socket.send($('#slider-red').val() +","+ slider_value + "," +$('#slider-blue').val()+",0"+","+currBulb);
-		});
-		$('#slider-blue').change(function(){
-    		var slider_value = $(this).val();
-    		console.log($('#slider-red').val() +","+ $('#slider-green').val() + "," +slider_value);
-    		socket.send($('#slider-red').val() +","+ $('#slider-green').val() + "," +slider_value+",0"+","+currBulb);
-		});
+      
+      $('button#sendAlert').click(function(e){
+	      if(!state.hasOwnProperty('on')){
+		      alert('Change Color first!');
+	      }else{
+		      state.alert = {duration: 1, frequency: 0, type: 0}
+		      sendAPICall(state);
+		  }
+      })
+  
     });
       function hslToRgb(h, s, l){
     var r, g, b;

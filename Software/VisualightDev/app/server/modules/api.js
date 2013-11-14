@@ -101,6 +101,10 @@ var putAPICall = function(parsed, bulbObject, callback){
 				break;
 			case 'alert':
 				bulbObject.alert = parsed.alert;
+				//bulbObject.alert = {};
+				//bulbObject.alert.duration = 0;
+				//bulbObject.alert.frequency = 0;
+				//bulbObject.alert.type = 0;
 				break;
 			case 'bri':
 				bulbObject.bri = parseFloat(parsed.bri);
@@ -122,6 +126,14 @@ var putAPICall = function(parsed, bulbObject, callback){
 	bulbObject.color.g = parseInt(rgb.g);
 	bulbObject.color.b = parseInt(rgb.b);
 	bulbObject.color.w = parseInt(rgb.w);
+	
+	if(!bulbObject.hasOwnProperty('alert')){
+		//make alert object if none exists yet to not break sendToVisualight Function
+		bulbObject.alert = {};
+		bulbObject.alert.duration = 0;
+		bulbObject.alert.frequency = 0;
+		bulbObject.alert.type = 0;
+	}
 
 	/*
 if(bulbObject.hue == 0){
