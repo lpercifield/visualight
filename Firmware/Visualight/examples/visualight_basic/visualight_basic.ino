@@ -14,7 +14,7 @@ void setup(){
   
   // set the initial color of bulb when turned on 
   // and waiting for server instruction (0,0,0) for off
-  visualight.setStartColor(255, 0, 255, 0); //r,g,b,w
+  visualight.setStartColor(80, 0, 130, 0); //r,g,b,w -- INDIGO!!
   
   // bulb type, server address, port
   // visualight.setup(TYPE_RGB, "dev.visualight.org", 5001);  // setup(TYPE, "URL", PORT)

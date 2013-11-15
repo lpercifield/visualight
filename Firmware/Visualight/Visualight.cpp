@@ -626,7 +626,7 @@ void Visualight::sendIndex() {
    * Note: we're not simply doing a close() because in version 2.32
    * firmware the close() does not work for client TCP streams.
    */
-/*  wifly.sendChunkln(F("<html>"));
+  wifly.sendChunkln(F("<html>"));
   wifly.sendChunkln(F("<head><title>Visualight Setup</title>"));
   wifly.sendChunkln(F("<style>body{width:100%;margin:0;padding:0;background:#999;}"));
   wifly.sendChunkln(F("h1,h3{margin:2% auto;width:80%;}div{margin: 10% auto 0;width:60%;padding:4%;background:#f9f9f9;}"));
@@ -651,7 +651,7 @@ void Visualight::sendIndex() {
   wifly.sendChunkln(F("</body></html>"));
   wifly.sendChunkln();
   wifly.sendChunkln();
-  */
+  
 }
 
 /** Send a greeting HTML page with the user's name and an analog reading */
