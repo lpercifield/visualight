@@ -8,7 +8,7 @@ colors.setTheme({
 
 	data: 	'grey',
 	info: 	'green',
-	warm: 	'yellow',
+	warn: 	'yellow',
 	debug: 	'blue',
 	help:  	'cyan',
 	error: 	'red'
@@ -73,7 +73,7 @@ exports.createSockets = function(app, io, AM){
                         try { 			console.log(data.data)
                                         data = JSON.parse(data) 
                                         var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
-                                        console.log("INCOMING: ".help + mac.data );
+                                        console.log("INCOMING: ".info + mac.data );
                                 }catch(e){
                                          console.error("Bad Data".error);
                                          console.error(data.error)
@@ -84,20 +84,20 @@ exports.createSockets = function(app, io, AM){
                                 //**NOTE** MAC ADDRESS VALIDATOR
                                 if(mac){                
                                         AM.checkBulbAuth(mac,function(o){ // check and see if this mac address is part of the DB
-                                                console.log('check bulb' + o);
+                                                //console.log('check bulb' + o);
                                                 
                                                 if(!o){ // we didn't find a bulb matching the sent mac address, kill the socket
-                                                  console.log("NOT AUTHORIZED bulb: " + data);
+                                                  console.log("NOT AUTHORIZED bulb: ".error + JSON.stringify(data).data);
                                                   socket.destroy();
                                                 }else{
 
-                                                          console.log("AUTHORIZED bulb: " + data);
+                                                          console.log("AUTHORIZED bulb: ".info + JSON.stringify(data).data);
                                                           var cleanbulbID = sanitize(o._id).trim(); // we got a bulb object that matches the sent mac address
-                                                          console.log("returned id " + cleanbulbID);
+                                                          console.log("returned id ".help + cleanbulbID.data);
                                                           
                                                           //create Bulbs obj
                                                         if( Bulbs.hasOwnProperty(cleanbulbID) == false ){ //check if Bulbs[] exists
-                                                                  console.log('Bulbs['+cleanbulbID+'] not defined - CREATING Bulbs['+cleanbulbID+']');
+                                                                  console.log('Bulbs['.help+cleanbulbID.data+'] not defined'.help+' CREATING Bulbs['.help+cleanbulbID.data+']'.help);
                                                                   
                                                                   Bulbs[cleanbulbID] = { _id: cleanbulbID, mac: mac, netsocket: socket };
                                                                   if(o.hasOwnProperty('color')){
@@ -117,7 +117,7 @@ exports.createSockets = function(app, io, AM){
 
                                                                   if(!data.hasOwnProperty('h')){ //check if we get heartbeat from device
                                                                           
-                                                                          console.log('Bulbs['+cleanbulbID+'] is defined');
+                                                                          console.log('Bulbs['.warn+cleanbulbID.warn+'] is already defined'.warn);
                                                                           Bulbs[cleanbulbID].netsocket.destroy(); //close our net socket
                                                                           delete Bulbs[cleanbulbID];
 
@@ -141,7 +141,7 @@ exports.createSockets = function(app, io, AM){
 
         // listen for the bulb connections on port number
         netserver.listen(5001, function() { //'listening' listener
-                console.log('tcp server bound');
+                console.log('tcp server bound'.data);
         });
         /**
         *        Remove A Bulb From Handle-sockets Bulbs{}
@@ -152,9 +152,9 @@ exports.createSockets = function(app, io, AM){
         **/
 
         function removeBulb(bulbID){
-                        console.log('Attempting to clear bulb: '+ bulbID);
+                        console.log('Attempting to clear bulb: '.warn+ bulbID.data);
                         if( Bulbs.hasOwnProperty(bulbID) ){
-                                console.log('Attempting to remove Bulb: '+bulbID);
+                                console.log('Bulb Found Attempting to remove: '.warn+bulbID.data);
                                 //console.log(Bulbs);
                                 
                                 //setting bulb
@@ -164,9 +164,9 @@ exports.createSockets = function(app, io, AM){
                                 			try{
                                 				delete Bulbs[bulbID]; //delete obj
                                 				//console.log(Bulbs);
-                                				console.log('Bulb '+bulbID+' Removed Successfully!');
+                                				console.log('Bulb '+bulbID+' Removed Successfully!'.info);
                                 			}catch(e){
-                                				console.log('DELETE ERROR: '+e)
+                                				console.log('DELETE ERROR: '.error+e.error)
                                 			}
                                 	})
                                 }else{
@@ -175,16 +175,16 @@ exports.createSockets = function(app, io, AM){
                                 	try{
                                 		delete Bulbs[bulbID]; //delete obj
                                 		//console.log(Bulbs);
-                                		console.log('Bulb '+bulbID+' Removed Successfully!');
+                                		console.log('Bulb '+bulbID+' Removed Successfully!'.info);
                                 		
                                 		}catch(e){
-                                				console.log('DELETE ERROR: '+e)
+                                				console.log('DELETE ERROR: '.error+e.error)
                                 		}
                                 }
                                 //update bulb color in db
         
                         }else{
-                                console.log('Bulb '+bulbID+' no longer exists');
+                                console.log('Bulb '+bulbID+' no longer exists'.error);
                         }
         }
         /**
@@ -239,7 +239,7 @@ exports.createSockets = function(app, io, AM){
                 }else if(Bulbs.hasOwnProperty(cleanbulbID) && heartbeat){ // we are sending a heartbeat
                         Bulbs[cleanbulbID].netsocket.write("H");
                 }else{
-                        console.log("Visulight NOT CONNECTED: " + bulbObject._id); // the visualight is not connected
+                        console.log("Visulight NOT CONNECTED: ".error + bulbObject._id.data); // the visualight is not connected
                 }
         } //end sendToVisualight
 
@@ -278,7 +278,7 @@ exports.createSockets = function(app, io, AM){
                           if(o != null){ // the json was valid and we have a bulb object that is valid
                                   sendToVisualight(o);  // send this data to the visualight
                           }else{
-                                  console.log(e); // we got an error from the api call -- NEED TO SEND THIS BACK TO THE CLIENT??
+                                  console.log(e.error); // we got an error from the api call -- NEED TO SEND THIS BACK TO THE CLIENT??
                           }
                   });
           });

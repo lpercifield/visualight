@@ -9,7 +9,7 @@ colors.setTheme({
 
 	data: 	'grey',
 	info: 	'green',
-	warm: 	'yellow',
+	warn: 	'yellow',
 	debug: 	'blue',
 	help:  	'cyan',
 	error: 	'red'
@@ -159,7 +159,7 @@ exports.updateGroupData =function(key,post,callback)
 			   result.details = e;
 		}else{ result.status= 'success';
 		}
-		callback(result);
+		callback(result)
 		
 	})
 	
@@ -170,7 +170,7 @@ exports.updateGroupData =function(key,post,callback)
 exports.checkBulbAuth = function(macAdd, callback)
 {
 	bulbs.findOne({mac:macAdd}, function(e, o) {
-		console.log("found" + macAdd);
+		console.log("FOUND MAC: ".help + macAdd.data);
 		if (o == null){
 			//console.log("error "+e);
 			callback(null);
