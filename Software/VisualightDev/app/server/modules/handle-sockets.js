@@ -152,9 +152,9 @@ exports.createSockets = function(app, io, AM){
         **/
 
         function removeBulb(bulbID){
-                        console.log('Attempting to clear bulb: '.warn+ bulbID.data);
+                        console.log('Attempting to clear bulb: '.warn+ bulbID);
                         if( Bulbs.hasOwnProperty(bulbID) ){
-                                console.log('Bulb Found Attempting to remove: '.warn+bulbID.data);
+                                console.log('Bulb Found Attempting to remove: '.warn+bulbID);
                                 //console.log(Bulbs);
                                 
                                 //setting bulb
@@ -164,7 +164,7 @@ exports.createSockets = function(app, io, AM){
                                 			try{
                                 				delete Bulbs[bulbID]; //delete obj
                                 				//console.log(Bulbs);
-                                				console.log('Bulb '+bulbID+' Removed Successfully!'.info);
+                                				console.log('Bulb '.info+bulbID+' Removed Successfully!'.info);
                                 			}catch(e){
                                 				console.log('DELETE ERROR: '.error+e.error)
                                 			}
