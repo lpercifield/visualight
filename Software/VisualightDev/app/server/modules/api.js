@@ -11,35 +11,65 @@ exports.setup = function(AM){
 	bulbobject: json containing bulb status and details
 	errormessage: verbose error string
 */
-exports.parseMessage = function(message,callback){
+exports.parseMessage = function(message,Bulbs,callback){
 
 	
 	//DEAL WITH API KEY
 	//build response json?
-	
+	//console.log(Bulbs)
+
 	try{
         var parsed = JSON.parse(message);
         //console.log("INCOMING MESSAGE: " + message);
         if(parsed.id != null){
-	        AM.getBulbInfo(parsed.id, function(o){
-		        if(!o){
-			        callback(null,"BULB ID LOOKUP FAILED");
-		        }else{
-			        //Check which api method is called and execute on that
-					switch(parsed.method){
-						case 'put':
-							putAPICall(parsed, o, callback);
-							break;
-						case 'get':
-							callback(o);
-							break;
-						default:
-							callback(null,"NO API TYPE DEFINED");
-						//issue API error: NO TYPE DEFINED
-					}
-		        }
-	        });
-        }
+				//console.log("PARSED: "+parsed.type);
+				if(parsed.type === 'group'){
+					
+					AM.getGroupBulbs(parsed.id,function(g){
+					if(g==null) callback(null,"GROUPS ERROR");
+					
+					g.bulbs.forEach(function(bulb){
+					
+						if(Bulbs.hasOwnProperty(bulb)==false){ 
+							callback(null,"BULB LOOKUP FAILED Bulb.id:"+bulb+" Group.id:"+parsed.id);
+						}else{
+							
+							switch(parsed.method){
+								case 'put':
+									putAPICall(parsed,Bulbs[bulb],callback);
+									break;
+								case 'get':
+									callback(Bulbs[bulb]);//must ensure the rgbw gets set before sending back this object
+									break;
+								default:
+									callback(null,"API TYPE NOT DEFINED")
+									break;
+							}
+						}//end if Bubls
+						
+						
+					})//end for each
+					})//end am.getGroupBulbs
+				}else{
+					if( Bulbs.hasOwnProperty(parsed.id) == false ){ //check if Bulbs[] exists
+						callback(null,"BULB LOOKUP FAILED Bulb.id:"+parsed.id);
+					}else{
+						switch(parsed.method){
+							case 'put':
+								putAPICall(parsed,Bulbs[parsed.id],callback);
+								break;
+							case 'get':
+								callback(Bulbs[parsed.id]); //must ensure the rgbw gets set before sending back this object
+								break;
+							default:
+								callback(null,"API TYPE NOT DEFINED");
+								break;
+						}
+					}//endifBulbs
+
+				}//end if group
+
+       }//ifparsed.id!=null
         
     }catch(e){
     	console.log("PARSE ERROR: " + e);
@@ -53,6 +83,8 @@ var getAPICall = function(bulbObject, callback){
 
 var putAPICall = function(parsed, bulbObject, callback){
 	// Loop through all the keys provided in the api call json object
+	//console.log('PUT BULB OBJECT')
+	//console.log(bulbObject);
 	for(var keyname in parsed){
     	//console.log(keyname+": "+parsed[keyname]);
     	switch(keyname){
@@ -69,6 +101,10 @@ var putAPICall = function(parsed, bulbObject, callback){
 				break;
 			case 'alert':
 				bulbObject.alert = parsed.alert;
+				//bulbObject.alert = {};
+				//bulbObject.alert.duration = 0;
+				//bulbObject.alert.frequency = 0;
+				//bulbObject.alert.type = 0;
 				break;
 			case 'bri':
 				bulbObject.bri = parseFloat(parsed.bri);
@@ -77,16 +113,27 @@ var putAPICall = function(parsed, bulbObject, callback){
 				break;
 			case 'id':
 				break;
+			case 'type':
+				break;
 			default:
 				callback(null,"PARAMETER IGNORED: " + parsed[keyname]);
 		}
 	}
 	var rgb = processBulbColors(bulbObject);
 	//console.log(rgb);
-	bulbObject.r = parseInt(rgb.r);
-	bulbObject.g = parseInt(rgb.g);
-	bulbObject.b = parseInt(rgb.b);
-	bulbObject.w = parseInt(rgb.w);
+	bulbObject.color = {}; //must create object before you can create sub objects
+	bulbObject.color.r = parseInt(rgb.r);
+	bulbObject.color.g = parseInt(rgb.g);
+	bulbObject.color.b = parseInt(rgb.b);
+	bulbObject.color.w = parseInt(rgb.w);
+	
+	if(!bulbObject.hasOwnProperty('alert')){
+		//make alert object if none exists yet to not break sendToVisualight Function
+		bulbObject.alert = {};
+		bulbObject.alert.duration = 0;
+		bulbObject.alert.frequency = 0;
+		bulbObject.alert.type = 0;
+	}
 
 	/*
 if(bulbObject.hue == 0){

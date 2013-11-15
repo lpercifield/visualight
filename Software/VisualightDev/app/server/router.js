@@ -1,9 +1,20 @@
-
 var CT = require('./modules/country-list');
 var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
 var WS = require('./modules/handle-sockets');
 var API = require('./modules/api');
+
+var colors = require('colors');
+
+colors.setTheme({
+
+	data: 	'grey',
+	info: 	'green',
+	warm: 	'yellow',
+	debug: 	'blue',
+	help:  	'cyan',
+	error: 	'red'
+});
 
 
 module.exports = function(app, io, sStore) { // this gets called from the main app
@@ -209,8 +220,32 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+
+/**
+* get the registered  groups for a user
+* This route is called to get the groups for a user
+* ---THIS NEEDS AN UPDATE
+* should take either the session or an API key
+*
+* @method get /get-groups
+*/	
+	app.get('/get-groups', function(req,res){
+		//console.log;
+		if(req.session.user == null){
+	    		res.send('not-authorized',400);
+	    }else{
+		    AM.getGroups(req.session.user.user, function(o){
+			    //console.log('AM.getGroups');console.log(o);
+			    if(o){
+				    res.send(o,200);
+			    }else{
+				    res.send('bulbs-not-found', 400);
+			    }
+		    });
+	    }
+		
+	});
 	
-	// add bulb to user
 /**
 * adds a bulb to DB
 * This route is called to add a bulb
@@ -225,16 +260,89 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    		res.send('not-authorized',400);
 	    }else{
 		    AM.addNewBulb(req.session.user.user,req.param('bulb'), function(e){
-		    	console.log("add bulb request ");
+		    	console.log("add bulb request".help);
 			    if(e){
 				    res.send(e,400);
+				    console.log('denied'.error);
 			    }else{
 				    res.send('ok', 200);
+				    console.log('accepted'.data);
 			    }
 		    });
 	    }
 		
 	});
+	
+	
+/**
+ *
+ *	Routes for bulb actions - update delete 	
+ *	
+ *	TODO: AUTHENTICATE ALL OF THIS
+ *
+ */
+ 
+ app.post('/bulb/:key/update',function(req,res){
+	var key = req.params.key;
+	var post = req.body;
+	 
+	console.log(key.help);
+	console.log(JSON.stringify(post).data);
+
+	AM.updateBulbData(key,post,function(result){
+		//res.send(result);
+		res.writeHead(200, {'content-type':'text/json'})
+		res.end(JSON.stringify(result))
+	})
+
+ })
+ 
+ app.delete('/bulb/:key',function(req,res){
+	 var key = req.params.key;
+	 
+	 AM.deleteBulb(key,function(result){
+	 	res.writeHead(200,{'content-type':'text/json'})
+	 	res.end(JSON.stringify(result));	
+	 }); 
+	 //delete the bulb 
+ })
+
+ app.delete('/group/:key',function(req,res){
+	 var key = req.params.key;
+	 
+	 AM.deleteGroup(key,function(result){
+	 	res.writeHead(200,{'content-type':'text/json'})
+	 	res.end(JSON.stringify(result));	
+	 }); 
+	 //delete the bulb 
+ })
+/** 
+ *
+ *  add bulbs to groups
+ *	This route is called to add bulbs into new group
+ *
+ *	@method post /bind-group
+ *  @param {Object} 
+ *
+ */	
+
+  app.post('/bind-group', function(req,res){
+  		if(req.session.user==null){
+  			res.send('not-authorized',400);
+  		}else{
+  			AM.addNewGroup(req.session.user.user,req.body,function(e){
+  				console.log('add group request'.help);
+  				if(e){
+  					res.send(e,400);
+  					console.log('denied: '.error+e.data);
+  				}else{
+  					//res.send('ok',200);
+  					res.redirect('/myvisualight');
+  					console.log('accepted'.data);
+  				}
+  			});
+  		}
+  });
 
 // password reset //
 /**

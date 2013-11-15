@@ -13,30 +13,67 @@ $(document).ready(function(){
       var send = document.getElementById("send");
       var text = document.getElementById("text");
       var message = document.getElementById("message");
+      var update = document.getElementById("update");
       var socket;
       var currBulb = 0;
       var currBulbId = null;
       var currBulbName = null;
+      var currBulbType = 'bulb';
       var poweron = true;
       var bulbArray = null;
       var reconnect = false;
+      var state; //this is bad.
       
 	$('#demo').hide();
+	$('#duration').slider({min:1,max:999});
+	$('#frequency').slider({min:0,max:9});
+	$('#type').slider({min:0,max:1});
 	setupVisualightButtons();
 	connectSocket();
-
 
 	function setupVisualightButtons(){
 		vc.getBulbs(function(r){
 		//console.log("getting complete");
-			$('div.btn-group .btn').click(function(){
-				//console.log($(this).find('input:radio').attr('checked', true).val());
-				//alert($('input[name=bulb-button]:checked').attr('bulbname') +" " + $('input[name=bulb-button]:checked').val());
-				currBulbId = $('input[name=bulb-button]:checked').val();
-				currBulbName = $('input[name=bulb-button]:checked').attr('bulbname');
-				//socket.emit('current-bulb', currBulbId);
-				});
+			$('#bulbs.dropdown-menu li a').click(function(){
+				//alert($(this).data('name'));
+				currBulbId = $(this).data('id');
+				currBulbName = $(this).data('name');
+				currBulbType = 'bulb';
+				$('h1.intro').hide()
+				//set header to bulb name
+				$('div#options form :text').val(currBulbName);
+				//$('div#title').show();
+				$('.current h1').html(currBulbName).parent().show();
+				$('div#options form').attr('action','/bulb/'+currBulbId+'/update')
+				$('div#options form input.id').val(currBulbId)
+				$('button#delete').attr('data-url','/bulb/'+currBulbId);
+				//$('button#delete').data('url', '/bulb/'+currBulbId)
+				
+    		});
 		});
+    vc.getGroups(function(r){
+      $('#groups.dropdown-menu li a').click(function(){
+
+        currBulbName = $(this).data('name');
+		var group=$(this).data('id');
+        var inputs = $(this).find(':hidden');
+        
+        currBulbId = group;
+        currBulbType = 'group';
+
+		$('h1.intro').hide()
+		//options menu
+		$('div#options form :text').val(currBulbName);
+		$('div#options form').attr('action','/group/'+group+'/update')
+		$('div#options form input.id').val(group);
+		//$('div#options').show();
+		$('button#delete').attr('data-url','/group/'+group);
+		
+		$('.current h1').html(currBulbName).parent().show();
+
+      });
+
+    });
 		//connectSocket();
 		console.log("connect");
 	}
@@ -56,10 +93,10 @@ $(document).ready(function(){
 		status.textContent = "Connected";
 		close.disabled = false;
         open.disabled = true;
-        currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
-        console.log("currBulbID " + currBulbId);
+        //currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
+        //console.log("currBulbID " + currBulbId);
         //if(currBulbId!=null) socket.emit('current-bulb', currBulbId);
-        console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
+        //console.log($('div.btn-group .btn').find('input:radio').attr('checked', true).val());
 	});
 	socket.on('disconnect',function(){
 		status.textContent = "Not Connected";
@@ -72,72 +109,49 @@ $(document).ready(function(){
 	});
 	
 	function sendAPICall(state){
-/*
-		//build our State object
-		var state = new
-		{
-		    type = value
-		    //hue = (int)(hsv.Hue * 182.04), //we convert the hue value into degrees by multiplying the value by 182.04
-		    //sat = (int)(hsv.Saturation * 254)
-		};
-*/	
-		//var currBulbId = $('div.btn-group .btn').find('input:radio').attr('checked', true).val();
 
-		//console.log(currBulbId);
+      state.id = currBulbId;
+      state.type = currBulbType;
+      //convert it to json:
+      var jsonObj = JSON.stringify(state);
+      console.log(jsonObj);
+      socket.send(jsonObj);
 
-		state.id = currBulbId;
-		//convert it to json:
-		var jsonObj = JSON.stringify(state);
-		console.log(jsonObj);
-		socket.send(jsonObj);
 	}
-// handle bulb button change
-		
 
-/*
-	bulbArray = vc.getBulbs();
-	if(bulbArray!=null){
-		
-	}else{
-		$('#main').style.display = "none";
-	}
-*/
-	
-  //var svgDoc, darkshade, lightshade;
 
   function updateHTML5LogoColor( color1, color2 ){
     darkshade.setProperty("fill", color1, "");
     lightshade.setProperty("fill", color2, "");
   };
 
-  //var svglogo = document.getElementById("html5svg");
-
-  /*svglogo.addEventListener("load",function(){
-    svgDoc = svglogo.contentDocument;
-    darkshade = svgDoc.getElementById('darkshade').style;
-    lightshade = svgDoc.getElementById('lightshade').style;
-  },false);*/
-  
   $('#picker').farbtastic(function(e){
     var c   = hexToRgb(e)
       , h   = rgbToHsl(c.r,c.g,c.b)
       , r   = hslToRgb(h.h,h.s,h.l)
-      , rgb = +c.r+','+c.g+','+c.b+',0'
-      ;
+      , rgb = +c.r+','+c.g+','+c.b+',0';
     
     //$('#color').css({backgroundColor:e}).val(e);
+    $('body').css({background:e});
     $('#color').css({backgroundColor:e});
 	console.log(rgb);
 	//socket.send(rgb);
-	//var newBri = Math.map(h.l,0,204,0,255);
-	var state =
-	{   
+	var newBri = map_range(h.l,0.0,.8,0,1);
+	state =
+	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(h.l * 254)
+	    bri:(newBri * 254),
+	    alert: {duration: 0, frequency: 0, type: 0}
 	};
+	
+/*
+	if(state.hasOwnProperty('alert')){
+		delete state.alert;
+	}
+*/
 	sendAPICall(state);
     //updateHTML5LogoColor(rgb, e);
   });
@@ -150,35 +164,6 @@ $(document).ready(function(){
       	console.log("click");
       	connectSocket();
       });
-/*
-      function connectSocket(){
-      		console.log("here");
-	      socket = new WebSocket("ws://leifp.com:8080", "echo-protocol");
-      socket.addEventListener("open", function(event) {
-          close.disabled = false;
-          open.disabled = true;
-          //send.disabled = false;
-          status.textContent = "Connected";
-        });
-
-        // Display messages received from the server
-        socket.addEventListener("message", function(event) {
-         // message.textContent = "Server Says: " + event.data;
-         	console.log(event.data);
-         	alert(event.data);
-        });
-
-        // Display any errors that occur
-        socket.addEventListener("error", function(event) {
-          //message.textContent = "Error: " + event;
-        });
-
-        socket.addEventListener("close", function(event) {
-          open.disabled = false;
-          status.textContent = "Not Connected";
-        });
-      }
-*/
       
 
       // Close the connection when the Disconnect button is clicked
@@ -189,96 +174,69 @@ $(document).ready(function(){
         socket.disconnect();
       });
       
-     /*
- one.addEventListener("click", function(event){
-      	//socket.send("weather,"+$('#zip').val());
-      	currBulb = 0;
-      	console.log("one");
-      });
-      two.addEventListener("click", function(event){
-      	//socket.send("weather,"+$('#zip').val());
-      	currBulb = 1;
-      	console.log("two");
-      });
-      three.addEventListener("click", function(event){
-      	//socket.send("weather,"+$('#zip').val());
-      	currBulb = 2;
-      	console.log("three");
-      });
-*/
-      weather.addEventListener("click", function(event){
-      	socket.send("weather,"+$('#zip').val()+","+currBulb);
-      });
-      bustime.addEventListener("click", function(event){
-      if($('#stopid').val() == ""){
-      	alert("Please enter both a Stop ID - See bustime.mta.info for details");
-      }else{
-      	socket.send("bustime,"+$('#stopid').val()+","+currBulb);
-      	}
-      });
-      cosm.addEventListener("click", function(event){
-      	if($('#feed').val() =="" || $('#datastream').val() ==""){
-      		alert("Please enter both a Feed ID and Datastream");
-      	}else{
-      		var min = 0;
-      		var max = 100;
-      		if($('#min').val() != ""){
-      			var min = $('#min').val();
-      		}
-      		if($('#max').val() != ""){
-      			var max = $('#max').val();
-      		}
-      		socket.send("cosm,"+$('#feed').val()+","+$('#datastream').val()+","+min+","+max+","+currBulb);
-      	}
-      });
+      $('button#settings').click(function(e){
+	      $('#options').toggle()
+	      if($(this).html() == 'SETTINGS') $(this).html('HIDE');
+	      else $(this).html('SETTINGS');
+      })
+      $('button#delete').click(function(e){
+	      if(!confirm('Are you sure you want to delete this item')) return;
+		  
+
+	      $.ajax({
+		      type:'DELETE',
+		      url: $(this).attr('data-url'),
+		      success: function(data){
+			      console.log('DELETE SUCCESS RECEIVED:')
+			      console.log(data);
+			      },
+			  error: function(jqXHR){
+				  console.log('AJAX ERROR: ')
+				  console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
+			  }
+		
+	      })
+
+	      
+      })
       
-      /*
-power.addEventListener("click", function(event) {
-        //close.disabled = true;
-        if(poweron == false){
-        	$('#slider-red').val(255);
-        	$('#slider-red').slider('refresh');
-        	$('#slider-green').val(255);
-        	$('#slider-green').slider('refresh');
-        	$('#slider-blue').val(255);
-        	$('#slider-blue').slider('refresh');
-        	poweron = true;
-        }else{
-        	$('#slider-red').val(0);
-        	$('#slider-red').slider('refresh');
-        	$('#slider-green').val(0);
-        	$('#slider-green').slider('refresh');
-        	$('#slider-blue').val(0);
-        	$('#slider-blue').slider('refresh');
-        	poweron = false;
-        }
+      $('button#update').click(function(e){
+	      
+	      var $parents = $(this).parents('form');
+	      var $form = $($parents[0]);
+	      console.log($form);
+	      //make ajax call 
 
-        //console.log("Power");
-        //send.disabled = true;
-        //message.textContent = "";
-        //socket.close();
-      });*/
+	      $.ajax({
+		      	type:'POST',
+		      	url: $form.attr( 'action' ),
+			  	data: $form.serialize(),
+			  	success: function(data){
+				  	var Name = $form.find('input.name').val();
+				  	var id = $form.find('input.id').val()
+				  	$('a[data-id='+id+']').html(Name)
+				  	$('.current h1').html(Name)
+				  	//console.log(data);
+			  	},
+			  	error:function(jqXHR){
+					console.log('AJAX ERROR: ')
+					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
+				}
+	      })
 
-      // Send text to the server when the Send button is clicked
-      //send.addEventListener("click", function(event) {
-        //socket.send(text.value);
-        //text.value = "";
-      //});
-      $('#slider-red').change(function(){
-    		var slider_value = $(this).val();
-    		console.log(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val());
-    		socket.send(slider_value +","+ $('#slider-green').val() + "," +$('#slider-blue').val()+",0"+","+currBulb);
-		});
-		$('#slider-green').change(function(){
-    		var slider_value = $(this).val();
-    		console.log($('#slider-red').val() +","+ slider_value + "," +$('#slider-blue').val());
-    		socket.send($('#slider-red').val() +","+ slider_value + "," +$('#slider-blue').val()+",0"+","+currBulb);
-		});
-		$('#slider-blue').change(function(){
-    		var slider_value = $(this).val();
-    		console.log($('#slider-red').val() +","+ $('#slider-green').val() + "," +slider_value);
-    		socket.send($('#slider-red').val() +","+ $('#slider-green').val() + "," +slider_value+",0"+","+currBulb);
-		});
+      })
+      
+      $('button#sendAlert').click(function(e){
+	      if(!state.hasOwnProperty('on')){
+		      alert('Change Color first!');
+	      }else{
+		      state.alert = {duration: $( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )}
+		      sendAPICall(state);
+		  }
+      })
+      function map_range(value, low1, high1, low2, high2) {
+        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+      }
     });
       function hslToRgb(h, s, l){
     var r, g, b;

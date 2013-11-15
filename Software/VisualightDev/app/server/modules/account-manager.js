@@ -4,6 +4,17 @@ var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 var Mongo 		= require('mongodb').MongoClient;
+var colors = require('colors');
+
+colors.setTheme({
+
+	data: 	'grey',
+	info: 	'green',
+	warm: 	'yellow',
+	debug: 	'blue',
+	help:  	'cyan',
+	error: 	'red'
+});
 
 
 var dbPort 		= 27017;
@@ -12,27 +23,10 @@ var dbName 		= 'node-login';
 var accounts;
 var bulbs;
 var sessions;
+var groups;
 
 
-
-/*
 exports.connectServer = function(callback){
-	Mongo.connect("mongodb://nodejitsu:ab124187f3e14972d1502824506e7123@linus.mongohq.com:10052/nodejitsudb6620458662", {auto_reconnect: true}, function(err, db) {
-				console.log("connecting to DB...");
-			if (err) {
-				console.log(err);
-				callback(err);
-			}	else{
-				console.log('connected to database :: ' + dbName);
-				accounts = db.collection('accounts');
-				bulbs = db.collection('bulbs');
-				sessions = db.collection('sessions');
-				callback(null);
-			}
-		}); 
-	}
-*/
-	exports.connectServer = function(callback){
 	Mongo.connect("mongodb://localhost:27017/visualightdev", {auto_reconnect: true}, function(err, db) {
 				console.log("connecting to DB...");
 			if (err) {
@@ -43,24 +37,11 @@ exports.connectServer = function(callback){
 				accounts = db.collection('accounts');
 				bulbs = db.collection('bulbs');
 				sessions = db.collection('sessions');
+				groups = db.collection('groups');
 				callback(null);
 			}
-		}); 
-	}
-
-/*
-var db = new MongoDB(dbName, new Server(dbHost, dbPort, {auto_reconnect: true}), {w: 1});
-	db.open(function(e, d){
-	if (e) {
-		console.log(e);
-	}	else{
-		console.log('connected to database :: ' + dbName);
-	}
-});
-var accounts = db.collection('accounts');
-var bulbs = db.collection('bulbs');
-var sessions = db.collection('sessions');
-*/
+	}); 
+}
 
 /* socket validation methods */
 
@@ -90,17 +71,82 @@ exports.getBulbInfo = function(id, callback)
 	});
 }
 
+/* bulb logoff */
+
+exports.updateBulbLogoff=function(id,color,callback){
+	//set last color state on logoff
+	//set status to 0 aka offline 
+	var obj = { $set: {color: color, lastOnline: new Date(), status:0 }}
+	bulbs.update({_id: getBulbId(id)},obj,true,function(e,o){
+
+		callback(null);
+	})
+
+}
+
+
 /* sets current bulb status*/
 exports.updateBulbStatus = function(id, online, callback)
 {	
-	//console.log("bulbId" + id);
-
-	// convert this to an update and modify the object... this currently overwrites the bulb object -- oops...
+	//var online = 0or1
+	//offline = 0
+	//online = 1
+	
+	var obj = {$set: {status: online}};
+	bulbs.update({_id:getBulbId(id)},obj,true,function(e,o){
+		callback(null)
+	})
+/*
 	bulbs.save({_id: getBulbId(id),status:online,lastOnline:moment()},{safe:true}, function(e, o) {
 		if (o == null){
 			callback(null);
 		}
 	});
+*/
+}
+exports.deleteGroup = function(key,callback)
+{
+	groups.remove({_id: getBulbId(key)},function(e){
+		var result = new Object();
+		
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status = 'deleted';
+			   result.details = {key: key};
+		}
+		callback(result)
+	})	
+	
+}
+
+exports.deleteBulb = function(key,callback)
+{
+	bulbs.remove({_id: getBulbId(key)},function(e){
+		var result = new Object();
+		
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status = 'deleted';
+			   result.details = {key: key};
+		}
+		callback(result)
+	})	
+	
+}
+exports.updateBulbData = function(key,post,callback)
+{	
+	if(post.options) var obj = {$set:{name:post.name,options:post.options}};
+	else var obj = {$set:{name:post.name}};
+	
+	bulbs.update({_id:getBulbId(key)},obj, true, function(e,o){
+		var result = new Object();
+		
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status = 'success';
+		}
+		callback(result)
+	})
 }
 
 /* get current bulb information*/
@@ -174,6 +220,44 @@ exports.addNewAccount = function(newData, callback)
 	});
 }
 
+exports.addNewGroup = function(user, post, callback){
+
+	//collect post data 
+	//process post data
+	console.log("Incoming Data: ".help+JSON.stringify(post).data);
+
+	//find user 
+	accounts.findOne({user:user},function(e,o){
+		if(e){ 
+			callback('Accounts Database Error: '+e);
+		}else if(o == null){
+			callback('user-not-found');
+		}else if(post.name === ''){
+			callback('no group name');
+		}else if(post.bulbs == null){
+			callback('no bulbs selected');
+		}else{
+
+			//have all our data to make a group
+			console.log(JSON.stringify(o).info);
+			var obj = {name:post.name, bulbs:post.bulbs, user: o._id, created: new Date()}
+
+			//console.log(obj)
+			groups.insert(obj,function(e,g){
+				if(e){
+					callback('Groups Database Insert Error: '+e);
+				}else{
+					callback(); 
+				}
+			});
+
+			
+		}
+	})
+
+
+	//check group name 
+}
 
 exports.addNewBulb = function(user, bulbMac, callback)
 {
@@ -211,13 +295,48 @@ exports.addNewBulb = function(user, bulbMac, callback)
 				}
 			});
 		}else{
-			console.log("bulb already exists");
+			console.log("bulb already exists".warn);
 			callback("bulb-already-registered");
 			//bulbExists = true;
 		}
 	});
 
 }
+exports.getGroupBulbs = function(id,callback)
+{	
+//console.log("INCOMING Group ID: "+id )
+	groups.findOne({_id: getGroupId(id)}, function(e,g){
+		if(g ==null){
+			callback(null)
+		}else{
+			callback(g)
+		}
+	})
+
+}
+exports.getGroups = function(user,callback)
+{
+
+	accounts.findOne({user:user},function(e,o){
+		if(o==null){
+			callback('user-not-found');
+		}else{
+
+			groups.find({user:o._id}).toArray(function(e,g){
+				if(g==null){
+					callback('group-not-found')
+				}else if(e){
+					callback('DB ERROR: '+e);
+				}else{
+					//TO DO:
+					//delete the fields we want to hide from g and send it back
+					callback(g);
+				}
+			})
+		}
+	})
+}
+
 exports.getBulbs = function(user, callback)
 {	
 	//console.log(user);
@@ -225,7 +344,20 @@ exports.getBulbs = function(user, callback)
 		if (o == null){
 			callback('user-not-found');
 		}	else{
-			callback(o.bulbs);
+			bulbs.find({user:o._id}).toArray(function(e,b){
+				if(e){
+					console.error(e)
+					callback('DB ERROR: '+e)
+				}else if(b==null){
+					callback('bulbs-not-found')
+						
+				}else{
+					//TO DO:
+					//delete the fields we want to hide from b and send it back
+					callback(b);
+				}
+			})
+			
 		}
 	});
 }
@@ -322,6 +454,9 @@ var validatePassword = function(plainPass, hashedPass, callback)
 }
 
 /* auxiliary methods */
+var getGroupId =function(id){
+	return groups.db.bson_serializer.ObjectID.createFromHexString(id)
+}
 
 var getObjectId = function(id)
 {

@@ -11,7 +11,17 @@
 var exp = require('express');
 var app = exp.createServer();
 
+var colors = require('colors');
 
+colors.setTheme({
+
+	data: 	'grey',
+	info: 	'green',
+	warm: 	'yellow',
+	debug: 	'blue',
+	help:  	'cyan',
+	error: 	'red'
+});
 
 var io = require('socket.io').listen(app); // Setup socket IO
 
@@ -27,5 +37,5 @@ require('./app/server/router')(app, io, MongoStore);// run the server/router.js
 
 //Start the express app on the port listed and console log
 app.listen(8080, function(){
-	console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+	console.log("Express server listening on port".data+" %d ".info+"in".data+" %s ".help+"mode".data, app.address().port, app.settings.env);
 });
