@@ -31,7 +31,6 @@ $(document).ready(function(){
 	setupVisualightButtons();
 	connectSocket();
 
-
 	function setupVisualightButtons(){
 		vc.getBulbs(function(r){
 		//console.log("getting complete");
