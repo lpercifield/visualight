@@ -1,10 +1,9 @@
-
 var crypto 		= require('crypto')
 var MongoDB 	= require('mongodb').Db;
 var Server 		= require('mongodb').Server;
 var moment 		= require('moment');
 var Mongo 		= require('mongodb').MongoClient;
-var colors = require('colors');
+var colors 		= require('colors');
 
 colors.setTheme({
 
@@ -147,6 +146,23 @@ exports.updateBulbData = function(key,post,callback)
 		}
 		callback(result)
 	})
+}
+
+exports.updateGroupData =function(key,post,callback)
+{
+
+	var obj = {$set: {name: post.name, bulbs: post.bulbs }}
+	
+	groups.update({_id: getGroupId(key)},obj,true,function(e,o){
+		var result = new Object();
+		if(e){ result.status = 'error';
+			   result.details = e;
+		}else{ result.status= 'success';
+		}
+		callback(result);
+		
+	})
+	
 }
 
 /* get current bulb information*/

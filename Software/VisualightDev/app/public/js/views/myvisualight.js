@@ -25,11 +25,9 @@ $(document).ready(function(){
       var state; //this is bad.
       
 	$('#demo').hide();
-	$('#duration').slider({min:1,max:999});
-	$('#frequency').slider({min:0,max:9});
-	$('#type').slider({min:0,max:1});
 	setupVisualightButtons();
 	connectSocket();
+
 
 	function setupVisualightButtons(){
 		vc.getBulbs(function(r){
@@ -48,6 +46,7 @@ $(document).ready(function(){
 				$('div#options form input.id').val(currBulbId)
 				$('button#delete').attr('data-url','/bulb/'+currBulbId);
 				//$('button#delete').data('url', '/bulb/'+currBulbId)
+				$('div#options form.update table').remove() 
 				
     		});
 		});
@@ -70,7 +69,15 @@ $(document).ready(function(){
 		$('button#delete').attr('data-url','/group/'+group);
 		
 		$('.current h1').html(currBulbName).parent().show();
-
+		$('div#options form.update table').remove() //clear out old table
+		
+		var clone = $('.modal-group-setup .modal-body form table').clone();
+		$('div#options form.update').append(clone);
+		
+		inputs.each(function(i){
+			$('div#options form.update table input[value="'+$(this).val()+'"]').attr('checked',true);
+		})
+		//console.log($('.modal-group-setup .modal-body form table'))
       });
 
     });
@@ -134,16 +141,15 @@ $(document).ready(function(){
     //$('#color').css({backgroundColor:e}).val(e);
     $('body').css({background:e});
     $('#color').css({backgroundColor:e});
-	console.log(rgb);
+	//console.log(rgb);
 	//socket.send(rgb);
-	var newBri = map_range(h.l,0.0,.8,0,1);
 	state =
 	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(newBri * 254),
+	    bri:(h.l * 254),
 	    alert: {duration: 0, frequency: 0, type: 0}
 	};
 	
@@ -230,15 +236,13 @@ $(document).ready(function(){
 	      if(!state.hasOwnProperty('on')){
 		      alert('Change Color first!');
 	      }else{
-		      state.alert = {duration: $( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )}
+		      state.alert = {duration: 1, frequency: 0, type: 0}
 		      sendAPICall(state);
 		  }
       })
-      function map_range(value, low1, high1, low2, high2) {
-        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-      }
+  
     });
-      function hslToRgb(h, s, l){
+  function hslToRgb(h, s, l){
     var r, g, b;
 
     if(s == 0){

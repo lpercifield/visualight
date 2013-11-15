@@ -283,38 +283,68 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  */
  
  app.post('/bulb/:key/update',function(req,res){
-	var key = req.params.key;
-	var post = req.body;
-	 
-	console.log(key.help);
-	console.log(JSON.stringify(post).data);
-
-	AM.updateBulbData(key,post,function(result){
-		//res.send(result);
-		res.writeHead(200, {'content-type':'text/json'})
-		res.end(JSON.stringify(result))
-	})
-
+ 
+ 	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+		var key = req.params.key;
+		var post = req.body;
+		console.log('BULB UPDATE REQUEST'.info)
+		console.log(key.help);
+		console.log(JSON.stringify(post).data);
+	
+		AM.updateBulbData(key,post,function(result){
+			//res.send(result);
+			res.writeHead(200, {'content-type':'text/json'})
+			res.end(JSON.stringify(result))
+		})
+	}
  })
  
  app.delete('/bulb/:key',function(req,res){
-	 var key = req.params.key;
-	 
-	 AM.deleteBulb(key,function(result){
-	 	res.writeHead(200,{'content-type':'text/json'})
-	 	res.end(JSON.stringify(result));	
-	 }); 
-	 //delete the bulb 
+  	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+		 var key = req.params.key;
+		 
+		 AM.deleteBulb(key,function(result){
+		 	res.writeHead(200,{'content-type':'text/json'})
+		 	res.end(JSON.stringify(result));	
+		 }); 
+		 //delete the bulb 
+	 }
+ })
+ 
+ app.post('/group/:key/update',function(req,res){
+	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+ 		var key = req.params.key;
+		var post = req.body;
+		console.log('GROUP UPDATE REQUEST'.info) 
+		console.log(key.help);
+		console.log(JSON.stringify(post).data);
+		AM.updateGroupData(key,post,function(result){
+			res.writeHead(200,{'content-type':'text/json'})
+			res.end(JSON.stringify(result))
+		})
+
+ 	}
+
  })
 
  app.delete('/group/:key',function(req,res){
-	 var key = req.params.key;
-	 
-	 AM.deleteGroup(key,function(result){
-	 	res.writeHead(200,{'content-type':'text/json'})
-	 	res.end(JSON.stringify(result));	
-	 }); 
-	 //delete the bulb 
+   	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+		 var key = req.params.key;
+		 
+		 AM.deleteGroup(key,function(result){
+		 	res.writeHead(200,{'content-type':'text/json'})
+		 	res.end(JSON.stringify(result));	
+		 }); 
+		 //delete the bulb 
+	 }
  })
 /** 
  *
@@ -431,6 +461,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 * @method post /delete
 */		
 	app.post('/delete', function(req, res){
+	
 		AM.deleteAccount(req.body.id, function(e, obj){
 			if (!e){
 				res.clearCookie('user');
