@@ -109,6 +109,7 @@ class Visualight {
 		int _duration;
 		int _frequency;
 		int _blinkType;
+		long _durationTime;
 
 		boolean _debug;
 

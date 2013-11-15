@@ -19,11 +19,11 @@ Visualight::Visualight(){
 	_blue = 255;
   _white = 255;
   _blinkType = 0;
-  _frequency = 10;
+  _frequency = 0;
   _duration = 1;
   alerting = false;
   alertBeginTimeStamp = 0;
-  blinkState = 255;
+  blinkState = 100;
 
 	connectTime = 0;
   lastHeartbeat = 0;
@@ -87,7 +87,7 @@ void Visualight::update(){
   	}
   	else{
     	processClient();
-      if(alerting) alert();
+      if(alerting && (millis() % 5)==0) alert();
   	}
   	processButton(); //TODO: test to see how much blockage this has...
 }
@@ -371,7 +371,7 @@ void Visualight::processClient(){
       char thisChar;
       thisChar = wifly.read();
       if( thisChar == 97){
-        int numBytes = wifly.readBytesUntil('x', serBuf, 31);
+        wifly.readBytesUntil('x', serBuf, 31);
         sscanf(serBuf,"%i,%i,%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_duration,&_frequency,&_blinkType); // INDIGO v0.1.1
         //sscanf(serBuf,"%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_blinkMe); // PURPLE v0.1.0
         if(_debug){
@@ -381,12 +381,12 @@ void Visualight::processClient(){
           Serial.println(serBuf);
           delay(1);
         }
-        if(_duration > 0){ //we are BLINKING\
-          if(_debug)Serial.print(F("BLINK RECEIVED"));
-          Serial.println(F("BLINK RECEIVED"));
-          _duration = _duration*1000;
-          _frequency = (_frequency+100); //* 100; //get the right freq out //100 - 1000
-          blinkState = 100;
+        if(_duration > 0){ //we are BLINKING
+          //if(_debug)Serial.print(F("BLINK RECEIVED"));
+          //Serial.println(F("BLINK RECEIVED"));
+          _durationTime = _duration*1000;
+          _frequency = (_frequency+1); //* 100; //get the right freq out //100 - 1000
+          //blinkState = 100;
           alertBeginTimeStamp = millis();
           alerting = true;
           alert();
@@ -429,6 +429,7 @@ void Visualight::colorLED(int red, int green, int blue){
 }
 
 void Visualight::colorLED(int red, int green, int blue, int white){
+	//Serial.println(green);
   analogWrite(redLED, red);
   analogWrite(greenLED, green);
   analogWrite(blueLED, blue);
@@ -436,10 +437,14 @@ void Visualight::colorLED(int red, int green, int blue, int white){
 }
 
 void Visualight::fadeOn(){ // turns all LEDs on to full white
-  for(int fadeValue = 100; fadeValue >=1; fadeValue -=5) { 
+  for(int fadeValue = 1; fadeValue <=100; fadeValue +=5) { 
     // sets the value (range from 0 to 255):
+    /*
+     (1*255)/100 
+    
+    */
     if(MODEL > 0) {
-      colorLED(_red/(_red*fadeValue), _green/fadeValue, _blue/fadeValue, _white/fadeValue);
+      colorLED((fadeValue*_red)/100, (fadeValue*_green)/100, (fadeValue*_blue)/100, (fadeValue*_white)/100);
     } else {
       colorLED(_red/fadeValue, _green/fadeValue, _blue/fadeValue);
     }
@@ -457,22 +462,27 @@ void Visualight::setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){
 
 void Visualight::alert(){
 
-  long elapsedBlinkTime = millis() - alertBeginTimeStamp;
+  long elapsedBlinkTime = millis(); 
 
-  if ( elapsedBlinkTime >= _duration){
+  if ( elapsedBlinkTime - alertBeginTimeStamp >= _durationTime){
     alerting = false;
+    colorLED(_red, _green, _blue, _white);
+    blinkState=100;
     //return;
   } 
 
   else {  // update the current blink
     //Serial.println("BLINKING");
-    if (blinkState < 2 || blinkState > 255) _frequency * -1;
     blinkState -= _frequency;
-
+		if (blinkState <= 1 || blinkState >= 100) _frequency *= -1;
+    
     switch(_blinkType){
       case 0: //FADING blink
-        colorLED( _red/blinkState, _green/blinkState, _blue/blinkState, _white/blinkState);
-      break;
+				//Serial.println(blinkState);
+        colorLED( int((blinkState*_red)/100), int((blinkState*_green)/100), int((blinkState*_blue)/100), int((blinkState*_white)/100));
+        //blinkState -= _frequency;
+				//if (blinkState <= 1 || blinkState >= 100) _frequency *= -1;
+				break;
 
       case 1: //HARD blink
         if(_frequency > 0 ){
@@ -480,13 +490,13 @@ void Visualight::alert(){
         } else {
           colorLED(0, 0, 0, 0);
         }
-      break;
+				break;
 
       default:
-
-      break;
+      	break;
     }
   }
+  delay(1);
 }
 
 
@@ -616,7 +626,7 @@ void Visualight::sendIndex() {
    * Note: we're not simply doing a close() because in version 2.32
    * firmware the close() does not work for client TCP streams.
    */
-  wifly.sendChunkln(F("<html>"));
+/*  wifly.sendChunkln(F("<html>"));
   wifly.sendChunkln(F("<head><title>Visualight Setup</title>"));
   wifly.sendChunkln(F("<style>body{width:100%;margin:0;padding:0;background:#999;}"));
   wifly.sendChunkln(F("h1,h3{margin:2% auto;width:80%;}div{margin: 10% auto 0;width:60%;padding:4%;background:#f9f9f9;}"));
@@ -641,6 +651,7 @@ void Visualight::sendIndex() {
   wifly.sendChunkln(F("</body></html>"));
   wifly.sendChunkln();
   wifly.sendChunkln();
+  */
 }
 
 /** Send a greeting HTML page with the user's name and an analog reading */
