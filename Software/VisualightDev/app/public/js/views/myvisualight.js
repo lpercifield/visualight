@@ -25,6 +25,11 @@ $(document).ready(function(){
       var state; //this is bad.
       
 	$('#demo').hide();
+	
+	$('#duration').slider({min:1,max:999});
+    $('#frequency').slider({min:0,max:9});
+    $('#type').slider({min:0,max:1});
+	
 	setupVisualightButtons();
 	connectSocket();
 
@@ -143,13 +148,14 @@ $(document).ready(function(){
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
+	var newBri = map_range(h.l,0.0,.8,0,1);
 	state =
 	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(h.l * 254),
+	    bri:(newBri * 254),
 	    alert: {duration: 0, frequency: 0, type: 0}
 	};
 	
@@ -236,12 +242,16 @@ $(document).ready(function(){
 	      if(!state.hasOwnProperty('on')){
 		      alert('Change Color first!');
 	      }else{
-		      state.alert = {duration: 1, frequency: 0, type: 0}
+		      state.alert = {$( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )};
 		      sendAPICall(state);
 		  }
       })
   
     });
+  function map_range(value, low1, high1, low2, high2) {
+         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+       }  
+  
   function hslToRgb(h, s, l){
     var r, g, b;
 
