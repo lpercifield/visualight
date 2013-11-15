@@ -25,6 +25,9 @@ $(document).ready(function(){
       var state; //this is bad.
       
 	$('#demo').hide();
+	$('#duration').slider({min:1,max:999});
+	$('#frequency').slider({min:0,max:9});
+	$('#type').slider({min:0,max:1});
 	setupVisualightButtons();
 	connectSocket();
 
@@ -141,7 +144,7 @@ $(document).ready(function(){
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(h.l * 254),
+	    bri:(newBri * 254),
 	    alert: {duration: 0, frequency: 0, type: 0}
 	};
 	
@@ -228,7 +231,7 @@ $(document).ready(function(){
 	      if(!state.hasOwnProperty('on')){
 		      alert('Change Color first!');
 	      }else{
-		      state.alert = {duration: 1, frequency: 0, type: 0}
+		      state.alert = {duration: $( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )}
 		      sendAPICall(state);
 		  }
       })

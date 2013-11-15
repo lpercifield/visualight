@@ -69,6 +69,12 @@ div.navbar
 				#picker
 		div#alerts
 			button(type="button")#sendAlert.btn.btn-danger Send Alert
+			label Duration
+			div#duration
+			label Frequency
+			div#frequency
+			label Type
+			div#type
 		
 
 include modals/alert
@@ -77,8 +83,10 @@ include modals/setupbulb
 include modals/network
 include modals/addgroup
 
+
 script(type='text/javascript', src='/vendor/jquery.min.js')
 script(type='text/javascript', src='/vendor/jquery.form.js')
+script(type='text/javascript', src="http://code.jquery.com/ui/1.10.3/jquery-ui.js")
 script(type='text/javascript', src='/vendor/farbtastic.js')
 script(type='text/javascript', src='/vendor/bootstrap-modal_222.js')
 script(type='text/javascript', src='/vendor/bootstrap-transition.js')
