@@ -10,7 +10,7 @@ colors.setTheme({
 
 	data: 	'grey',
 	info: 	'green',
-	warm: 	'yellow',
+	warn: 	'yellow',
 	debug: 	'blue',
 	help:  	'cyan',
 	error: 	'red'
@@ -210,7 +210,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		if(req.session.user == null){
 	    		res.send('not-authorized',400);
 	    }else{
-		    AM.getBulbs(req.session.user.user, function(o){
+		    AM.getBulbsByUser(req.session.user.user, function(o){
 			    if(o){
 				    res.send(o,200);
 			    }else{
@@ -220,6 +220,17 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+	app.get('/get-bulbs/:key',function(req,res){
+		var key = req.params.key;
+		AM.getBulbsByKey(key,function(o){
+			if(o){
+				    res.send(o,200);
+			    }else{
+				    res.send('bulbs-not-found', 400);
+			   }
+		})
+		
+	})
 
 /**
 * get the registered  groups for a user
@@ -234,7 +245,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		if(req.session.user == null){
 	    		res.send('not-authorized',400);
 	    }else{
-		    AM.getGroups(req.session.user.user, function(o){
+		    AM.getGroupsByUser(req.session.user.user, function(o){
 			    //console.log('AM.getGroups');console.log(o);
 			    if(o){
 				    res.send(o,200);
@@ -245,6 +256,18 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+	
+	app.get('/get-groups/:key',function(req,res){
+		var key = req.params.key;
+		AM.getGroupsByKey(key,function(o){
+			if(o){
+				    res.send(o,200);
+			    }else{
+				    res.send('bulbs-not-found', 400);
+			   }
+		})
+		
+	})
 	
 /**
 * adds a bulb to DB

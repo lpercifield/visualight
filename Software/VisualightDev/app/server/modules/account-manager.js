@@ -185,7 +185,7 @@ exports.checkBulbAuth = function(macAdd, callback)
 /* login validation methods */
 
 exports.autoLogin = function(user, pass, callback)
-{
+{	//exposed hashed password?
 	accounts.findOne({user:user}, function(e, o) {
 		if (o){
 			o.pass == pass ? callback(o) : callback(null);
@@ -330,7 +330,42 @@ exports.getGroupBulbs = function(id,callback)
 	})
 
 }
-exports.getGroups = function(user,callback)
+exports.getGroupsByKey = function(key,callback)
+{
+
+	groups.find({user:getUserId(key)}).toArray(function(e,g){
+		if(g==null){
+			callback('group-not-found')
+		}else if(e){
+			callback('DB ERROR: '+e);
+		}else{
+			//TO DO:
+			//delete the fields we want to hide from g and send it back
+			callback(g);
+		}
+	})
+		
+}
+exports.getBulbsByKey = function(key, callback)
+{	
+
+	bulbs.find({user:getUserId(key)}).toArray(function(e,b){
+		if(e){
+			console.error(e)
+			callback('DB ERROR: '+e)
+		}else if(b==null){
+			callback('bulbs-not-found')
+				
+		}else{
+			//TO DO:
+			//delete the fields we want to hide from b and send it back
+			callback(b);
+		}
+	})
+			
+
+}
+exports.getGroupsByUser = function(user,callback)
 {
 
 	accounts.findOne({user:user},function(e,o){
@@ -353,7 +388,7 @@ exports.getGroups = function(user,callback)
 	})
 }
 
-exports.getBulbs = function(user, callback)
+exports.getBulbsByUser = function(user, callback)
 {	
 	//console.log(user);
 	accounts.findOne({user:user}, function(e, o) {
@@ -481,6 +516,10 @@ var getObjectId = function(id)
 var getBulbId = function(id)
 {
 	return bulbs.db.bson_serializer.ObjectID.createFromHexString(id)
+}
+var getUserId = function(id)
+{
+	return accounts.db.bson_serializer.ObjectID.createFromHexString(id)
 }
 var findById = function(id, callback)
 {

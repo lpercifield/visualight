@@ -229,6 +229,10 @@ $(document).ready(function(){
 				  	$('a[data-id='+id+']').html(Name)
 				  	$('.current h1').html(Name)
 				  	//console.log(data);
+				  	//check for group 
+				  		//get all selected ids
+				  		//add them to the group dropdown
+				  		//
 			  	},
 			  	error:function(jqXHR){
 					console.log('AJAX ERROR: ')

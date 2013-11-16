@@ -38,7 +38,9 @@ exports.createSockets = function(app, io, AM){
                 socket.setEncoding('utf8');
                 socket.setKeepAlive(true); // heartbeat timer... This doesnt really work...
                 socket.setTimeout(60000,function(){ //if we don't hear anything from the server for a minute then we kill the connection
-                        console.log('connection_id: '+connection_id+" TIMEOUT");
+                
+                		var message = 'connection_id: '+connection_id+' TIMEOUT';
+                        console.log(message.error);
                         //socket.write('H');
                         removeBulb(connection_id);
                 })
@@ -47,33 +49,41 @@ exports.createSockets = function(app, io, AM){
 
                 socket.on('close', function() {
                         //inform clients that bulbs are lost
-                        console.log('visualight closed id: '+connection_id);
+                        var message = 'visualight closed id: '+connection_id;
+                        console.log(message.error);
                         removeBulb(connection_id);        
                 });
                 // this is called when the bulb socket ends
                 socket.on('end',function(){
                         //inform clients that bulb is gone
-                        console.log('visualight ended id: '+connection_id);
+                        var message = 'visualight ended id: '+connection_id;
+                        console.log(message.error);
                         //probably not needed but well see.
                         //removeBulb(connection_id);
 
                 });
                 // this is called when there is an error on the bulb socket
                 socket.on('error',function(err){
-
-                        console.log('visualight error id: '+connection_id);
-                        console.log(err);
+						var message = 'visualight error id: '+connection_id;
+                        console.log(message.error);
+                        console.log(JSON.stringify(err).error);
 
                 });
 
           // this is the function that gets called when the bulb sends data
                 socket.on('data', function(data){
                         //console.log(data); // debug only see exactly what is sent from netsocket
-
-                        try { 			console.log(data.data)
+						
+                        try { 			console.log()
+                        				console.log(data.data)
                                         data = JSON.parse(data) 
+                                        if(!data.mac) {
+	                                        console.error("Bad Data".error);
+											console.error(data.error)
+                                        }
                                         var mac = sanitize(data.mac).trim(); // we hope that we are getting a mac address
                                         console.log("INCOMING: ".info + mac.data );
+                                        console.log();
                                 }catch(e){
                                          console.error("Bad Data".error);
                                          console.error(data.error)
@@ -133,6 +143,10 @@ exports.createSockets = function(app, io, AM){
                                                   }// o is valid
                                         
                                         });
+                                }else{
+	                              console.error("Bad Data".error);
+                                  console.error(data.error)
+                                  socket.destroy();  
                                 }
 
                 });        
@@ -152,9 +166,11 @@ exports.createSockets = function(app, io, AM){
         **/
 
         function removeBulb(bulbID){
-                        console.log('Attempting to clear bulb: '.warn+ bulbID);
+        				var message = 'Attempting to clear bulb: '+ bulbID;
+                        console.log(message.warn);
                         if( Bulbs.hasOwnProperty(bulbID) ){
-                                console.log('Bulb Found Attempting to remove: '.warn+bulbID);
+                        		message = 'Bulb Found Attempting to remove: '+bulbID;
+                                console.log(message.warn);
                                 //console.log(Bulbs);
                                 
                                 //setting bulb
@@ -164,9 +180,11 @@ exports.createSockets = function(app, io, AM){
                                 			try{
                                 				delete Bulbs[bulbID]; //delete obj
                                 				//console.log(Bulbs);
-                                				console.log('Bulb '.info+bulbID+' Removed Successfully!'.info);
+                                				message = 'Bulb '+bulbID+' Removed Successfully!';
+                                				console.log(message.info);
                                 			}catch(e){
-                                				console.log('DELETE ERROR: '.error+e.error)
+                                				message = 'DELETE ERROR: '.error+e;
+                                				console.log(message.error)
                                 			}
                                 	})
                                 }else{
@@ -175,16 +193,19 @@ exports.createSockets = function(app, io, AM){
                                 	try{
                                 		delete Bulbs[bulbID]; //delete obj
                                 		//console.log(Bulbs);
-                                		console.log('Bulb '+bulbID+' Removed Successfully!'.info);
+                                		message = 'Bulb '+bulbID+' Removed Successfully!';
+                                		console.log(message.info);
                                 		
                                 		}catch(e){
-                                				console.log('DELETE ERROR: '.error+e.error)
+                                			message = 'DELETE ERROR: '.error+e;
+                                			console.log(message.error)
                                 		}
                                 }
                                 //update bulb color in db
         
                         }else{
-                                console.log('Bulb '+bulbID+' no longer exists'.error);
+                        		message = 'Bulb '+bulbID+' no longer exists';
+                                console.log(message.error);
                         }
         }
         /**
