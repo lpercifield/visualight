@@ -53,7 +53,7 @@ class Visualight {
 		Visualight();
 		WiFly wifly; //just in case we want to access this from the sketch...
 		void update();
-		void setup(uint8_t _MODEL, char* _URL, uint16_t _PORT);
+		void setup(char* _URL, uint16_t _PORT);
 		void setVerbose(boolean set);
 		void setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
 		boolean factoryRestore();
@@ -100,7 +100,6 @@ class Visualight {
 
 		char * URL;
 		uint16_t PORT;
-		uint8_t MODEL; // 0 = RGB // 1 = RGBW //
 
 		int _red;
 		int _green;

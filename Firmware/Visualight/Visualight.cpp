@@ -50,6 +50,10 @@ boolean Visualight::factoryRestore(){
   pinMode(resetPin,OUTPUT);
   digitalWrite(resetButton, HIGH);
   digitalWrite(resetPin, HIGH);  
+  pinMode(_red,OUTPUT);
+  pinMode(_green, OUTPUT);
+  pinMode(_blue, OUTPUT);
+  colorLED(255, 0, 0,0);
   if(_debug) Serial.begin(9600);
   if(_debug){
     while(!Serial){
@@ -68,7 +72,16 @@ boolean Visualight::factoryRestore(){
     wifly.reboot();
     //reset visualight eeprom
     EEPROM.write(0, 1); 
-    if(_debug) Serial.println(F("Visualight Factory Reset Complete."));
+    if(_debug) Serial.println(F("Visualight Factory Reset Complete !"));
+    colorLED(0,255,0,0);
+    // alertBeginTimeStamp = millis();
+    // _blinkType = 1;
+    // _frequency = 3;
+    // _red = _blue = 0;
+    // _green = 255;
+    // _duration = 12000;
+    // alerting = true;
+    // alert();
     return true;
   } else {
     if(_debug) Serial.println(F("Failed to factoryRestore wifly"));
@@ -81,7 +94,6 @@ boolean Visualight::factoryRestore(){
 /**********************************************************************************/
 
 void Visualight::update(){
-
 	if(isServer){
     	processServer();
   	}
@@ -92,9 +104,8 @@ void Visualight::update(){
   	processButton(); //TODO: test to see how much blockage this has...
 }
 
-void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
+void Visualight::setup(char* _URL, uint16_t _PORT){
   if(_debug) Serial.println(F("-SETUP-"));
-  MODEL = _MODEL;
   URL = _URL;
   PORT = _PORT;
 	//colorLED(255,255,255);
@@ -125,6 +136,7 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	}
 	else{
 		if(_debug) Serial.println(F("ID NOT SET"));
+    EEPROM.write(0,1);
 		configureWifi();
 	}
 	//wifly.terminal();
@@ -148,8 +160,7 @@ void Visualight::setup(uint8_t _MODEL, char* _URL, uint16_t _PORT){
 	if(isServer){
 		/* Create AP*/
 		if(_debug) Serial.println(F("Creating AP"));
-    if (MODEL > 0) colorLED(0,0,255,255);
-		else colorLED(0,0,255); // set led to blue for setup
+    colorLED(0,0,255,255);
 		if(_debug) Serial.println(F("Create server"));
 		wifly.setSoftAP();
 		EEPROM.write(0, 1);
@@ -186,8 +197,7 @@ void Visualight::configureWifi(){
 void Visualight::wifiReset(){
   wifly.close();
   if(_debug) Serial.println(F("-WIFIRESET-"));
-  if(MODEL>0) colorLED(0,0,255,0);
-  else colorLED(0,0,255);
+  colorLED(0,0,255,0);
   isServer = true;
   EEPROM.write(0, 1);
   wifly.reboot();
@@ -268,11 +278,9 @@ void Visualight::joinWifi(){
     }
   }
   else{
-    //Serial.println(F("Already Joined!"));
-    if(MODEL>0)colorLED(255,255,255,255);
-    else colorLED(255,255,255);
+    //colorLED(255,255,255,255);
     if(isServer){
-      if(_debug) Serial.println(F("Switch to Client Mode"));
+      if(_debug) Serial.println(F("Switching to Client Mode"));
       EEPROM.write(0, 0); 
       isServer = false;
     }
@@ -318,11 +326,9 @@ boolean Visualight::connectToServer(){
 
   if (wifly.open(URL, PORT)) {
     if(reconnect){
-      if(MODEL>0)colorLED(_red,_green,_blue,_white); // RGBW
-      else colorLED(_red,_green,_blue); // RGB
+      colorLED(_red,_green,_blue,_white); // RGBW
     }else{
-      if(MODEL>0)colorLED(255,255,255,255); // white is connected
-      else colorLED(255,255,255); // white is connected
+      colorLED(255,255,255,255); // white is connected
     }
     if(_debug) Serial.println(F("Connected"));
 
@@ -384,7 +390,7 @@ void Visualight::processClient(){
         if(_duration > 0){ //we are BLINKING
           //if(_debug)Serial.print(F("BLINK RECEIVED"));
           //Serial.println(F("BLINK RECEIVED"));
-          _durationTime = _duration*1000;
+          _durationTime = _duration*1000; 
           _frequency = (_frequency+1); //* 100; //get the right freq out //100 - 1000
           //blinkState = 100;
           alertBeginTimeStamp = millis();
@@ -393,8 +399,7 @@ void Visualight::processClient(){
         } 
 
         else { //simple set color
-          if(MODEL > 0) colorLED(_red, _green, _blue, _white); 
-          else colorLED(_red,_green,_blue);
+          colorLED(_red, _green, _blue, _white); 
           if(_debug) Serial.println(thisChar);
           delay(5);
         } 
@@ -416,20 +421,7 @@ void Visualight::processButton(){
   }
 }
 
-void Visualight::colorLED(int red, int green, int blue){
-  // if(sink){ /* keep just in case for future */
-  //   red = 255-red;
-  //   green = 255-green;
-  //   blue = 255-blue;
-  //   white = 255-white;
-  // }
-  analogWrite(redLED, red);
-  analogWrite(greenLED, green);
-  analogWrite(blueLED, blue);
-}
-
 void Visualight::colorLED(int red, int green, int blue, int white){
-	//Serial.println(green);
   analogWrite(redLED, red);
   analogWrite(greenLED, green);
   analogWrite(blueLED, blue);
@@ -438,17 +430,8 @@ void Visualight::colorLED(int red, int green, int blue, int white){
 
 void Visualight::fadeOn(){ // turns all LEDs on to full white
   for(int fadeValue = 1; fadeValue <=100; fadeValue +=5) { 
-    // sets the value (range from 0 to 255):
-    /*
-     (1*255)/100 
-    
-    */
-    if(MODEL > 0) {
-      colorLED((fadeValue*_red)/100, (fadeValue*_green)/100, (fadeValue*_blue)/100, (fadeValue*_white)/100);
-    } else {
-      colorLED(_red/fadeValue, _green/fadeValue, _blue/fadeValue);
-    }
-    delay(10);                            
+    colorLED((fadeValue*_red)/100, (fadeValue*_green)/100, (fadeValue*_blue)/100, (fadeValue*_white)/100);
+    delay(10);            
   }
 }
 
@@ -472,16 +455,12 @@ void Visualight::alert(){
   } 
 
   else {  // update the current blink
-    //Serial.println("BLINKING");
     blinkState -= _frequency;
 		if (blinkState <= 1 || blinkState >= 100) _frequency *= -1;
     
     switch(_blinkType){
       case 0: //FADING blink
-				//Serial.println(blinkState);
         colorLED( int((blinkState*_red)/100), int((blinkState*_green)/100), int((blinkState*_blue)/100), int((blinkState*_white)/100));
-        //blinkState -= _frequency;
-				//if (blinkState <= 1 || blinkState >= 100) _frequency *= -1;
 				break;
 
       case 1: //HARD blink
