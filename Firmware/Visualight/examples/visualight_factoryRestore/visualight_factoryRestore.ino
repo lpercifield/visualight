@@ -7,7 +7,9 @@ void setup(){
   
   // if set true, board will wait for serial  
   // monitor to be opened before executing any code
-  visualight.setVerbose(true); 
+  visualight.setVerbose(false); 
+  
+  visualight.setStartColor(0,255,0,0);
   
   // resets EEPROM flags on the Visualight, 
   // wipes all WiFly flash memory, settings
@@ -15,7 +17,8 @@ void setup(){
 }
 
 void loop(){
-
+  
+  visualight.update();
 }
 
 

@@ -81,6 +81,7 @@ class Visualight {
 		void fadeOn();
 		void sendHeartbeat();
 		void alert();
+		void setAlert(int blinkType, long durationTime, int frequency, int r, int g, int b, int w);
 		boolean alerting;
 		long alertBeginTimeStamp;
 		uint16_t blinkState; //counts from 0 - 100
@@ -105,7 +106,13 @@ class Visualight {
 		int _green;
 		int _blue;
 		int _white;
-		int _duration;
+
+		int _Ared;
+		int _Agreen;
+		int _Ablue;
+		int _Awhite;
+
+
 		int _frequency;
 		int _blinkType;
 		long _durationTime;
