@@ -121,6 +121,7 @@ $('div.btn-group .btn').click(function(){
 			},
 			error: function(request,error){
 				console.log(arguments);
+				//Yikes the Visualight might not have received your data... Is it blinking green?
 				 //$.ajax(this);
                 //return;
 			}
