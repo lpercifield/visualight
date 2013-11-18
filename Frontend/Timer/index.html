@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" href="js/lib/themes/default.css" id="theme_base">
+	<link rel="stylesheet" href="js/lib/themes/default.date.css" id="theme_date">
+	<link rel="stylesheet" href="js/lib/themes/default.time.css" id="theme_time">
+	<style>
+		#inline > * {
+			display: inline;
+		}
+
+	</style>
+</head>
+<body>
+	<button id="btnAddTimer">
+		<h1>+ Set new Timer</h1>
+	</button>
+	<hr><br>
+	<div id="container">
+	<!-- template -->
+	<form class="formTimer" id="formTmp">
+		<div id="inline">
+			<!-- <input type="submit" id="submit" value="Submit"> -->
+			<input type="button" class="delete" value="Remove" onclick="var ok = confirm('Do you really want to delete this timer?');if(ok==true) {$(this).parent().parent().remove();}">
+			<input type="text" name="input_name" class="inputName" style="margin-left: 35px; width: 200px; height: 40px; font-size: 2em;" placeholder="Name it">
+			<br>
+			<select id ="myList" style="margin-left: 100px; width: 200px; height: 40px; font-size: 2em;">
+               <option value = "1">Bed</option>
+               <option value = "2">Living</option>
+               <option value = "3">Kitchen</option>
+               <option value = "4">Garden</option>
+            </select>
+			<input type="text" name="input_time" class="inputTime" style="width: 200px; height: 40px; font-size: 2em;" placeholder="Time it">
+			<label>S</label><input type="checkbox" class="chkOne" id="Sunday">
+			<label>M</label><input type="checkbox" class="chkOne" id="Monday">
+			<label>T</label><input type="checkbox" class="chkOne" id="Tuesday">
+			<label>W</label><input type="checkbox" class="chkOne" id="Wednesday">
+			<label>T</label><input type="checkbox" class="chkOne" id="Thursday">
+			<label>F</label><input type="checkbox" class="chkOne" id="Friday">
+			<label>S</label><input type="checkbox" class="chkOne" id="Saturday">
+		</div>
+		<hr>
+	</form>
+	<!-- end of template -->
+	</div>
+	<!-- Sumbit -->
+	<button id="submit" type="submit">Confirm</button>
+	<!-- End of Submit -->
+	<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="js/lib/picker.js"></script>
+	<!-- <script src="lib/picker.date.js"></script>
+-->
+<script src="js/lib/picker.time.js"></script>
+<!-- <script src="http://localhost:9001/socket.io/socket.io.js"></script> -->
+<script src="js/main.js"></script>
+</body>
+</html>
