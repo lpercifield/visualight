@@ -4,13 +4,38 @@
 			<meta charset="utf-8" />
 			<title></title>
 			<link rel="stylesheet" href="/css/style.css" />
-			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>	
+			<link rel="stylesheet" href="/css/farbtastic.css" />
+			<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+			<script type="text/javascript" src="/js/farbtastic.js"> </script>	
 			<script type="text/javascript" src="/js/main.js"> </script>
 			<!--[if IE]>
 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 			<![endif]-->
 		</head>
 		<body>
-			<div id="grid"></div>
+			<section id="color-wrapper">
+				<div id="color-picker"></div>
+			</section>
+			<section id="control">
+				<button id="eyedropper">Eyedropper</button>
+				<button id="select" href='#'>Select All</button>
+				<button id="deselect" href='#'>Deselect All</button>
+				<form id="add-bulb">
+					<select name="newbulb">
+	  					<option value="weiner" data-id="32423">Weiner</option>
+	  					<option value="penis" data-id="23413">Penis</option>
+	  					<option value="dick" data-id="12343">Dick</option>
+	  					<option value="cock" data-id="23423">Cock</option>
+					</select>
+					<input type="submit" value="Add Bulb">
+				</form>
+				<a href='#' id="add-beat">+</a>
+				<a href='#' id="remove-beat">-</a>
+				<p id="beat-count"></p>
+			</section>
+			<form id="sequencer-data">
+				<div id="grid"></div>
+				<input type="submit" value="Save Sequence">
+			</form>
 		</body>
 	</html>

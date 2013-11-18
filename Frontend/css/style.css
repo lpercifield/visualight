@@ -50,6 +50,14 @@ table {
 
 /* VISUALIGHT SEQUENCER CSS */
 
+#eyedropper{
+	color:white;
+	background-color:black;
+	float:left;
+}
+
+
+
 .bulb{
 	clear:both;
 	padding-top:20px;
@@ -78,4 +86,6 @@ table {
 .active{
 	border:solid 2px black;
 }
+
+
 
