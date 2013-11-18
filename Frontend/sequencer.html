@@ -13,29 +13,32 @@
 			<![endif]-->
 		</head>
 		<body>
-			<section id="color-wrapper">
-				<div id="color-picker"></div>
-			</section>
-			<section id="control">
-				<button id="eyedropper">Eyedropper</button>
-				<button id="select" href='#'>Select All</button>
-				<button id="deselect" href='#'>Deselect All</button>
-				<form id="add-bulb">
-					<select name="newbulb">
-	  					<option value="weiner" data-id="32423">Weiner</option>
-	  					<option value="penis" data-id="23413">Penis</option>
-	  					<option value="dick" data-id="12343">Dick</option>
-	  					<option value="cock" data-id="23423">Cock</option>
-					</select>
-					<input type="submit" value="Add Bulb">
+				<section id="color-wrapper">
+					<div id="color-picker"></div>
+				</section>
+				<section id="control">
+					<button id="eyedropper">Eyedropper</button>
+					<button id="select" href='#'>Select All</button>
+					<button id="deselect" href='#'>Deselect All</button>
+					<form id="add-bulb">
+						<select name="newbulb">
+		  					<option value="weiner" data-id="32423">Weiner</option>
+		  					<option value="penis" data-id="23413">Penis</option>
+		  					<option value="dick" data-id="12343">Dick</option>
+		  					<option value="cock" data-id="23423">Cock</option>
+						</select>
+						<input type="submit" value="Add Bulb">
+					</form>
+					<a href='#' id="add-beat">+</a>
+					<a href='#' id="remove-beat">-</a>
+					<p id="beat-count"></p>
+				</section>
+				<form id="sequencer-data">
+					<div id="grid"></div>
+					<input type="submit" value="Save Sequence">
 				</form>
-				<a href='#' id="add-beat">+</a>
-				<a href='#' id="remove-beat">-</a>
-				<p id="beat-count"></p>
-			</section>
-			<form id="sequencer-data">
-				<div id="grid"></div>
-				<input type="submit" value="Save Sequence">
-			</form>
+				<button id="preview">Preview Sequence</button>
+			<div id="overlay"></div>
+			<div id="preview-window"></div>
 		</body>
 	</html>

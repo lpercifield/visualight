@@ -1,7 +1,7 @@
 $(document).ready( function (){
 
   var eyedropper=false;
-  var bulbNumber, beatNumber;
+  var bulbNumber, beatNumber,playTimer,beatPlay;
 
   var f=$.farbtastic('#color-picker');
   f.linkTo(function(){
@@ -20,7 +20,6 @@ $(document).ready( function (){
 		
 		$.each(data.bulbs, function() {
     		var html='<li class="bulb"><input type="hidden" name="bulbs['+i+'][id]" value="'+this.id+'"><input type="hidden" name="bulbs['+i+'][name]" value="'+this.name+'"><h1 class="name">' + this.name + '</h1><ul class="beats">';
-    		console.log(this.name);
         var j=0;
     		$.each(this.beats, function(){
           html+='<li class="beat"><div class="color-button" data-hue="'+(parseInt(this.hue/182.04))/360+'" data-sat="'+(this.sat/255)+'" data-level="'+(this.level/255)+'"style="background-color: hsl('+(parseInt(this.hue/182.04))+','+(this.sat/255)*100+'%,'+(this.level/255)*100+'%)">';
@@ -44,7 +43,6 @@ $(document).ready( function (){
       //listener for click on color buttons
   		$('body').delegate(".color-button","click",function(){
         if(eyedropper==false){
-          console.log('click');
           if($(this).hasClass('active')){
   			   	$(this).removeClass('active');
           }
@@ -52,8 +50,6 @@ $(document).ready( function (){
   			   	$(this).addClass('active');
             var newColor=[parseFloat($(this).attr('data-hue')),parseFloat($(this).attr('data-sat')),parseFloat($(this).attr('data-level'))];
             f.setHSL(newColor);
-            console.log(newColor);
-            console.log(f.hsl);
   			  }
         }
         else{
@@ -80,24 +76,26 @@ $('#deselect').click(function(){
   $('.active').removeClass('active');
 });
 
-//deselect all listener
+//select all listener
 $('#select').click(function(){
   $('.color-button').addClass('active');
 });
 
-//save button listener
+//save button listener - currently saves to local json file
 $('#sequencer-data').submit(function(e){
   $.post(
       'php/saveSequence.php',
        $(this).serialize(),
-          function(data){
-              alert('You have saved your sequence');
-                }
-              );
-              return false;
+       function(data){
+          alert('You have saved your sequence');
+        }
+  );
+  return false;
 
 });
 
+
+//adds new bulb from list - currently uses hardcoded list
 $('#add-bulb').submit(function(event){
     event.preventDefault();
     var bulbName=$(this).find('select').val();
@@ -115,6 +113,7 @@ $('#add-bulb').submit(function(event){
       $('.bulbs').append(html);
 });
 
+//adds new black (off) beat to each bulb in sequence
 $('#add-beat').click(function(){
   var i=0;
   $('.beats').each( function(){ 
@@ -133,6 +132,32 @@ $('#remove-beat').click(function(){
   $('.beat:last-child').remove();
   beatNumber--;
   $('#beat-count').html(beatNumber+' Beats');
+});
+
+$('#preview').click(function(){
+    $('#overlay').fadeIn(500);
+          beatPlay=1;
+
+
+    playTimer=setInterval(function(){
+      var html='<button class="close">X</button><ul class="preview-beats">';
+      $('.bulb').each( function(){ 
+        html+='<li class="beat"><div class="color-button" style="background-color:'+$(this).find('.beat:nth-child('+beatPlay+')').find('.color-button').css('background-color')+'"></div></li>'; 
+        
+      });
+      html+='</ul>';
+      $('#preview-window').html(html);
+      beatPlay++;
+      if(beatPlay>beatNumber){
+        beatPlay=1;
+      }
+    },500);
+});
+
+$('body').delegate('.close',"click",function(){
+  $('#overlay').fadeOut(500);
+  clearInterval(playTimer);
+  $('#preview-window').html(' ');
 });
 
 

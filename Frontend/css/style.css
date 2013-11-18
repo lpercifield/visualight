@@ -50,13 +50,22 @@ table {
 
 /* VISUALIGHT SEQUENCER CSS */
 
+#overlay{
+	z-index:1;
+	position:fixed;
+	top:0;
+	width:100%;
+	height:100%;
+	background-color:rgb(0,0,0);
+	opacity:.7;
+	display:none;
+}
+
 #eyedropper{
 	color:white;
 	background-color:black;
 	float:left;
 }
-
-
 
 .bulb{
 	clear:both;
@@ -85,6 +94,17 @@ table {
 
 .active{
 	border:solid 2px black;
+}
+
+#preview-window{
+	position:absolute;
+	top:20px;
+	z-index:9;
+}
+
+.preview-beats .beat{
+	float:left;
+	clear:both;
 }
 
 
