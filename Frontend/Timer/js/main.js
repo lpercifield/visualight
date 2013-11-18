@@ -72,7 +72,7 @@ function showListTimer(id, name, time, group, repeat) {
 	// inject pickatime
 	.pickatime()
 	// check repeat checkbox if selected
-	.parent().parent()
+	.parent()
 		.children('#' + repeat[0]).prop('checked', true)
 		.parent()
 		.children('#' + repeat[1]).prop('checked', true)
@@ -98,10 +98,10 @@ $('#submit').on('click', function(e) {
 		var id = v.id;
 		// console.log(id);
 		var repeat = [];
-		$(this).children('input[type="checkbox"]').each(function(i, v) {
+		$(this).children('#inline').children('input[type="checkbox"]').each(function(i, v) {
 			if (this.checked) {
 				repeat.push(v.id);
-				// console.log(v);
+				console.log(v);
 			}
 		});
 		tmpArray.push({
