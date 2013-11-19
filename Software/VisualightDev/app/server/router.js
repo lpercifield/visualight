@@ -369,6 +369,57 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		 //delete the bulb 
 	 }
  })
+ 
+ app.delete('/bulb/:key',function(req,res){
+	 if(req.session.user == null){
+		 res.send('not-authorized',400);
+	 }else{
+		 var key = req.params.key;
+		 
+		 res.send('Ha - this hasn\'t been implimented asshole', 200);
+	 }
+	 
+ })
+
+
+/**
+ *   trigger bulb
+ *
+ *
+ *	
+ */ 
+ 
+app.post('/trigger/:key',function(req,res){
+	
+	console.log('Got Trigger');
+	console.log(req.body)
+	
+	
+	if(req.session.user ==null){
+		//res.send('not-authorized',400);
+	}else{
+		var key = req.params.key;
+		var post = req.body;
+		
+		API.parseMessage(JSON.stringify(post), WS.returnBulbs,function(o,e){ 
+			
+			if(o != null){ // the json was valid and we have a bulb object that is valid
+              WS.sendTrigger(o);  // send this data to the visualight
+
+            }else{
+              console.log(e.error); // we got an error from the api call -- NEED TO SEND THIS BACK TO THE CLIENT??
+
+            }
+			
+		})
+		//check post data 
+		//use parse message api
+		//get access to objects so we can 
+		//create bulbObj and sendToVisualight()
+
+	}
+})
+ 
 /** 
  *
  *  add bulbs to groups

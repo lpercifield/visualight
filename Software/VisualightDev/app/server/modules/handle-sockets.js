@@ -17,6 +17,10 @@ colors.setTheme({
 var Bulbs = {}; //temp object of bulbs to start cross referenceing
                            //each object will contain mac address, socket.io client, netsocket client
 
+
+exports.returnBulbs =  Bulbs;
+
+
 /**
 * creates all socket connections
 * both net and IO
@@ -309,3 +313,53 @@ exports.createSockets = function(app, io, AM){
           });
         });//end io.sockets.on
 }
+
+exports.sendTrigger = function(bulbObject,heartbeat){
+		//console.log('Bulb Object'.error);
+		//console.log(bulbObject);
+        if(!bulbObject.hasOwnProperty('alert')){
+			//in case there is no alert data
+    		bulbObject.alert = {};
+			bulbObject.alert.duration = 0;
+			bulbObject.alert.frequency = 0;
+			bulbObject.alert.type = 0;
+        }
+        
+        heartbeat = typeof heartbeat !== 'undefined' ? heartbeat : false; // if we didnt define heartbeat then set it to false
+        
+        var cleanbulbID = sanitize(bulbObject._id).trim();
+
+        if(Bulbs.hasOwnProperty(cleanbulbID) && !heartbeat){ // if we have a bulb and the message is not a heartbeat
+
+        		if(Bulbs[cleanbulbID].hasOwnProperty('color')){
+        			//var data = bulbObject.color.r+","+bulbObject.color.g+","+bulbObject.color.b+","+bulbObject.color.w; // this creates the r,g,b,blink array
+					var data  = bulbObject.color.r+",";
+						data += bulbObject.color.g+",";
+						data += bulbObject.color.b+",";
+						data += bulbObject.color.w+",";
+						data += bulbObject.alert.duration+",";
+						data += bulbObject.alert.frequency+",";
+						data += bulbObject.alert.type;
+						
+                    console.log("WRITING DATA: ".help+data.data+" ID: ".help+cleanbulbID.data);
+
+                    Bulbs[cleanbulbID].netsocket.write("a");  // start character
+                    Bulbs[cleanbulbID].netsocket.write(data); // data string 
+                    Bulbs[cleanbulbID].netsocket.write("x");  // stop character
+
+                    Bulbs[cleanbulbID].color = bulbObject.color;
+
+            	}else{
+            		//send heartbeat
+            		Bulbs[cleanbulbID].netsocket.write("H");
+
+            	}
+                
+        }else if(Bulbs.hasOwnProperty(cleanbulbID) && heartbeat){ // we are sending a heartbeat
+                Bulbs[cleanbulbID].netsocket.write("H");
+        }else{
+                console.log("Visulight NOT CONNECTED: ".error + bulbObject._id.data); // the visualight is not connected
+        }
+} //end sendToVisualight
+
+

@@ -22,7 +22,7 @@ $(document).ready(function(){
       var poweron = true;
       var bulbArray = null;
       var reconnect = false;
-      var state; //this is bad.
+      var state = {} ; //this is bad.
       
 	$('#demo').hide();
 	
@@ -249,6 +249,24 @@ $(document).ready(function(){
 		      state.alert = { duration: $( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )};
 		      sendAPICall(state);
 		  }
+      })
+      
+      $('button#sendTrigger').click(function(e){
+      
+      	state.id = currBulbId;
+	  	state.type = currBulbType;
+	    $.ajax({
+			type: 'POST',
+			url: '/trigger/'+currBulbId,
+			data: state,
+			success:function(data){
+				alert('UPDATED')
+			},
+			error:function(jqXHR){
+					console.log('AJAX ERROR: ')
+					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
+			}
+	    })
       })
   
     });
