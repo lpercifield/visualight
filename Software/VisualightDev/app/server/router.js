@@ -355,7 +355,8 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  	}
 
  })
-
+ /* TO DO: RETEST THIS
+ */
  app.delete('/group/:key',function(req,res){
    	if (req.session.user == null){
 	 	res.send('not-authorized',400);
@@ -369,14 +370,17 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		 //delete the bulb 
 	 }
  })
- 
+ /* TO DO: Test This shit.
+ */
  app.delete('/bulb/:key',function(req,res){
 	 if(req.session.user == null){
 		 res.send('not-authorized',400);
 	 }else{
 		 var key = req.params.key;
-		 
-		 res.send('Ha - this hasn\'t been implimented asshole', 200);
+		 AM.deleteBulb(key,function(result){
+			res.writeHead(200,{'content-type':'text/json'});
+			res.end(JSON.stringify(result)); 
+		 })
 	 }
 	 
  })
@@ -386,7 +390,8 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  *   trigger bulb
  *
  *
- *	
+ *	@method post /trigger/:key
+ * 	@param {JSON OBJECT} bulbObj 
  */ 
  
 app.post('/trigger/:key',function(req,res){
@@ -412,10 +417,6 @@ app.post('/trigger/:key',function(req,res){
             }
 			
 		})
-		//check post data 
-		//use parse message api
-		//get access to objects so we can 
-		//create bulbObj and sendToVisualight()
 
 	}
 })

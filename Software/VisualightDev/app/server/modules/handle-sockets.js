@@ -1,6 +1,6 @@
 var net = require('net');
-var sanitize        = require('validator').sanitize;
-var API = require('./api');
+var sanitize = require('validator').sanitize;
+var API	= require('./api');
 
 var colors = require('colors');
 
@@ -15,7 +15,7 @@ colors.setTheme({
 });
 
 var Bulbs = {}; //temp object of bulbs to start cross referenceing
-                           //each object will contain mac address, socket.io client, netsocket client
+                //each object will contain mac address, socket.io client, netsocket client
 
 
 exports.returnBulbs =  Bulbs;
@@ -313,6 +313,13 @@ exports.createSockets = function(app, io, AM){
           });
         });//end io.sockets.on
 }
+
+/*	Support for restful connection of COLOR data to bulb 
+ *  
+ *
+ *
+ *
+*/
 
 exports.sendTrigger = function(bulbObject,heartbeat){
 		//console.log('Bulb Object'.error);

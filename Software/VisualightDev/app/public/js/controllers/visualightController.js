@@ -294,6 +294,7 @@ $('div.btn-group .btn').click(function(){
     }
     function addBulbsToDropdown(bulbData,callback){
 	    //get data about online-offline by storing to db when signing on and logging off
+	    $('ul#bulbs').html('');
 	    for(var i=0; i<bulbData.length; i++){
 	    	var html = '<li';
 			console.log(bulbData[i]);
@@ -306,6 +307,7 @@ $('div.btn-group .btn').click(function(){
 	    callback(null);
     }
     function addGroupsToDropdown(groupData,callback){
+    	$('ul#groups').html('');
 	    for(var i=0; i<groupData.length;i++){
 		    var html = '<li><a data-name="'+groupData[i].name+'" data-id="'+groupData[i]._id+'">'+groupData[i].name;
 		    for(var b = 0; b<groupData[i].bulbs.length;b++){
@@ -320,6 +322,7 @@ $('div.btn-group .btn').click(function(){
     function addBulbButtons(bulbData, callback){
     	var checked = true;
     	var buttonDiv = document.getElementById('blub-buttons');
+    	
 	    for(var i =0;i<bulbData.length;i++){
 	    	if(i>0){
 		    	checked = false
@@ -330,7 +333,6 @@ $('div.btn-group .btn').click(function(){
     }
 
     function addGroupButtons(groupData,callback){
-
     	for(var i = 0; i<groupData.length; i++){
     		var html ='<button type="Button" data-toggle="button" class="btn btn-primary group-btn" data-group="'+groupData[i]._id+'">';
     		html+=groupData[i].name;
@@ -345,7 +347,7 @@ $('div.btn-group .btn').click(function(){
     }
 
     function addBulbGroupList(bulbData){
-
+		$('tdbody#bulbs').html('');
     	//$('.modal-group-setup form');
     	for(var i=0; i<bulbData.length; i++){
 			var html  = '<tr>';
