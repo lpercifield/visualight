@@ -74,7 +74,7 @@ class Visualight {
 		void processServer();
 		void processClient();
 		boolean connectToServer();
-		void processButton(); //needs to be static for attachInterrupt()
+		static void processButton(); //needs to be static for attachInterrupt()
 		void replaceAll(char *buf_,const char *find_,const char *replace_);
 		void colorLED(int red, int green, int blue);
 		void colorLED(int red, int green, int blue, int white);
@@ -93,7 +93,6 @@ class Visualight {
 		char password[64];
 		char security[2];
 		boolean isServer;
-		boolean	reconnect;
 		char MAC[18];
 		char devID[11];
 		long wifiTimer;
@@ -119,8 +118,7 @@ class Visualight {
 
 		boolean _debug;
 
-		//const int resetButtonTime = 2000;
-		uint8_t resetButtonState;
+		volatile uint8_t resetButtonState;
 		int resetTime;
 		uint8_t reconnectCount;
 
