@@ -4,9 +4,6 @@
 Visualight visualight;
 
 void setup(){
-  // if set true, board will wait for serial  
-  // monitor to be opened before executing any code
-  visualight.setVerbose(false); 
   
   // set the initial color of bulb when turned on 
   // and waiting for server instruction (0,0,0) for off
