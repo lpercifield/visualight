@@ -119,7 +119,7 @@ exports.createSockets = function(app, io, AM){
                                                                   	//check bulb setting options
                                                                   	Bulbs[cleanbulbID].color = o.color;
                                                                   	//update bulb with color
-                                                                  	sendToVisualight(Bulbs[cleanbulbID])
+                                                                  	//sendToVisualight(Bulbs[cleanbulbID]) // for RC blue we are not going to send back the last color when the bulb connects
                                                                   	AM.updateBulbStatus(cleanbulbID,1,function(){})
                                                                   	//log to db that bulb is on.
                                                                   	
@@ -139,7 +139,7 @@ exports.createSockets = function(app, io, AM){
                                                                           connection_id = cleanbulbID;
                                                                   }else{
 
-                                                                          sendToVisualight(o,true);
+                                                                          sendToVisualight(o,true); // this should be where we send back a heartbeat acknowledge...
                                                                           //socket.write('H'); //writing to the socket
 
                                                                   }
@@ -217,7 +217,7 @@ exports.createSockets = function(app, io, AM){
         * 
         * @method sendToVisualight
         * @type {Object} bulbObject this bulbobject json is defined in the API doc
-        * @type {Boolean} heartbeet OPTIONAL
+        * @type {Boolean} heartbeat OPTIONAL
         */
 
         function sendToVisualight(bulbObject,heartbeat){
@@ -358,7 +358,7 @@ exports.sendTrigger = function(bulbObject,heartbeat){
 
             	}else{
             		//send heartbeat
-            		Bulbs[cleanbulbID].netsocket.write("H");
+            		Bulbs[cleanbulbID].netsocket.write("H"); // why is this else here??
 
             	}
                 
