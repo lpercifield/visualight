@@ -32,7 +32,7 @@ exports.connectServer = function(callback){
 				console.log(err);
 				callback(err);
 			}	else{
-				console.log('connected to database :: ' + dbName);
+				console.log('connected to database :: '.debug + dbName.debug);
 				accounts = db.collection('accounts');
 				bulbs = db.collection('bulbs');
 				sessions = db.collection('sessions');
@@ -40,6 +40,44 @@ exports.connectServer = function(callback){
 				callback(null);
 			}
 	}); 
+}
+exports.sessionAuth = function(session_id, session, callback)
+{
+	//check the database for the session_id
+	//verify that the username has been added to the session
+	//return true or false
+
+	//console.log(session_id);
+	
+	sessions.findOne({_id: session_id },function(e,o){
+		console.log(o);
+		if(!o){
+			console.log("NO SESSION FOUND");
+			callback(false);
+		}else{
+			
+			try{
+				var dbSess = JSON.parse(o.session)
+			}catch(e){
+				console.error('PARSE ERROR');
+				console.error(e);
+			}
+			
+			if(!dbSess.hasOwnProperty('user')){
+				console.log("NO USER FOUND");
+				callback(false)
+			}else{
+				if(dbSess.user == session.user){ 
+					callback(true);
+				}else{
+				 console.log("USERS DONT MATCH");
+				 console.log('DB:'+dbSess);
+				 console.log('session: '+session.user);
+				 callback(false)
+				}
+			}
+		}
+	})
 }
 
 /* socket validation methods */
@@ -301,9 +339,9 @@ exports.addNewBulb = function(user, bulbMac, callback)
 							var myBulb = new Object();
 							myBulb.name = "Visualight "+(o.bulbs.length+1);
 							myBulb.id = item._id;
-							o.bulbs.push(myBulb);
+							//o.bulbs.push(myBulb);
 							//o.bulbs = bulbArray;
-							console.log(o.bulbs);
+							//console.log(o.bulbs);
 							//callback(o.bulbs);
 							accounts.save(o, {safe: true}, callback);
 						});

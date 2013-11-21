@@ -1,4 +1,4 @@
-var sanitize	= require('validator').sanitize;
+
 var AM = require('./account-manager');
 var IO = require('./handle-sockets');
 
@@ -70,6 +70,7 @@ exports.parseMessage = function(message,Bulbs,callback){
        }//ifparsed.id!=null
         
     }catch(e){
+    	//this catch kicks if any of the operations in try fail.
     	console.log("PARSE ERROR: " + e);
         callback(null,"INVALID JSON: " + message);
     }

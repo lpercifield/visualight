@@ -3,6 +3,7 @@ var AM = require('./modules/account-manager');
 var EM = require('./modules/email-dispatcher');
 var WS = require('./modules/handle-sockets');
 var API = require('./modules/api');
+var AUTH = require('./modules/auth');
 
 var colors = require('colors');
 
@@ -26,6 +27,10 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		}
 	});
 	
+	app.get('/test',AUTH.sessionCheck,function(req,res){
+		res.send('you\'ve made it');
+	})
+	
 /**
 * main login page 
 * This route is called from the idex of the URL where the app is running
@@ -34,42 +39,57 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 * @param {String} req.cookies.user from the cookie get the user
 * @param {String} req.cookies.pass from the cookie get the pass
 */
-	app.get('/', function(req, res){
-	// check if the user's credentials are saved in a cookie //this allows us to auto login a user using cookies
-		if (req.cookies.user == undefined || req.cookies.pass == undefined){ // if there are no cookies that match are stuff then redirect
-			res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }}); // this renders the login view
-		}	else{
-	// attempt automatic login //
-			AM.autoLogin(req.cookies.user, req.cookies.pass, function(o){ // pass the login data to the Account Manager and attempt autologin
-				if (o != null){
-				    req.session.user = o; // we were able to auth in the user and now we are setting a session
-				    res.cookie('sessionID',req.sessionID, {maxAge: null});
-					res.redirect('/myvisualight'); // this is where the auth'd user is redirected
-				}	else{
-					res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }}); // this is where you are redirected if the auth fails
-				}
-			});
-		}
+	app.get('/',AUTH.sessionCheck, function(req, res){
+
+		res.redirect('/myvisualight'); // this is where the auth'd user is redirected
+		
 	});
 	
+	app.get('/login',function(req,res){
+		res.render('login', { locals: { title: 'Visualight - Please Login To Your Account' }}); // this renders the login view
+
+	})
+	
 /**
-* post login route 
-* This route is used to manually login
-*
-* @method post /
-* @param {String} user user-id
-* @param {String} pass password
-*/
+ * post login route 
+ * This route is used to manually login
+ *
+ *  @method post /
+ *  @param {String} user user-id
+ *  @param {String} pass password
+ *
+ */
 	app.post('/', function(req, res){
+	console.log('Logging User IN'.error);
 		AM.manualLogin(req.param('user'), req.param('pass'), function(e, o){
 			if (!o){
 				res.send(e, 400);
 			}	else{
-			    req.session.user = o;
+				//log in our user with a session
+			    req.session.user = o.user;
 			    res.cookie('sessionID',req.sessionID);
+			    console.log('User Authenticated: '.info+o.user+' Session: '.info+JSON.stringify(req.session).data)
 				if (req.param('remember-me') == 'true'){
 					res.cookie('user', o.user, { maxAge: 900000 });
-					res.cookie('pass', o.pass, { maxAge: 900000 });
+					//res.cookie('pass', o.pass, { maxAge: 900000 });
+				}
+				res.send(o, 200);
+			}
+		});
+	});
+	app.post('/login', function(req, res){
+	console.log('Logging User IN'.error);
+		AM.manualLogin(req.param('user'), req.param('pass'), function(e, o){
+			if (!o){
+				res.send(e, 400);
+			}	else{
+				//log in our user with a session
+			    req.session.user = o.user;
+			    res.cookie('sessionID',req.sessionID);
+			    console.log('User Authenticated: '.info+o.user+' Session: '.info+JSON.stringify(req.session).data)
+				if (req.param('remember-me') == 'true'){
+					res.cookie('user', o.user, { maxAge: 900000 });
+					//res.cookie('pass', o.pass, { maxAge: 900000 });
 				}
 				res.send(o, 200);
 			}
@@ -85,11 +105,8 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 * @method get /home
 */
 
-	app.get('/home', function(req, res) {
-	    if (req.session.user == null){
-	// if user is not logged-in redirect back to login page //
-	        res.redirect('/');
-	    }   else{
+	app.get('/home',AUTH.sessionCheck, function(req, res) {
+
 			res.render('home', {
 				locals: {
 					title : 'Control Panel',
@@ -97,7 +114,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 					udata : req.session.user
 				}
 			});
-	    }
+	    
 	});
 	
 /**
@@ -106,18 +123,15 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 *
 * @method get /myvisualight
 */
-	app.get('/myvisualight', function(req, res) {
-	    if (req.session.user == null){
-	// if user is not logged-in redirect back to login page //
-	        res.redirect('/');
-	    }   else{
+	app.get('/myvisualight',AUTH.sessionCheck, function(req, res) {
+
 			res.render('myvisualight', {
 				locals: {
 					title : 'My Visualights',
 					udata : req.session.user
 				}
 			});
-	    }
+	    
 	});
 /**
 * updates a user in the DB 
@@ -205,22 +219,20 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 *
 * @method get /get-bulbs
 */	
-	app.get('/get-bulbs', function(req,res){
+	app.get('/get-bulbs',AUTH.authCheck, function(req,res){
 		//console.log;
-		if(req.session.user == null){
-	    		res.send('not-authorized',400);
-	    }else{
-		    AM.getBulbsByUser(req.session.user.user, function(o){
+
+		    AM.getBulbsByUser(req.session.user, function(o){
 			    if(o){
 				    res.send(o,200);
 			    }else{
 				    res.send('bulbs-not-found', 400);
 			    }
 		    });
-	    }
+	    
 		
 	});
-	app.get('/get-bulbs/:key',function(req,res){
+	app.get('/get-bulbs/:key', AUTH.authCheck, function(req,res){
 		var key = req.params.key;
 		AM.getBulbsByKey(key,function(o){
 			if(o){
@@ -240,12 +252,9 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 *
 * @method get /get-groups
 */	
-	app.get('/get-groups', function(req,res){
-		//console.log;
-		if(req.session.user == null){
-	    		res.send('not-authorized',400);
-	    }else{
-		    AM.getGroupsByUser(req.session.user.user, function(o){
+	app.get('/get-groups', AUTH.authCheck, function(req,res){
+
+		    AM.getGroupsByUser(req.session.user, function(o){
 			    //console.log('AM.getGroups');console.log(o);
 			    if(o){
 				    res.send(o,200);
@@ -253,11 +262,11 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 				    res.send('bulbs-not-found', 400);
 			    }
 		    });
-	    }
+	    
 		
 	});
 	
-	app.get('/get-groups/:key',function(req,res){
+	app.get('/get-groups/:key', AUTH.authCheck, function(req,res){
 		var key = req.params.key;
 		AM.getGroupsByKey(key,function(o){
 			if(o){
@@ -269,19 +278,19 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		
 	})
 	
-/**
-* adds a bulb to DB
-* This route is called to add a bulb
-* ---THIS NEEDS AN UPDATE
-* should take either the session or an API key??
-*
-* @method post /add-bulbs
-* @param {Object} bulb this is a new bulb object {bulb : bulbMac}
-*/	
-	app.post('/add-bulb', function(req,res){
-		if(req.session.user == null){
-	    		res.send('not-authorized',400);
-	    }else{
+/***
+ *
+ * adds a bulb to DB
+ * This route is called to add a bulb
+ * ---THIS NEEDS AN UPDATE
+ * should take either the session or an API key??
+ *
+ * @method post /add-bulbs
+ * @param {Object} bulb this is a new bulb object {bulb : bulbMac}
+ *
+***/	
+	app.post('/add-bulb', AUTH.authCheck, function(req,res){
+
 		    AM.addNewBulb(req.session.user.user,req.param('bulb'), function(e){
 		    	console.log("add bulb request".help);
 			    if(e){
@@ -292,7 +301,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 				    console.log('accepted'.data);
 			    }
 		    });
-	    }
+	    
 		
 	});
 	
@@ -305,11 +314,9 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  *
  */
  
- app.post('/bulb/:key/update',function(req,res){
+ app.post('/bulb/:key/update',AUTH.authCheck,function(req,res){
  
- 	if (req.session.user == null){
-	 	res.send('not-authorized',400);
- 	}else{
+
 		var key = req.params.key;
 		var post = req.body;
 		console.log('BULB UPDATE REQUEST'.info)
@@ -321,13 +328,11 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 			res.writeHead(200, {'content-type':'text/json'})
 			res.end(JSON.stringify(result))
 		})
-	}
+	
  })
  
- app.delete('/bulb/:key',function(req,res){
-  	if (req.session.user == null){
-	 	res.send('not-authorized',400);
- 	}else{
+ app.delete('/bulb/:key',AUTH.authCheck,function(req,res){
+
 		 var key = req.params.key;
 		 
 		 AM.deleteBulb(key,function(result){
@@ -335,13 +340,11 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		 	res.end(JSON.stringify(result));	
 		 }); 
 		 //delete the bulb 
-	 }
+	 
  })
  
- app.post('/group/:key/update',function(req,res){
-	if (req.session.user == null){
-	 	res.send('not-authorized',400);
- 	}else{
+ app.post('/group/:key/update',AUTH.authCheck,function(req,res){
+
  		var key = req.params.key;
 		var post = req.body;
 		console.log('GROUP UPDATE REQUEST'.info) 
@@ -352,15 +355,11 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 			res.end(JSON.stringify(result))
 		})
 
- 	}
-
  })
  /* TO DO: RETEST THIS
  */
- app.delete('/group/:key',function(req,res){
-   	if (req.session.user == null){
-	 	res.send('not-authorized',400);
- 	}else{
+ app.delete('/group/:key',AUTH.authCheck,function(req,res){
+
 		 var key = req.params.key;
 		 
 		 AM.deleteGroup(key,function(result){
@@ -368,20 +367,18 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		 	res.end(JSON.stringify(result));	
 		 }); 
 		 //delete the bulb 
-	 }
+	 
  })
  /* TO DO: Test This shit.
  */
- app.delete('/bulb/:key',function(req,res){
-	 if(req.session.user == null){
-		 res.send('not-authorized',400);
-	 }else{
+ app.delete('/bulb/:key',AUTH.authCheck,function(req,res){
+
 		 var key = req.params.key;
 		 AM.deleteBulb(key,function(result){
 			res.writeHead(200,{'content-type':'text/json'});
 			res.end(JSON.stringify(result)); 
 		 })
-	 }
+	 
 	 
  })
 
@@ -394,15 +391,12 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  * 	@param {JSON OBJECT} bulbObj 
  */ 
  
-app.post('/trigger/:key',function(req,res){
+app.post('/trigger/:key',AUTH.authCheck,function(req,res){
 	
 	console.log('Got Trigger');
 	console.log(req.body)
 	
-	
-	if(req.session.user ==null){
-		//res.send('not-authorized',400);
-	}else{
+
 		var key = req.params.key;
 		var post = req.body;
 		
@@ -418,7 +412,6 @@ app.post('/trigger/:key',function(req,res){
 			
 		})
 
-	}
 })
  
 /** 
@@ -431,10 +424,8 @@ app.post('/trigger/:key',function(req,res){
  *
  */	
 
-  app.post('/bind-group', function(req,res){
-  		if(req.session.user==null){
-  			res.send('not-authorized',400);
-  		}else{
+  app.post('/bind-group', AUTH.authCheck,function(req,res){
+
   			AM.addNewGroup(req.session.user.user,req.body,function(e){
   				console.log('add group request'.help);
   				if(e){
@@ -446,7 +437,7 @@ app.post('/trigger/:key',function(req,res){
   					console.log('accepted'.data);
   				}
   			});
-  		}
+  		
   });
 
 // password reset //
