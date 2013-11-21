@@ -55,7 +55,8 @@ class Visualight {
 		void update();
 		void setup(char* _URL, uint16_t _PORT);
 		void setVerbose(boolean set);
-		void setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
+		void saveStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
+		void setColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
 		boolean factoryRestore();
 
 		/* Change these to match your WiFi network */

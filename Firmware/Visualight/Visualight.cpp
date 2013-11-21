@@ -31,10 +31,10 @@ void* pt2Object; //
 
 Visualight::Visualight(){
 
-	_red = 255;
-	_green = 255;
-	_blue = 255;
-  _white = 255;
+//	_red = 255;
+//	_green = 255;
+//	_blue = 255;
+//  _white = 255;
   _blinkType = 0;
   _frequency = 0;
   alerting = false;
@@ -69,8 +69,8 @@ boolean Visualight::factoryRestore(){
   pinMode(_green, OUTPUT);
   pinMode(_blue, OUTPUT);
   
-  #ifdef DEBUG
-    Serial.begin(9600);
+  #if DEBUG
+    Serial.begin(115200);
     while(!Serial){
       ;
     }
@@ -134,8 +134,8 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	digitalWrite(resetButton, HIGH);
 	digitalWrite(resetPin, HIGH);  
 	attachInterrupt(4, processButton, CHANGE);
-  #ifdef DEBUG
-    Serial.begin(9600);
+  #if DEBUG
+    Serial.begin(115200);
     while(!Serial){
       ;
     }
@@ -181,7 +181,7 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 		/* Create AP*/
 		VPRINTLN(F("Creating AP"));
     //colorLED(0,0,255,255);
-    setAlert(0, 999999, 1, 0, 0, 255, 0);
+    setAlert(0, 600000, 1, 0, 0, 255, 0); // Set a server timeout of 10 minutes
 		VPRINTLN(F("Create server"));
 		wifly.setSoftAP();
 		EEPROM.write(0, 1);
@@ -397,35 +397,22 @@ void Visualight::processClient(){
         wifly.readBytesUntil('x', serBuf, 31);
         int duration;
         int red, green, blue, white;
-
         sscanf(serBuf,"%i,%i,%i,%i,%i,%i,%i",&red,&green,&blue,&white,&duration,&_frequency,&_blinkType); // INDIGO v0.1.1
-        //sscanf(serBuf,"%i,%i,%i,%i,%i",&_red,&_green,&_blue,&_white,&_blinkMe); // PURPLE v0.1.0
-        //if(_debug){
-          // Serial.print("numBytes: ");
-          // Serial.println(numBytes);
-          // Serial.print("buf: ");
-          //Serial.println(serBuf);
-          //delay(1);
-        //}
-        if(duration > 0){ //we are STARTING AN ALERT
-          _Ared = red; //"Alertred"
-          _Agreen = green;
-          _Ablue = blue;
-          _Awhite = white;
 
+          VPRINT("buf: ");
+          VPRINTLN(serBuf);
+
+        if(duration > 0 && _blinkType <=1){ //we are STARTING AN ALERT
           _durationTime = duration*1000; 
           _frequency = (_frequency+1); //* 100; //get the right freq out //100 - 1000
-          //blinkState = 100;
-          alertBeginTimeStamp = millis();
-          alerting = true;
-          alert();
-        } 
+          setAlert(_blinkType, _durationTime, _frequency, red, green, blue, white);
+          
+        } else if(_blinkType == 2){ // we are setting the start color here
+					saveStartColor(red,green,blue,white);
+        }
 
         else { //simple set color
-          colorLED(red, green, blue, white); 
-          setStartColor(red, green, blue, white); 
-          VPRINTLN(thisChar);
-          delay(5);
+          setColor(red, green, blue, white); 
         } 
         memset(serBuf,0,31);
       }
@@ -453,18 +440,33 @@ void Visualight::colorLED(int red, int green, int blue, int white){
 }
 
 void Visualight::fadeOn(){ // turns all LEDs on to full white
+	_red = EEPROM.read(1);
+	_green = EEPROM.read(2);
+	_blue = EEPROM.read(3);
+	_white = EEPROM.read(4);
   for(int fadeValue = 1; fadeValue <=100; fadeValue +=5) { 
     colorLED((fadeValue*_red)/100, (fadeValue*_green)/100, (fadeValue*_blue)/100, (fadeValue*_white)/100);
     delay(10);            
   }
 }
 
-// color of LED on start up, while waiting for instruction from server
-void Visualight::setStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){ 
+// set the global color variables to this color
+void Visualight::setColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){ 
+  colorLED(_r,_g,_b,_w);
   _red = _r;
   _green = _g;
   _blue = _b;
   _white = _w;
+  
+}
+
+//THIS SAVES TO THE EEPROM. USE WITH CARE
+void Visualight::saveStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){
+    EEPROM.write(1,_r);
+    EEPROM.write(2,_g);
+    EEPROM.write(3,_b);
+    EEPROM.write(4,_w);
+	
 }
 
 void Visualight::setAlert(int blinkType, long durationTime, int frequency, int r, int g, int b, int w){
@@ -485,8 +487,15 @@ void Visualight::alert(){
   long elapsedBlinkTime = millis(); 
 
   if ( elapsedBlinkTime - alertBeginTimeStamp >= _durationTime){
+  	if(isServer){
+  		wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
+			wifly.save();
+			wifly.reboot();
+	  	colorLED(255, 255, 255, 255);
+		}else{
+    	colorLED(_red, _green, _blue, _white);
+    }
     alerting = false;
-    colorLED(_red, _green, _blue, _white);
     blinkState=100;
     //return;
   } 
