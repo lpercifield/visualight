@@ -16,8 +16,6 @@ exports.parseMessage = function(message,Bulbs,callback){
 	
 	//DEAL WITH API KEY
 	//build response json?
-	//console.log(Bulbs)
-
 	try{
         var parsed = JSON.parse(message);
         //console.log("INCOMING MESSAGE: " + message);

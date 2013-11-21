@@ -10,7 +10,7 @@ colors.setTheme({
 
 	data: 	'grey',
 	info: 	'green',
-	warm: 	'yellow',
+	warn: 	'yellow',
 	debug: 	'blue',
 	help:  	'cyan',
 	error: 	'red'
@@ -210,7 +210,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		if(req.session.user == null){
 	    		res.send('not-authorized',400);
 	    }else{
-		    AM.getBulbs(req.session.user.user, function(o){
+		    AM.getBulbsByUser(req.session.user.user, function(o){
 			    if(o){
 				    res.send(o,200);
 			    }else{
@@ -220,6 +220,17 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+	app.get('/get-bulbs/:key',function(req,res){
+		var key = req.params.key;
+		AM.getBulbsByKey(key,function(o){
+			if(o){
+				    res.send(o,200);
+			    }else{
+				    res.send('bulbs-not-found', 400);
+			   }
+		})
+		
+	})
 
 /**
 * get the registered  groups for a user
@@ -234,7 +245,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 		if(req.session.user == null){
 	    		res.send('not-authorized',400);
 	    }else{
-		    AM.getGroups(req.session.user.user, function(o){
+		    AM.getGroupsByUser(req.session.user.user, function(o){
 			    //console.log('AM.getGroups');console.log(o);
 			    if(o){
 				    res.send(o,200);
@@ -245,6 +256,18 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 	    }
 		
 	});
+	
+	app.get('/get-groups/:key',function(req,res){
+		var key = req.params.key;
+		AM.getGroupsByKey(key,function(o){
+			if(o){
+				    res.send(o,200);
+			    }else{
+				    res.send('bulbs-not-found', 400);
+			   }
+		})
+		
+	})
 	
 /**
 * adds a bulb to DB
@@ -283,39 +306,121 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  */
  
  app.post('/bulb/:key/update',function(req,res){
-	var key = req.params.key;
-	var post = req.body;
-	 
-	console.log(key.help);
-	console.log(JSON.stringify(post).data);
-
-	AM.updateBulbData(key,post,function(result){
-		//res.send(result);
-		res.writeHead(200, {'content-type':'text/json'})
-		res.end(JSON.stringify(result))
-	})
-
+ 
+ 	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+		var key = req.params.key;
+		var post = req.body;
+		console.log('BULB UPDATE REQUEST'.info)
+		console.log(key.help);
+		console.log(JSON.stringify(post).data);
+	
+		AM.updateBulbData(key,post,function(result){
+			//res.send(result);
+			res.writeHead(200, {'content-type':'text/json'})
+			res.end(JSON.stringify(result))
+		})
+	}
  })
  
  app.delete('/bulb/:key',function(req,res){
-	 var key = req.params.key;
+  	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+		 var key = req.params.key;
+		 
+		 AM.deleteBulb(key,function(result){
+		 	res.writeHead(200,{'content-type':'text/json'})
+		 	res.end(JSON.stringify(result));	
+		 }); 
+		 //delete the bulb 
+	 }
+ })
+ 
+ app.post('/group/:key/update',function(req,res){
+	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+ 		var key = req.params.key;
+		var post = req.body;
+		console.log('GROUP UPDATE REQUEST'.info) 
+		console.log(key.help);
+		console.log(JSON.stringify(post).data);
+		AM.updateGroupData(key,post,function(result){
+			res.writeHead(200,{'content-type':'text/json'})
+			res.end(JSON.stringify(result))
+		})
+
+ 	}
+
+ })
+ /* TO DO: RETEST THIS
+ */
+ app.delete('/group/:key',function(req,res){
+   	if (req.session.user == null){
+	 	res.send('not-authorized',400);
+ 	}else{
+		 var key = req.params.key;
+		 
+		 AM.deleteGroup(key,function(result){
+		 	res.writeHead(200,{'content-type':'text/json'})
+		 	res.end(JSON.stringify(result));	
+		 }); 
+		 //delete the bulb 
+	 }
+ })
+ /* TO DO: Test This shit.
+ */
+ app.delete('/bulb/:key',function(req,res){
+	 if(req.session.user == null){
+		 res.send('not-authorized',400);
+	 }else{
+		 var key = req.params.key;
+		 AM.deleteBulb(key,function(result){
+			res.writeHead(200,{'content-type':'text/json'});
+			res.end(JSON.stringify(result)); 
+		 })
+	 }
 	 
-	 AM.deleteBulb(key,function(result){
-	 	res.writeHead(200,{'content-type':'text/json'})
-	 	res.end(JSON.stringify(result));	
-	 }); 
-	 //delete the bulb 
  })
 
- app.delete('/group/:key',function(req,res){
-	 var key = req.params.key;
-	 
-	 AM.deleteGroup(key,function(result){
-	 	res.writeHead(200,{'content-type':'text/json'})
-	 	res.end(JSON.stringify(result));	
-	 }); 
-	 //delete the bulb 
- })
+
+/**
+ *   trigger bulb
+ *
+ *
+ *	@method post /trigger/:key
+ * 	@param {JSON OBJECT} bulbObj 
+ */ 
+ 
+app.post('/trigger/:key',function(req,res){
+	
+	console.log('Got Trigger');
+	console.log(req.body)
+	
+	
+	if(req.session.user ==null){
+		//res.send('not-authorized',400);
+	}else{
+		var key = req.params.key;
+		var post = req.body;
+		
+		API.parseMessage(JSON.stringify(post), WS.returnBulbs,function(o,e){ 
+			
+			if(o != null){ // the json was valid and we have a bulb object that is valid
+              WS.sendTrigger(o);  // send this data to the visualight
+
+            }else{
+              console.log(e.error); // we got an error from the api call -- NEED TO SEND THIS BACK TO THE CLIENT??
+
+            }
+			
+		})
+
+	}
+})
+ 
 /** 
  *
  *  add bulbs to groups
@@ -431,6 +536,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 * @method post /delete
 */		
 	app.post('/delete', function(req, res){
+	
 		AM.deleteAccount(req.body.id, function(e, obj){
 			if (!e){
 				res.clearCookie('user');

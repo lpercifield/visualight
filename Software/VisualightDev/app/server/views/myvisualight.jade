@@ -15,7 +15,7 @@ div.navbar
 			//adding button dropdowns
 			div#bulb-btns.btn-group.btn
 				button#btn-add.btn.btn-inverse +
-				button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; BULBS &nbsp; &nbsp;
+				button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; LIGHTS &nbsp; &nbsp;
 					span.caret
 				ul.dropdown-menu#bulbs(role="menu")
 			
@@ -24,7 +24,7 @@ div.navbar
 				button.btn.btn-inverse.dropdown-toggle(data-toggle='dropdown') &nbsp; GROUPS &nbsp; &nbsp; 
 					span.caret
 				ul.dropdown-menu#groups
-		
+			
 
 #account-form-container
 	h1.intro Select A Bulb or Group
@@ -42,7 +42,7 @@ div.navbar
 	
 	div#main(style='display:block')
 		div#options(style="display:none")
-			form(method="post", action="bulb//")
+			form(method="post", action="bulb//").update
 				div.input-append
 					input(type="text", name="name").name.input-xlarge
 					input(type="hidden", name="key").id

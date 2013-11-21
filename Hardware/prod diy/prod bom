@@ -1,0 +1,40 @@
+Partlist
+
+Exported from VisualightMicroDIY_038_GoldPhoenix.brd at 11/16/13 11:43 AM
+
+EAGLE Version 6.4.0 Copyright (c) 1988-2013 CadSoft
+
+Assembly variant: 
+
+Part       Value                     Package                   Library                    Position (inch)       Orientation
+
+3.3VREG    MIC5219 3.3V              SOT23-5                   SparkFun-PowerIC           (2.14 2.47)           R90
+ATMEGA32U4 ATMEGA32U4                SPARKFUN-DIGITALIC_TQFP44 SparkFun-DigitalIC         (2.22 1.86)           R315.1
+C1         0.1uF                     0402-CAP                  SparkFun                   (2.38 2.23)           R270
+C2         22pF                      0402-CAP                  SparkFun                   (2.47 1.47)           R270
+C4         22pF                      0402-CAP                  SparkFun                   (2.15 1.42)           R270
+C5         1uF                       0402-CAP                  SparkFun                   (2.02 2.3)            R180
+C6         1uF                       0402-CAP                  SparkFun                   (2.28 2.23)           R180
+C8         10uF                      EIA3216                   SparkFun                   (1.94 2.43)           R0
+C9         0.1uF                     0402-CAP                  SparkFun                   (2.02 2.35)           R180
+C10        1uF                       0402-CAP                  SparkFun                   (2.31 2.43)           R180
+C13        10uF                      EIA3216                   SparkFun                   (2.31 2.34)           R0
+F1         500mA                     PTC-1206                  SparkFun                   (2.14 2.28)           R90
+ISP1       AVRISP-6                  AVRISP                    adafruit                   (1.87 1.42)           MR90
+JP2                                  1X07                      SparkFun-Connectors        (2.9 1.36)            R90
+POWER      Red                       LED-0603                  SparkFun                   (1.69639998 2.51680007) R180
+R1         2.2K                      0402-RES                  SparkFun                   (1.64 2.09)           R180
+R2         10K                       0402-RES                  SparkFun                   (1.91 1.7)            R0
+R3         3.3K                      0402-RES                  SparkFun                   (1.53 2.05)           R0
+R4         2.2K                      0402-RES                  SparkFun                   (1.9 2.14)            R180
+R5         22                        0402-RES                  SparkFun                   (1.53 1.99)           R180
+R6         330                       0402-RES                  SparkFun                   (2.07 1.54)           R180
+R7         22                        0402-RES                  SparkFun                   (1.53 1.91)           R180
+R8         3.3K                      0402-RES                  SparkFun                   (1.9 2.19)            R180
+R11        1K                        0402-RES                  SparkFun                   (2.34 2.52)           R270
+S1         SWITCH-MOMENTARY-2SIDE_EZ TACTILE-PTH-SIDEEZ        SparkFun-Electromechanical (2.58 2.54)           R180
+SK2                                  DF3S-06                   con-hirose-df3             (2.86 2.32)           R270
+TX         Green                     LED-0603                  SparkFun                   (2.06319993 1.41720005) R0
+U$1        XBEE-1B3                  XBEE-SMD                  SparkFun-RF                (2.21 1.53)           R0
+X2         USBPCB                    USB-A-PCB                 SparkFun-Connectors        (1.22 1.95)           R0
+Y1         16MHz                     CRYSTAL-SMD-5X3           SparkFun                   (2.31 1.44)           R0

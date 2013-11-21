@@ -22,14 +22,17 @@ $(document).ready(function(){
       var poweron = true;
       var bulbArray = null;
       var reconnect = false;
-      var state; //this is bad.
+      var state = {} ; //this is bad.
       
 	$('#demo').hide();
+	
 	$('#duration').slider({min:1,max:999});
-	$('#frequency').slider({min:0,max:9});
-	$('#type').slider({min:0,max:1});
+    $('#frequency').slider({min:0,max:9});
+    $('#type').slider({min:0,max:1});
+	
 	setupVisualightButtons();
 	connectSocket();
+
 
 	function setupVisualightButtons(){
 		vc.getBulbs(function(r){
@@ -48,6 +51,7 @@ $(document).ready(function(){
 				$('div#options form input.id').val(currBulbId)
 				$('button#delete').attr('data-url','/bulb/'+currBulbId);
 				//$('button#delete').data('url', '/bulb/'+currBulbId)
+				$('div#options form.update table').remove() 
 				
     		});
 		});
@@ -70,7 +74,15 @@ $(document).ready(function(){
 		$('button#delete').attr('data-url','/group/'+group);
 		
 		$('.current h1').html(currBulbName).parent().show();
-
+		$('div#options form.update table').remove() //clear out old table
+		
+		var clone = $('.modal-group-setup .modal-body form table').clone();
+		$('div#options form.update').append(clone);
+		
+		inputs.each(function(i){
+			$('div#options form.update table input[value="'+$(this).val()+'"]').attr('checked',true);
+		})
+		//console.log($('.modal-group-setup .modal-body form table'))
       });
 
     });
@@ -134,7 +146,7 @@ $(document).ready(function(){
     //$('#color').css({backgroundColor:e}).val(e);
     $('body').css({background:e});
     $('#color').css({backgroundColor:e});
-	console.log(rgb);
+	//console.log(rgb);
 	//socket.send(rgb);
 	var newBri = map_range(h.l,0.0,.8,0,1);
 	state =
@@ -217,6 +229,10 @@ $(document).ready(function(){
 				  	$('a[data-id='+id+']').html(Name)
 				  	$('.current h1').html(Name)
 				  	//console.log(data);
+				  	//check for group 
+				  		//get all selected ids
+				  		//add them to the group dropdown
+				  		//
 			  	},
 			  	error:function(jqXHR){
 					console.log('AJAX ERROR: ')
@@ -230,15 +246,35 @@ $(document).ready(function(){
 	      if(!state.hasOwnProperty('on')){
 		      alert('Change Color first!');
 	      }else{
-		      state.alert = {duration: $( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )}
+		      state.alert = { duration: $( "#duration" ).slider( "value" ), frequency: $( "#frequency" ).slider( "value" ), type: $( "#type" ).slider( "value" )};
 		      sendAPICall(state);
 		  }
       })
-      function map_range(value, low1, high1, low2, high2) {
-        return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-      }
+      
+      $('button#sendTrigger').click(function(e){
+      
+      	state.id = currBulbId;
+	  	state.type = currBulbType;
+	    $.ajax({
+			type: 'POST',
+			url: '/trigger/'+currBulbId,
+			data: state,
+			success:function(data){
+				alert('UPDATED')
+			},
+			error:function(jqXHR){
+					console.log('AJAX ERROR: ')
+					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
+			}
+	    })
+      })
+  
     });
-      function hslToRgb(h, s, l){
+  function map_range(value, low1, high1, low2, high2) {
+         return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+       }  
+  
+  function hslToRgb(h, s, l){
     var r, g, b;
 
     if(s == 0){
