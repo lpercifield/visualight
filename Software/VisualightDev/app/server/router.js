@@ -524,12 +524,14 @@ app.post('/trigger/:key',function(req,res){
 * Shows all the registered users -- DELETE FROM PROD BUILD OR PASSWORD PROTECT!!!!
 *
 * @method get /print
-*/	
+*/	// only allow this route if running debug or on local
+/*
 	app.get('/print', function(req, res) {
 		AM.getAllRecords( function(e, accounts){
 			res.render('print', { locals: { title : 'Account List', accts : accounts } });
 		})
 	});
+*/
 /**
 * delete a registered user using session data
 *
@@ -552,12 +554,14 @@ app.post('/trigger/:key',function(req,res){
 * deletes all users -- DELETE FROM PROD BUILD OR PASSWORD PROTECT!!!!
 *
 * @method get /reset
-*/		
+*/		// only allow this route if running debug or in local...
+/*
 	app.get('/reset', function(req, res) {
 		AM.delAllRecords(function(){
 			res.redirect('/print');	
 		});
 	});
+*/
 	
 /**
 * send 404
