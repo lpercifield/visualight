@@ -302,7 +302,9 @@ $('div.btn-group .btn').click(function(){
 	    	if(bulbData[i].status === 0) html += ' class="disabled" ';
 	    
 	    	
-		    html += '><a data-status="'+bulbData[i].status+'" data-name="'+bulbData[i].name+'" data-id='+bulbData[i]._id+'>'+bulbData[i].name+'</a></li>';
+		    html += '><a data-status="'+bulbData[i].status+'" data-name="'+bulbData[i].name+'" data-id="'+bulbData[i]._id+'"';
+		    if(bulbData[i].color){ html += ' data-color="'+bulbData[i].color.r+','+bulbData[i].color.g+','+bulbData[i].color.b+','+bulbData[i].color.w+'"'}
+		    html += '>'+bulbData[i].name+'</a></li>';
 			$('ul#bulbs').append(html);
 	    }
 	    callback(null);

@@ -39,6 +39,29 @@ $(document).ready(function(){
 		//console.log("getting complete");
 			$('#bulbs.dropdown-menu li a').click(function(){
 				//alert($(this).data('name'));
+				
+				//set initial colors 
+				var color = $(this).data('color');
+				//console.log(color);
+				var colors = color.split(',');
+				
+				var h = rgbToHsl(colors[0],colors[1],colors[2]);
+				var colorPicker = $.farbtastic("#picker");
+				
+				colorPicker.setColor([h.h,h.s,h.l]);
+				
+				var newBri = map_range(h.l,0.0,.8,0,1);
+				state =
+				{
+					on:true,
+					method:'put',
+					hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
+					sat:(h.s * 254),
+					bri:(newBri * 254),
+					alert: {duration: 0, frequency: 0, type: 0}
+				};
+				
+				
 				currBulbId = $(this).data('id');
 				currBulbName = $(this).data('name');
 				currBulbType = 'bulb';
@@ -268,6 +291,12 @@ $(document).ready(function(){
 					console.log(jqXHR.responseText+' :: '+jqXHR.statusText);
 			}
 	    })
+      })
+      
+      $('#options form.update input[name="name"]').focus(function(){
+
+	      state.alert = { duration: 999, frequency: 5, type: 1};
+		  sendAPICall(state);
       })
   
     });
