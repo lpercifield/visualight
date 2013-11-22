@@ -291,7 +291,7 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
 ***/	
 	app.post('/add-bulb', AUTH.authCheck, function(req,res){
 
-		    AM.addNewBulb(req.cookies['connect.sid'],req.param('bulb'), function(e){ // this should be setup to use something other than the cookies. pass user in from check auth?
+		    AM.addNewBulb(req.cookies['user'],req.param('bulb'), function(e){ // this should be setup to use something other than the cookies. pass user in from check auth?
 		    	console.log("add bulb request".help);
 			    if(e){
 				    res.send(e,400);
