@@ -27,7 +27,7 @@
 
 #include "Visualight.h"
 
-void* pt2Object; //
+//void* pt2Object; //
 
 Visualight::Visualight(){
 
@@ -133,7 +133,7 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	pinMode(resetPin,OUTPUT);
 	digitalWrite(resetButton, HIGH);
 	digitalWrite(resetPin, HIGH);  
-	attachInterrupt(4, processButton, CHANGE);
+	//attachInterrupt(4, processButton, CHANGE);
   #if DEBUG
     Serial.begin(115200);
     while(!Serial){
@@ -221,7 +221,7 @@ void Visualight::wifiReset(){
   wifly.close();
   VPRINTLN(F("-WIFIRESET-"));
   //colorLED(0,0,255,0);
-  setAlert(0, 10000, 1, 0, 0, 255, 0);
+  setAlert(0, 600000, 1, 0, 0, 255, 0);
   isServer = true;
   EEPROM.write(0, 1);
   wifly.reboot();
@@ -412,6 +412,9 @@ void Visualight::processClient(){
         }
 
         else { //simple set color
+        if(alerting){
+	        _durationTime = 0;
+        }
           setColor(red, green, blue, white); 
         } 
         memset(serBuf,0,31);
@@ -427,8 +430,9 @@ void Visualight::processClient(){
 void Visualight::processButton(){
   //resetButtonState = digitalRead(resetButton);
   if(digitalRead(resetButton) == LOW){
-    Visualight* mySelf = (Visualight*) pt2Object;
-    mySelf->wifiReset();
+    //Visualight* mySelf = (Visualight*) pt2Object;
+   // mySelf->wifiReset();
+   wifiReset();
   }
 }
 
@@ -488,10 +492,11 @@ void Visualight::alert(){
 
   if ( elapsedBlinkTime - alertBeginTimeStamp >= _durationTime){
   	if(isServer){
-  		wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
-			wifly.save();
+  		//wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
+			//wifly.save();
 			wifly.reboot();
-	  	colorLED(255, 255, 255, 255);
+	  	fadeOn();
+	  	VPRINTLN(F("SERVER TIMEOUT")); //TIMEOUT??
 		}else{
     	colorLED(_red, _green, _blue, _white);
     }

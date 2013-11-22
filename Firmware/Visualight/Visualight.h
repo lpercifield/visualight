@@ -75,7 +75,7 @@ class Visualight {
 		void processServer();
 		void processClient();
 		boolean connectToServer();
-		static void processButton(); //needs to be static for attachInterrupt()
+		void processButton(); //needs to be static for attachInterrupt()
 		void replaceAll(char *buf_,const char *find_,const char *replace_);
 		void colorLED(int red, int green, int blue);
 		void colorLED(int red, int green, int blue, int white);
