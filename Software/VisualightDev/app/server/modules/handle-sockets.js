@@ -317,6 +317,7 @@ exports.createSockets = function(app, io, AM){
 }
 
 
+/*
 exports.resetBulb = function(key){
 	if(Bulbs.hasOwnProperty(key){
 		var data = "0,0,0,0,0,0,3";
@@ -328,6 +329,7 @@ exports.resetBulb = function(key){
   }
 	
 }
+*/
 
 /*	Support for restful connection of COLOR data to bulb 
  *  
