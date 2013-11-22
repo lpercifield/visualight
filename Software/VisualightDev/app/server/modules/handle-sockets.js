@@ -317,8 +317,7 @@ exports.createSockets = function(app, io, AM){
 }
 
 
-/*
-exports.resetBulb = function(key){
+exports.resetBulbMode = function(key){
 	if(Bulbs.hasOwnProperty(key){
 		var data = "0,0,0,0,0,0,3";
 		Bulbs[key].netsocket.write("a");  // start character
@@ -329,7 +328,6 @@ exports.resetBulb = function(key){
   }
 	
 }
-*/
 
 /*	Support for restful connection of COLOR data to bulb 
  *  
