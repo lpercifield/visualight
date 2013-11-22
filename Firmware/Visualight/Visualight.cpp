@@ -113,7 +113,6 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
     wifly.setIOFunc(5); // requires a save and reboot after.
     wifly.save();
     wifly.reboot();
-    VPRINTLN("setIOFunc LEDSOFF");
   #endif
 
 	if(isServer){
