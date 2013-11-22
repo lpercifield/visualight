@@ -154,7 +154,7 @@ $('div.btn-group .btn').click(function(){
 			}
 		});
 	}
-	function getNetworkConnection(){
+	function getNetworkConnection(){ // sometimes this function gets neither success or error...
 		//var that = this;
 		console.log("Getting network...")
 		getRequest = $.ajax({
@@ -173,6 +173,7 @@ $('div.btn-group .btn').click(function(){
 			error: function(request,error){
 				console.log(arguments);
 				timer = setTimeout(getNetworkConnection, 2000);
+				// is this not 
 				 //$.ajax(this);
                 //return;
 			}
