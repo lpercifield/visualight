@@ -39,6 +39,29 @@ $(document).ready(function(){
 		//console.log("getting complete");
 			$('#bulbs.dropdown-menu li a').click(function(){
 				//alert($(this).data('name'));
+				
+				//set initial colors 
+				var color = $(this).data('color');
+				//console.log(color);
+				var colors = color.split(',');
+				
+				var h = rgbToHsl(colors[0],colors[1],colors[2]);
+				var colorPicker = $.farbtastic("#picker");
+				
+				colorPicker.setHSL([h.h,h.s,h.l]);
+				
+				//var newBri = map_range(h.l,0.0,.8,0,1);
+				state =
+				{
+					on:true,
+					method:'put',
+					hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
+					sat:(h.s * 254),
+					bri:(h.l * 254),
+					alert: {duration: 0, frequency: 0, type: 0}
+				};
+				
+				
 				currBulbId = $(this).data('id');
 				currBulbName = $(this).data('name');
 				currBulbType = 'bulb';
@@ -148,14 +171,14 @@ $(document).ready(function(){
     $('#color').css({backgroundColor:e});
 	//console.log(rgb);
 	//socket.send(rgb);
-	var newBri = map_range(h.l,0.0,.8,0,1);
+	//var newBri = map_range(h.l,0.0,.8,0,1);
 	state =
 	{
 	    on:true,
 	    method:'put',
 	    hue:((h.h *360)* 182.04), //we convert the hue value into degrees then convert to scaled hue by multiplying the value by 182.04
 	    sat:(h.s * 254),
-	    bri:(newBri * 254),
+	    bri:(h.l * 254),
 	    alert: {duration: 0, frequency: 0, type: 0}
 	};
 	
@@ -201,7 +224,6 @@ $(document).ready(function(){
 		      success: function(data){
 			      console.log('DELETE SUCCESS RECEIVED:')
 			      console.log(data);
-			      location.reload();
 			      },
 			  error: function(jqXHR){
 				  console.log('AJAX ERROR: ')
@@ -269,6 +291,12 @@ $(document).ready(function(){
 			}
 	    })
       })
+      
+      $('#options form.update input[name="name"]').focus(function(){
+
+	      state.alert = { duration: 999, frequency: 5, type: 1};
+		  sendAPICall(state);
+      })
   
     });
   function map_range(value, low1, high1, low2, high2) {
@@ -320,7 +348,7 @@ $(document).ready(function(){
 
       //return [h*100, s*100, l*70];
       //return {h:parseFloat(h*360), s:parseInt(s*100), l:parseInt(l*80)};
-      return {h:h, s:s, l:l*.8};
+      return {h:h, s:s, l:l};
   }
   
 
