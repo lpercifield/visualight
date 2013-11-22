@@ -28,7 +28,7 @@ $(document).ready(function(){
 	
 	$('#duration').slider({min:1,max:999});
     $('#frequency').slider({min:0,max:9});
-    $('#type').slider({min:0,max:1});
+    $('#type').slider({min:0,max:3});
 	
 	setupVisualightButtons();
 	connectSocket();
@@ -43,12 +43,16 @@ $(document).ready(function(){
 				//set initial colors 
 				var color = $(this).data('color');
 				//console.log(color);
-				var colors = color.split(',');
-				
-				var h = rgbToHsl(colors[0],colors[1],colors[2]);
-				var colorPicker = $.farbtastic("#picker");
-				
-				colorPicker.setHSL([h.h,h.s,h.l]);
+				if(color){
+					var colors = color.split(',');
+					var h = rgbToHsl(colors[0],colors[1],colors[2]);
+					var colorPicker = $.farbtastic("#picker");
+					colorPicker.setHSL([h.h,h.s,h.l]);
+				}else{
+					var h = rgbToHsl(255,255,255);
+					var colorPicker = $.farbtastic("#picker");
+					colorPicker.setHSL([h.h,h.s,h.l]);
+				}
 				
 				//var newBri = map_range(h.l,0.0,.8,0,1);
 				state =
@@ -224,6 +228,7 @@ $(document).ready(function(){
 		      success: function(data){
 			      console.log('DELETE SUCCESS RECEIVED:')
 			      console.log(data);
+			      window.location.reload(true);
 			      },
 			  error: function(jqXHR){
 				  console.log('AJAX ERROR: ')

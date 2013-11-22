@@ -20,6 +20,18 @@ var Bulbs = {}; //temp object of bulbs to start cross referenceing
 
 exports.returnBulbs =  Bulbs;
 
+exports.resetBulb = function(key){
+	if(Bulbs.hasOwnProperty(cleanbulbID){
+		var data = "0,0,0,0,0,0,3";
+		Bulbs[key].netsocket.write("a");  // start character
+		Bulbs[key].netsocket.write(data); // data string 
+		Bulbs[key].netsocket.write("x");  // stop character
+		var message = "RESETTING BULBID: " + key;
+		console.log(message.warn);
+  }
+	
+};
+
 
 /**
 * creates all socket connections
@@ -120,7 +132,7 @@ exports.createSockets = function(app, io, AM){
                                                                   	Bulbs[cleanbulbID].color = o.color;
                                                                   	//update bulb with color
                                                                   	//sendToVisualight(Bulbs[cleanbulbID]) // for RC blue we are not going to send back the last color when the bulb connects
-                                                                  	AM.updateBulbStatus(cleanbulbID,1,function(){})
+                                                                  	AM.updateBulbStatus(cleanbulbID,1,Bulbs[cleanbulbID].color,function(){})
                                                                   	//log to db that bulb is on.
                                                                   	
                                                                   }
@@ -138,7 +150,7 @@ exports.createSockets = function(app, io, AM){
                                                                           Bulbs[cleanbulbID] = {_id: cleanbulbID, mac: mac, netsocket: socket };
                                                                           connection_id = cleanbulbID;
                                                                   }else{
-
+																																					AM.updateBulbStatus(cleanbulbID,1,Bulbs[cleanbulbID].color,function(){}); // see if this is too many READ/WRITES
                                                                           sendToVisualight(o,true); // this should be where we send back a heartbeat acknowledge...
                                                                           //socket.write('H'); //writing to the socket
 
@@ -179,7 +191,7 @@ exports.createSockets = function(app, io, AM){
                                 
                                 //setting bulb
                                 if(Bulbs[bulbID].hasOwnProperty('color')){
-                                	AM.updateBulbLogoff(bulbID,Bulbs[bulbID].color,function(e){
+                                	AM.updateBulbStatus(bulbID,0,Bulbs[bulbID].color,function(e){
                                 		    Bulbs[bulbID].netsocket.destroy(); //destroy socket 
                                 			try{
                                 				delete Bulbs[bulbID]; //delete obj

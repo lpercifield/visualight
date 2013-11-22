@@ -123,13 +123,13 @@ exports.updateBulbLogoff=function(id,color,callback){
 
 
 /* sets current bulb status*/
-exports.updateBulbStatus = function(id, online, callback)
+exports.updateBulbStatus = function(id, online, color, callback)
 {	
 	//var online = 0or1
 	//offline = 0
 	//online = 1
 	
-	var obj = {$set: {status: online}};
+	var obj = {$set: {color: color, lastOnline: new Date(), status:online }};
 	bulbs.update({_id:getBulbId(id)},obj,true,function(e,o){
 		callback(null)
 	})
