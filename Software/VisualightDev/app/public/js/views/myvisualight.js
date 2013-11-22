@@ -28,7 +28,7 @@ $(document).ready(function(){
 	
 	$('#duration').slider({min:1,max:999});
     $('#frequency').slider({min:0,max:9});
-    $('#type').slider({min:0,max:1});
+    $('#type').slider({min:0,max:3});
 	
 	setupVisualightButtons();
 	connectSocket();
