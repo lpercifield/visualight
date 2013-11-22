@@ -8,7 +8,7 @@
 /* SET TO 1 TO DEBUG OVER SERIAL MONITOR @115200 baud
  if set to 1, board will wait for serial  
  monitor to be opened before executing any code */
-#define DEBUG 0 //SET TO 0 for normal operation
+#define DEBUG 1 //SET TO 0 for normal operation
 
 #if DEBUG
   #define VPRINT(item) Serial.print(item)
@@ -27,14 +27,8 @@
 
 #include "Visualight.h"
 
-//void* pt2Object; //
-
 Visualight::Visualight(){
 
-//	_red = 255;
-//	_green = 255;
-//	_blue = 255;
-//  _white = 255;
   _blinkType = 0;
   _frequency = 0;
   alerting = false;
@@ -43,7 +37,6 @@ Visualight::Visualight(){
 
 	connectTime = 0;
   lastHeartbeat = 0;
-	_debug = false;
 	resetButtonState = 1;
 
 	isServer = true;
@@ -53,13 +46,6 @@ Visualight::Visualight(){
   network[0] = '0';
   security[0] = '0';  
 }
-
-void Visualight::setVerbose(boolean set){
-	if(set) _debug = true;
-	else _debug = false;
-  delay(50);
-}
-
 
 
 /**********************************************************************************/
@@ -299,6 +285,7 @@ void Visualight::joinWifi(){
   }
 }
 
+// heartbeat to server so it knows this light is still connected
 void Visualight::sendHeartbeat(){
   VPRINTLN(F("-SENDHEARTBEAT-"));
   wifly.print("{\"mac\":\"");
@@ -338,7 +325,6 @@ boolean Visualight::connectToServer(){
 
     VPRINTLN(F("Connected"));
 
-    //wifly.write(MAC); //how did this ever work?
     wifly.print("{\"mac\":\"");
     wifly.print(MAC);
     wifly.println("\"}");
@@ -354,6 +340,7 @@ boolean Visualight::connectToServer(){
   }
 }
 
+// process all incoming server messages
 void Visualight::processClient(){
   int available;
 
@@ -373,7 +360,7 @@ void Visualight::processClient(){
     available = wifly.available();
 
     if (available < 0) {
-      //if(_debug)Serial.println(F("reconnect from available()"));
+      VPRINT(F("reconnect from available()"));
       if(!connectToServer()){
         reconnectCount++;
       }
@@ -395,16 +382,21 @@ void Visualight::processClient(){
           _durationTime = duration*1000; 
           _frequency = (_frequency+1); //* 100; //get the right freq out //100 - 1000
           setAlert(_blinkType, _durationTime, _frequency, red, green, blue, white);
-          
-        } else if(_blinkType == 2){ // we are setting the start color here
+        } 
+
+        else if(_blinkType == 2){ // we are setting the start color here
 					saveStartColor(red,green,blue,white);
+        } 
+
+        else if(_blinkType == 3){
+          wifiReset(); //set isServer = true, turn on AP mode
         }
 
         else { //simple set color
-        if(alerting){
-	        _durationTime = 0;
-        }
-          setColor(red, green, blue, white); 
+          if(alerting){
+  	        _durationTime = 0; // will time out any currently running alert
+          }
+            setColor(red, green, blue, white); 
         } 
         memset(serBuf,0,31);
       }
@@ -416,15 +408,14 @@ void Visualight::processClient(){
 //------------------------------ BUTTON & LED METHODS ----------------------------//
 /**********************************************************************************/
 
+// check for a button press, reset WiFi if hit.
 void Visualight::processButton(){
-  //resetButtonState = digitalRead(resetButton);
   if(digitalRead(resetButton) == LOW){
-    //Visualight* mySelf = (Visualight*) pt2Object;
-   // mySelf->wifiReset();
-   wifiReset();
+    wifiReset(); // Visualight to AP mode, pulse blue
   }
 }
 
+// simple set all LEDs to this color
 void Visualight::colorLED(int red, int green, int blue, int white){
   analogWrite(redLED, red);
   analogWrite(greenLED, green);
@@ -432,7 +423,8 @@ void Visualight::colorLED(int red, int green, int blue, int white){
   analogWrite(whiteLED, white);
 }
 
-void Visualight::fadeOn(){ // turns all LEDs on to full white
+// turns all LEDs on to startColor
+void Visualight::fadeOn(){
 	_red = EEPROM.read(1);
 	_green = EEPROM.read(2);
 	_blue = EEPROM.read(3);
@@ -443,23 +435,44 @@ void Visualight::fadeOn(){ // turns all LEDs on to full white
   }
 }
 
-// set the global color variables to this color
+// set the global color variables AND simple set to this color
 void Visualight::setColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){ 
-  colorLED(_r,_g,_b,_w);
   _red = _r;
   _green = _g;
   _blue = _b;
   _white = _w;
-  
+
+  colorLED(_r,_g,_b,_w);
 }
 
-//THIS SAVES TO THE EEPROM. USE WITH CARE
+// if the new saveStartColor is different from what is already stored in EEPROM,
+// overwrite the current EEPROM values and use this from now on.
 void Visualight::saveStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w){
+
+  int currR = EEPROM.read(1);
+  int currG = EEPROM.read(2);
+  int currB = EEPROM.read(3);
+  int currW = EEPROM.read(4);
+
+  if (currR != _r){
+    VPRINTLN(F("SET R COLOR TO EEPROM"));
     EEPROM.write(1,_r);
+  }
+    
+  if (currG != _g){
+    VPRINTLN(F("SET G COLOR TO EEPROM"));
     EEPROM.write(2,_g);
+  }
+    
+  if (currB != _b){
+    VPRINTLN(F("SET B COLOR TO EEPROM"));
     EEPROM.write(3,_b);
+  }
+    
+  if (currW != _w){
+    VPRINTLN(F("SET W COLOR TO EEPROM"));
     EEPROM.write(4,_w);
-	
+  }
 }
 
 void Visualight::setAlert(int blinkType, long durationTime, int frequency, int r, int g, int b, int w){
