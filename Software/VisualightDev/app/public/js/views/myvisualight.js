@@ -201,7 +201,6 @@ $(document).ready(function(){
 		      success: function(data){
 			      console.log('DELETE SUCCESS RECEIVED:')
 			      console.log(data);
-			      location.reload();
 			      },
 			  error: function(jqXHR){
 				  console.log('AJAX ERROR: ')
