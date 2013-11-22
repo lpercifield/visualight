@@ -213,6 +213,7 @@ $('div.btn-group .btn').click(function(){
 	 			$('.modal-bulb-network .modal-footer .submit').click(function(){
 	 				$('.modal-bulb-network').modal('hide');
 	 				mainCallback();
+	 				location.reload();
 	 			});
 	 			console.log(data)
 	 			
