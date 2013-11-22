@@ -5,10 +5,10 @@
 *
 */
 
-/* SET TO 1 TO DEBUG OVER SERIAL MONITOR
+/* SET TO 1 TO DEBUG OVER SERIAL MONITOR @115200 baud
  if set to 1, board will wait for serial  
  monitor to be opened before executing any code */
-#define DEBUG 1 //SET TO 0 for normal operation
+#define DEBUG 0 //SET TO 0 for normal operation
 
 #if DEBUG
   #define VPRINT(item) Serial.print(item)
@@ -60,53 +60,7 @@ void Visualight::setVerbose(boolean set){
   delay(50);
 }
 
-boolean Visualight::factoryRestore(){ 
-  pinMode(resetButton, INPUT);
-  pinMode(resetPin,OUTPUT);
-  digitalWrite(resetButton, HIGH);
-  digitalWrite(resetPin, HIGH);  
-  pinMode(_red,OUTPUT);
-  pinMode(_green, OUTPUT);
-  pinMode(_blue, OUTPUT);
-  
-  #if DEBUG
-    Serial.begin(115200);
-    while(!Serial){
-      ;
-    }
-  #endif
-  colorLED(255, 0, 0,0);
 
-  Serial1.begin(9600);
-  if (!wifly.begin(&Serial1,&Serial)) {
-    VPRINTLN(F("Failed to start wifly"));
-  }
-
-  // FACTORY RESTORE WIFLY UNIT
-  if(wifly.factoryRestore()){
-    wifly.setDeviceID("WiFly");
-    wifly.save();
-    VPRINTLN(F("WiFly Factory Restored. Rebooting.."));
-    wifly.reboot();
-    //reset visualight eeprom
-    EEPROM.write(0, 1); 
-    VPRINTLN(F("Visualight Factory Reset Complete !"));
-
-    setAlert(0, 10000, 1, 0, 255, 0, 0);
-
-    // alertBeginTimeStamp = millis();
-    // _blinkType = 0;
-    // _frequency = 1;
-    // _red = _blue = 0;
-    // _green = 255;
-    // _durationTime = 10000;
-    // alerting = true;
-    return true;
-  } else {
-    VPRINTLN(F("Failed to factoryRestore wifly"));
-    return false;
-  }
-}
 
 /**********************************************************************************/
 //--------------------------------- SETUP & UPDATE -------------------------------//
@@ -159,7 +113,6 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
     EEPROM.write(0,1);
 		configureWifi();
 	}
-	//wifly.terminal();
 	isServer = EEPROM.read(0);
 
 	wifly.getMAC(MAC, sizeof(MAC));
@@ -167,20 +120,11 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	VPRINTLN(MAC);
 	VPRINT(F("IP: "));
 	VPRINTLN(wifly.getIP(buf, sizeof(buf)));
-
-//	if (wifly.getPort() != 80) {
-//		wifly.setPort(80);
-		/* local port does not take effect until the WiFly has rebooted (2.32) */
-//		wifly.save();
-//		VPRINTLN(F("Set port to 80"));
-			//wifly.reboot();
-//	}
 	VPRINTLN(F("Ready"));
 
 	if(isServer){
 		/* Create AP*/
 		VPRINTLN(F("Creating AP"));
-    //colorLED(0,0,255,255);
     setAlert(0, 600000, 1, 0, 0, 255, 0); // Set a server timeout of 10 minutes
 		VPRINTLN(F("Create server"));
 		wifly.setSoftAP();
@@ -193,6 +137,47 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
       reconnectCount++;
     }
 	}
+}
+
+boolean Visualight::factoryRestore(){ 
+  pinMode(resetButton, INPUT);
+  pinMode(resetPin,OUTPUT);
+  digitalWrite(resetButton, HIGH);
+  digitalWrite(resetPin, HIGH);  
+  pinMode(_red,OUTPUT);
+  pinMode(_green, OUTPUT);
+  pinMode(_blue, OUTPUT);
+  
+  #if DEBUG
+    Serial.begin(115200);
+    while(!Serial){
+      ;
+    }
+  #endif
+  colorLED(255, 0, 0,0);
+
+  Serial1.begin(9600);
+  if (!wifly.begin(&Serial1,&Serial)) {
+    VPRINTLN(F("Failed to start wifly"));
+  }
+
+  // FACTORY RESTORE WIFLY UNIT
+  if(wifly.factoryRestore()){
+    wifly.setDeviceID("WiFly");
+    wifly.save();
+    VPRINTLN(F("WiFly Factory Restored. Rebooting.."));
+    wifly.reboot();
+    //reset visualight eeprom
+    EEPROM.write(0, 1); 
+    VPRINTLN(F("Visualight Factory Reset Complete !"));
+
+    setAlert(0, 90000, 1, 0, 255, 0, 0);
+
+    return true;
+  } else {
+    VPRINTLN(F("Failed to factoryRestore wifly"));
+    return false;
+  }
 }
 
 /**********************************************************************************/
@@ -211,8 +196,12 @@ void Visualight::configureWifi(){
   wifly.enableDHCP();
   wifly.setChannel("0");
   wifly.setPort(80);
-  /*** disables WiFly GREEN and RED LEDs ***/
-  //wifly.setIOFunc(5); // requires a save and reboot after.
+  
+  #if DEBUG == 0 //if we're NOT DEBUG
+    /*** disables WiFly GREEN and RED LEDs ***/
+    wifly.setIOFunc(5); // requires a save and reboot after.
+  #endif
+
   wifly.save();
   wifly.reboot();
 }
@@ -565,16 +554,6 @@ void Visualight::processServer() {
       else if (strstr_P(buf, PSTR("POST")) > 0) { /* Form POST */
          
         VPRINTLN(F("Got POST"));
-
-        // while(1) {
-        //     Serial.print(wifly.read());
-        // }
-        // while (wifly.gets(buf, sizeof(buf)) > 0) { /* Skip rest of request */
-        //   Serial.println(buf);
-        //   while (wifly.gets(buf, sizeof(buf)) > 0) { /* Skip rest of request */
-        //     Serial.println(buf);
-        //   }
-        // }
 
         if (wifly.match(F("net="))) { /* Get posted field value */
           //Serial.println(buf);
