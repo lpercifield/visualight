@@ -20,17 +20,7 @@ var Bulbs = {}; //temp object of bulbs to start cross referenceing
 
 exports.returnBulbs =  Bulbs;
 
-exports.resetBulb = function(key){
-	if(Bulbs.hasOwnProperty(cleanbulbID){
-		var data = "0,0,0,0,0,0,3";
-		Bulbs[key].netsocket.write("a");  // start character
-		Bulbs[key].netsocket.write(data); // data string 
-		Bulbs[key].netsocket.write("x");  // stop character
-		var message = "RESETTING BULBID: " + key;
-		console.log(message.warn);
-  }
-	
-};
+
 
 
 /**
@@ -325,6 +315,21 @@ exports.createSockets = function(app, io, AM){
           });
         });//end io.sockets.on
 }
+
+
+/*
+exports.resetBulb = function(key){
+	if(Bulbs.hasOwnProperty(key){
+		var data = "0,0,0,0,0,0,3";
+		Bulbs[key].netsocket.write("a");  // start character
+		Bulbs[key].netsocket.write(data); // data string 
+		Bulbs[key].netsocket.write("x");  // stop character
+		var message = "RESETTING BULBID: " + key;
+		console.log(message.warn);
+  }
+	
+}
+*/
 
 /*	Support for restful connection of COLOR data to bulb 
  *  
