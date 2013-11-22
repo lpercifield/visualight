@@ -21,7 +21,7 @@ var Bulbs = {}; //temp object of bulbs to start cross referenceing
 exports.returnBulbs =  Bulbs;
 
 exports.resetBulb = function(key){
-	if(Bulbs.hasOwnProperty(cleanbulbID){
+	if(Bulbs.hasOwnProperty(key){
 		var data = "0,0,0,0,0,0,3";
 		Bulbs[key].netsocket.write("a");  // start character
 		Bulbs[key].netsocket.write(data); // data string 
@@ -30,7 +30,7 @@ exports.resetBulb = function(key){
 		console.log(message.warn);
   }
 	
-};
+}
 
 
 /**
