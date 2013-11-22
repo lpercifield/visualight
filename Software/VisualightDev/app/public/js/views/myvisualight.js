@@ -228,6 +228,7 @@ $(document).ready(function(){
 		      success: function(data){
 			      console.log('DELETE SUCCESS RECEIVED:')
 			      console.log(data);
+			      window.location.reload(true);
 			      },
 			  error: function(jqXHR){
 				  console.log('AJAX ERROR: ')
