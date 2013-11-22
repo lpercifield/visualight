@@ -8,7 +8,7 @@
 /* SET TO 1 TO DEBUG OVER SERIAL MONITOR @115200 baud
  if set to 1, board will wait for serial  
  monitor to be opened before executing any code */
-#define DEBUG 1 //SET TO 0 for normal operation
+#define DEBUG 0 //SET TO 0 for normal operation
 
 #if DEBUG
   #define VPRINT(item) Serial.print(item)
@@ -108,6 +108,14 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	VPRINTLN(wifly.getIP(buf, sizeof(buf)));
 	VPRINTLN(F("Ready"));
 
+  #if DEBUG == 0 //if we're NOT DEBUG
+    /*** disables WiFly GREEN and RED LEDs ***/
+    wifly.setIOFunc(5); // requires a save and reboot after.
+    wifly.save();
+    wifly.reboot();
+    VPRINTLN("setIOFunc LEDSOFF");
+  #endif
+
 	if(isServer){
 		/* Create AP*/
 		VPRINTLN(F("Creating AP"));
@@ -182,15 +190,11 @@ void Visualight::configureWifi(){
   wifly.enableDHCP();
   wifly.setChannel("0");
   wifly.setPort(80);
-  
-  #if DEBUG == 0 //if we're NOT DEBUG
-    /*** disables WiFly GREEN and RED LEDs ***/
-    wifly.setIOFunc(5); // requires a save and reboot after.
-  #endif
 
   wifly.save();
   wifly.reboot();
-}
+  }
+
 
 void Visualight::wifiReset(){
   wifly.close();
@@ -278,6 +282,7 @@ void Visualight::joinWifi(){
       EEPROM.write(0, 0); 
       alerting = false;
       isServer = false;
+      fadeOn();
     }
     if(!connectToServer()){
       reconnectCount++;
@@ -389,6 +394,7 @@ void Visualight::processClient(){
         } 
 
         else if(_blinkType == 3){
+          VPRINTLN(F("BLINKTYPE 3"));
           wifiReset(); //set isServer = true, turn on AP mode
         }
 
@@ -429,6 +435,7 @@ void Visualight::fadeOn(){
 	_green = EEPROM.read(2);
 	_blue = EEPROM.read(3);
 	_white = EEPROM.read(4);
+  VPRINTLN(F("fadeOn"));
   for(int fadeValue = 1; fadeValue <=100; fadeValue +=5) { 
     colorLED((fadeValue*_red)/100, (fadeValue*_green)/100, (fadeValue*_blue)/100, (fadeValue*_white)/100);
     delay(10);            
