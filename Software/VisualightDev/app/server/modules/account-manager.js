@@ -50,7 +50,7 @@ exports.sessionAuth = function(session_id, session, callback)
 	//console.log(session_id);
 	
 	sessions.findOne({_id: session_id },function(e,o){
-		console.log(o);
+		//console.log(o);
 		if(!o){
 			console.log("NO SESSION FOUND");
 			callback(false);
@@ -333,19 +333,35 @@ exports.addNewBulb = function(user, bulbMac, callback)
 					var bulb = new Object();
 					bulb.mac = bulbMac.mac;
 					bulb.user = o._id;
-					bulbs.insert(bulb, {safe: true}, function(err,item){
-						bulbs.findOne({mac:bulb.mac}, function(err,item){
-							console.log(item);
-							var myBulb = new Object();
-							myBulb.name = "Visualight "+(o.bulbs.length+1);
-							myBulb.id = item._id;
-							//o.bulbs.push(myBulb);
-							//o.bulbs = bulbArray;
-							//console.log(o.bulbs);
-							//callback(o.bulbs);
-							accounts.save(o, {safe: true}, callback);
+					console.log('Creating BULB'.info);
+					bulbs.count({user:o._id},function(err,count){
+						if(err){ bulb.name = "Newest Visualight" 
+						}else{ 
+						console.log('User:'.help+o._id+' Bulb Count: '.help+count);
+							bulb.name = "Visualight "+(count+1);
+						}
+						console.log('Inserting Bulb'.info);
+						console.log(JSON.stringify(bulb).data);
+						bulbs.insert(bulb, {safe: true}, function(err,item){
+							/*
+							bulbs.findOne({mac:bulb.mac}, function(err,item){
+								console.log(item);
+								var myBulb = new Object();
+								myBulb.name = "Visualight "+(o.bulbs.length+1);
+								myBulb.id = item._id;
+								
+								//no longer storing bulbs into the account information 
+								
+								//o.bulbs.push(myBulb);
+								//o.bulbs = bulbArray;
+								//console.log(o.bulbs);
+								//callback(o.bulbs);
+								accounts.save(o, {safe: true}, callback);
+							});
+							*/
+							callback();
 						});
-					});
+					})
 				}
 			});
 		}else{
