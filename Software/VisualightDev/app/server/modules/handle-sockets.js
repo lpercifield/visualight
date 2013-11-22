@@ -318,6 +318,7 @@ exports.createSockets = function(app, io, AM){
 
 
 exports.resetBulbMode = function(key){
+/*
 	if(Bulbs.hasOwnProperty(key){
 		var data = "0,0,0,0,0,0,3";
 		Bulbs[key].netsocket.write("a");  // start character
@@ -326,6 +327,7 @@ exports.resetBulbMode = function(key){
 		var message = "RESETTING BULBID: " + key;
 		console.log(message.warn);
   }
+*/
 	
 }
 
