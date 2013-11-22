@@ -1,9 +1,21 @@
+/*
+visualight_LED.ino
 
-int redPin = 9;
-int greenPin = 13;
-int bluePin = 10;
-int whitePin = 5;
-const int resetButtonPin = 7;
+Example sketch for how to control the visualight LEDs manually.
+R,G,B,W LEDs are on PWM-enabled pins 9, 13, 10, and 13 respectively.
+NOTE: White LED pin is available only on non-DIY Visualight bulbs.
+
+LEDs are common-ground, so use analogWrite 0(off) - 255(full brightness).
+
+http://visualight.org
+
+*/
+
+#define redPin 9
+#define greenPin 13
+#define bluePin 10
+#define whitePin 5
+#define resetButtonPin 7
 
 int maxFade = 255;
 float fadeSpeed = 10;
@@ -12,12 +24,12 @@ void setup()  {
   Serial.begin(9600);
   Serial.println("hello from Visualight");
 
-  pinMode(redPin,OUTPUT);
-  pinMode(greenPin,OUTPUT);
-  pinMode(bluePin,OUTPUT);
-  digitalWrite(redPin,LOW);
-  digitalWrite(greenPin,LOW);
-  digitalWrite(bluePin,LOW);
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  digitalWrite(redPin, LOW);
+  digitalWrite(greenPin, LOW);
+  digitalWrite(bluePin, LOW);
 
   pinMode(resetButtonPin, INPUT);
   //attachInterrupt(resetButtonPin, resetNow, CHANGE);
