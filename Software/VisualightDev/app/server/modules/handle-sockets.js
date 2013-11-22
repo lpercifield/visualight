@@ -30,7 +30,7 @@ exports.resetBulb = function(key){
 		console.log(message.warn);
   }
 	
-}
+};
 
 
 /**
