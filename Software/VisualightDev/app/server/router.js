@@ -374,7 +374,9 @@ module.exports = function(app, io, sStore) { // this gets called from the main a
  app.delete('/bulb/:key',AUTH.authCheck,function(req,res){
 
 		 var key = req.params.key;
-		 WS.resetBulbMode(key);
+		 if(key != null){
+			 WS.resetBulbMode(key);
+		 }
 		 AM.deleteBulb(key,function(result){
 			res.writeHead(200,{'content-type':'text/json'});
 			res.end(JSON.stringify(result)); 
