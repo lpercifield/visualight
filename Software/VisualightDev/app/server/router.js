@@ -428,8 +428,8 @@ app.post('/trigger/:key',AUTH.authCheck,function(req,res){
  */	
 
   app.post('/bind-group', AUTH.authCheck,function(req,res){
-
-  			AM.addNewGroup(req.session.user.user,req.body,function(e){
+	  		
+  			AM.addNewGroup(req.session.user,req.body,function(e){
   				console.log('add group request'.help);
   				if(e){
   					res.send(e,400);
