@@ -37,15 +37,17 @@
 #define heartBeatInterval 25000
 #define connectServerInterval 60000 //
 
+#define blueComp 1.2
 #define redLED 9
 #define greenLED 13
 #define blueLED 10
-#define whiteLED 6 //only for PROD version!
-#define blueComp 1.2
+/* whiteLED is digitalPin 5 on the PRODUCT Version.
+if you are converting a DIY bulb to RGBW, change this to digitalPin 6 */
+ #define whiteLED 5 // DIY = 6 // PRODUCT = 5 //
 
 #define resetButton 7
 #define resetPin 11
-#define resetButtonTime 2000
+//#define resetButtonTime 2000
 
 class Visualight {
 

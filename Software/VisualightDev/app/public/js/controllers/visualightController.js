@@ -297,6 +297,9 @@ $('div.btn-group .btn').click(function(){
     function addBulbsToDropdown(bulbData,callback){
 	    //get data about online-offline by storing to db when signing on and logging off
 	    $('ul#bulbs').html('');
+	    if(bulbData.length == 0){
+		    that.addVisualight();
+	    }
 	    for(var i=0; i<bulbData.length; i++){
 	    	var html = '<li';
 			console.log(bulbData[i]);

@@ -1,7 +1,7 @@
 /*
 
 visualight_factoryRestore.ino
-
+ 
 This sketch resets your Visualight to factory settings. 
 WiFi network credentials will be wiped, as will all EEPROM settings.
 After upload, your light will be RED until restore is complete, and 
@@ -35,7 +35,7 @@ void setup(){
   delay(1000);
   
   // visualight.saveStartColor(R, G, B, W);
-  visualight.saveStartColor(0, 0, 255, 0); 
+  visualight.saveStartColor(255, 255, 255, 255); 
 }
 
 void loop(){

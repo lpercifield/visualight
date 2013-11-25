@@ -7,9 +7,16 @@
 
 /* SET TO 1 TO DEBUG OVER SERIAL MONITOR @115200 baud
  if set to 1, board will wait for serial  
- monitor to be opened before executing any code */
+ monitor to be opened before executing any code. */
 #define DEBUG 0 //SET TO 0 for normal operation
 
+/* SET TO 1 TO ENABLE THE GREEN AND RED LEDS ON THE WIFLY UNIT
+These LEDs show various connection statuses and routines.
+They are disabled in Visualights by default, but have no 
+effect on the behavior of the WiFly module. */  
+#define DEBUG_WIFLY_LEDS 0 //SET TO 0 for standard operation
+
+/* define Serial prints based on DEBUG declaration */
 #if DEBUG
   #define VPRINT(item) Serial.print(item)
   #define VPRINTLN(item) Serial.println(item)
@@ -18,6 +25,7 @@
   #define VPRINTLN(item)
 #endif
 
+/* get some Arduino up in here */
 #if (ARDUINO >= 100)
    #include "Arduino.h"
 #else
@@ -108,8 +116,8 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	VPRINTLN(wifly.getIP(buf, sizeof(buf)));
 	VPRINTLN(F("Ready"));
 
-  #if DEBUG == 0 //if we're NOT DEBUG
-    /*** disables WiFly GREEN and RED LEDs ***/
+  #if DEBUG_WIFLY_LEDS == 0 //if we're NOT DEBUG
+    /*** DISABLE WiFly GREEN and RED LEDs ***/
     wifly.setIOFunc(5); // requires a save and reboot after.
     wifly.save();
     wifly.reboot();
