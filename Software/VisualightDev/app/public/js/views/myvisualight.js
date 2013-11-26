@@ -28,7 +28,7 @@ $(document).ready(function(){
 	
 	$('#duration').slider({min:1,max:999});
     $('#frequency').slider({min:0,max:9});
-    $('#type').slider({min:0,max:3});
+    $('#type').slider({min:0,max:2});
 	
 	setupVisualightButtons();
 	connectSocket();
@@ -229,6 +229,9 @@ $(document).ready(function(){
 			      console.log('DELETE SUCCESS RECEIVED:')
 			      console.log(data);
 			      window.location.reload(true);
+			      ///send delete bulb signal
+			      state.alert = { duration: 0, frequency: 0, type: 3};
+				  sendAPICall(state);
 			      },
 			  error: function(jqXHR){
 				  console.log('AJAX ERROR: ')
