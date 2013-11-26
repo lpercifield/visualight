@@ -26,6 +26,7 @@ $(document).ready(function(){
       
 	$('#demo').hide();
 	
+	
 	$('#duration').slider({min:1,max:999});
     $('#frequency').slider({min:0,max:9});
     $('#type').slider({min:0,max:2});
@@ -211,6 +212,13 @@ $(document).ready(function(){
         //send.disabled = true;
         //message.textContent = "";
         socket.disconnect();
+      });
+      
+      $('.modal-bulb-network .modal-footer .form-actions .controls #submit').click(function(){
+	      console.log('pressed');
+	      //$('.modal-bulb-network .modal-body form').submit();
+	      vc.postNetwork()
+	      $(this).hide()
       });
       
       $('button#settings').click(function(e){
