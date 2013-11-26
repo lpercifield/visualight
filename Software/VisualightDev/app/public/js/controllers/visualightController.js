@@ -71,8 +71,8 @@ $('div.btn-group .btn').click(function(){
 		var that = this;
 		$('.modal-bulb-setup').modal({ show : false, keyboard : false, backdrop : 'static' });
 		$('.modal-bulb-setup .modal-header h3').text('Add A Visualight');
-		$('.modal-bulb-setup .modal-body h4').html("Ensure that you Visualight is turned on and is glowing blue - Then join the 'Visualight' wifi network");
-		$(".modal-bulb-setup .modal-body img").attr("src", 'img/joinvisualight.png');
+		$('.modal-bulb-setup .modal-body h4').html("Ensure that your Visualight is turned on and is glowing blue. Then join the 'Visualight-##' WiFi network.");
+		//$(".modal-bulb-setup .modal-body img").attr("src", 'img/joinvisualight.png');
 		$('.modal-bulb-setup .cancel').html('Cancel');
 		$('.modal-bulb-setup .cancel').addClass('btn-danger');
 		$('.modal-bulb-setup .modal-body #searching').css('display','block');
@@ -107,7 +107,7 @@ $('div.btn-group .btn').click(function(){
 	 			//that.showLockedAlert('You are now logged out.<br>Redirecting you back to the homepage.');
 	 			console.log("posted");
 	 			//addBulb(newBulb)
-	 			$('.modal-bulb-network .modal-body h4').html("Success! Now switch you wifi back to " + $('.modal-bulb-network #network').val());
+	 			$('.modal-bulb-network .modal-body h4').html("Success! Now switch your WiFi back to " + $('.modal-bulb-network #network').val());
 	 			$('.modal-bulb-network .modal-body #searching').css('display','block');
 	 			$('.modal-bulb-network .modal-body #set-network-form').css('display','none');
 	 			$('.modal-bulb-network .cancel').click(function(){
