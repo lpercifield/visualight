@@ -26,10 +26,70 @@ $(document).ready(function(){
       
 	$('#demo').hide();
 	
+	//sliders
+	//$('#duration').slider({min:1,max:999});
+    //$('#frequency').slider({min:0,max:9});
+    //$('#type').slider({min:0,max:2});
 	
-	$('#duration').slider({min:1,max:999});
-    $('#frequency').slider({min:0,max:9});
-    $('#type').slider({min:0,max:2});
+	
+	//sliders with tooltip:
+	var durationtip = $('<div class="btn btn-inverse" />').css({
+	    position: 'absolute',
+	    top: -30,
+	    left: -15
+	}).hide().text(1);
+	var freqtip = $('<div class="btn btn-inverse" />').css({
+	    position: 'absolute',
+	    top: -30,
+	    left: -15
+	}).hide().text(0);
+	var typetip = $('<div class="btn btn-inverse" />').css({
+	    position: 'absolute',
+	    top: -30,
+	    left: -15
+	}).hide().text(0);
+	
+	$("#duration").slider({
+	    value: 1,
+	    min: 1,
+	    max: 999,
+	    slide: function(event, ui) {
+	        durationtip.text(ui.value);
+	    },
+	    change: function(event, ui) {}
+	}).find(".ui-slider-handle").append(durationtip).hover(function() {
+	    durationtip.show()
+	}, function() {
+	    durationtip.hide()
+	})
+	
+	$("#frequency").slider({
+	    value: 0,
+	    min: 0,
+	    max: 9,
+	    slide: function(event, ui) {
+	        freqtip.text(ui.value);
+	    },
+	    change: function(event, ui) {}
+	}).find(".ui-slider-handle").append(freqtip).hover(function() {
+	    freqtip.show()
+	}, function() {
+	    freqtip.hide()
+	})
+	
+	$("#type").slider({
+	    value: 0,
+	    min: 0,
+	    max: 2,
+	    slide: function(event, ui) {
+	        typetip.text(ui.value);
+	    },
+	    change: function(event, ui) {}
+	}).find(".ui-slider-handle").append(typetip).hover(function() {
+	    typetip.show()
+	}, function() {
+	    typetip.hide()
+	})
 	
 	setupVisualightButtons();
 	connectSocket();

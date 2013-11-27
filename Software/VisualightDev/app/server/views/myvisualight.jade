@@ -47,16 +47,7 @@ div.navbar
 					input(type="text", name="name").name.input-xlarge
 					input(type="hidden", name="key").id
 					button(type="button").btn#update Update
-					div 
-						h3 Reconnect Options	 
-						div
-							h4 On Restart use:
-							label White Color
-								input(type="radio", name="options[restart]",value='white')
-							label Last Color
-								input(type="radio",name="options[restart]",value="last")
-							label Current Color
-								input(type="radio",name="options[restart]",value="current")
+
 			h3 Bulb Status:
 			span#status
 			form#form-inline
@@ -75,6 +66,9 @@ div.navbar
 			div#frequency
 			label Type
 			div#type
+			div.container
+				div#slider
+			
 		
 
 include modals/alert
@@ -83,8 +77,8 @@ include modals/setupbulb
 include modals/network
 include modals/addgroup
 
-
-script(type='text/javascript', src='/vendor/jquery.min.js')
+script(type='text/javascript',src='http://code.jquery.com/jquery-1.8.3.min.js')
+//script(type='text/javascript', src='/vendor/jquery.min.js')
 script(type='text/javascript', src='/vendor/jquery.form.js')
 script(type='text/javascript', src='http://code.jquery.com/ui/1.10.3/jquery-ui.js')
 script(type='text/javascript', src='/vendor/farbtastic.js')

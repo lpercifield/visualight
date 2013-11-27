@@ -72,7 +72,7 @@ $('div.btn-group .btn').click(function(){
 		$('.modal-bulb-setup').modal({ show : false, keyboard : false, backdrop : 'static' });
 		$('.modal-bulb-setup .modal-header h3').text('Add A Visualight');
 		$('.modal-bulb-setup .modal-body h4').html("Ensure that your Visualight is turned on and is glowing blue. Then join the 'Visualight-##' WiFi network.");
-		//$(".modal-bulb-setup .modal-body img").attr("src", 'img/joinvisualight.png');
+		//$(".modal-bulb-setup .modal-body img").attr("src", 'img/joinvisualight.png'); //load the image on page load 
 		$('.modal-bulb-setup .cancel').html('Cancel');
 		$('.modal-bulb-setup .cancel').addClass('btn-danger');
 		$('.modal-bulb-setup .modal-body #searching').css('display','block');
