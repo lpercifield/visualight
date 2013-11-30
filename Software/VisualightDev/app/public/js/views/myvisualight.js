@@ -101,6 +101,10 @@ $(document).ready(function(){
 			$('#bulbs.dropdown-menu li a').click(function(){
 				//alert($(this).data('name'));
 				
+				currBulbId = $(this).data('id');
+				currBulbName = $(this).data('name');
+				currBulbType = 'bulb';
+				
 				//set initial colors 
 				var color = $(this).data('color');
 				//console.log(color);
@@ -127,9 +131,7 @@ $(document).ready(function(){
 				};
 				
 				
-				currBulbId = $(this).data('id');
-				currBulbName = $(this).data('name');
-				currBulbType = 'bulb';
+
 				$('h1.intro').hide()
 				//set header to bulb name
 				$('div#options form :text').val(currBulbName);
