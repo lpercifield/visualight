@@ -907,6 +907,10 @@
     display: block;
     line-height: 20px;
   }
+  .navbar .btn {
+  	padding-left: 4px;
+  	padding-right: 4px;
+  }
   input[type="checkbox"],
   input[type="radio"] {
     border: 1px solid #ccc;
