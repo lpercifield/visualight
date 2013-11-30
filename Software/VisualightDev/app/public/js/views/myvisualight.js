@@ -111,12 +111,12 @@ $(document).ready(function(){
 				if(color){
 					var colors = color.split(',');
 					var h = rgbToHsl(colors[0],colors[1],colors[2]);
-					var colorPicker = $.farbtastic("#picker");
-					colorPicker.setHSL([h.h,h.s,h.l]);
+					//var colorPicker = $.farbtastic("#picker");
+					//colorPicker.setHSL([h.h,h.s,h.l]);
 				}else{
 					var h = rgbToHsl(255,255,255);
-					var colorPicker = $.farbtastic("#picker");
-					colorPicker.setHSL([h.h,h.s,h.l]);
+					//var colorPicker = $.farbtastic("#picker");
+					//colorPicker.setHSL([h.h,h.s,h.l]);
 				}
 				
 				//var newBri = map_range(h.l,0.0,.8,0,1);
