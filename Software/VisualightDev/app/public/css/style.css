@@ -85,6 +85,9 @@ div.navbar div.container {
 #account-form-container h1 {
   font-size: 28px;
 }
+.white {
+  background-color: #fdfdfd;
+}
 .modal-single-input {
   width: 452px;
   margin: -200px 0 0 -232px;
@@ -148,6 +151,16 @@ div.navbar div.container {
 .modal-alert {
   width: 310px;
   margin: -200px 0 0 -150px;
+}
+#duration,
+#frequency,
+#type {
+  margin: 40px 0 0 0;
+}
+div#alerts label {
+  margin: 20px 0 0 0;
+  font-weight: bold;
+  color: #020202;
 }
 div.btn-group[data-toggle=buttons-radio] input[type=radio] {
   display: block;
