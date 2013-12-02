@@ -37,17 +37,17 @@ $(document).ready(function(){
 	    position: 'absolute',
 	    top: -30,
 	    left: -15
-	}).hide().text(1);
+	}).show().text(1);
 	var freqtip = $('<div class="btn btn-inverse" />').css({
 	    position: 'absolute',
 	    top: -30,
 	    left: -15
-	}).hide().text(0);
+	}).show().text(0);
 	var typetip = $('<div class="btn btn-inverse" />').css({
 	    position: 'absolute',
 	    top: -30,
 	    left: -15
-	}).hide().text(0);
+	}).show().text(0);
 	
 	$("#duration").slider({
 	    value: 1,
@@ -60,7 +60,7 @@ $(document).ready(function(){
 	}).find(".ui-slider-handle").append(durationtip).hover(function() {
 	    durationtip.show()
 	}, function() {
-	    durationtip.hide()
+	    //durationtip.hide()
 	})
 	
 	$("#frequency").slider({
@@ -74,7 +74,7 @@ $(document).ready(function(){
 	}).find(".ui-slider-handle").append(freqtip).hover(function() {
 	    freqtip.show()
 	}, function() {
-	    freqtip.hide()
+	    //freqtip.hide()
 	})
 	
 	$("#type").slider({
@@ -88,7 +88,7 @@ $(document).ready(function(){
 	}).find(".ui-slider-handle").append(typetip).hover(function() {
 	    typetip.show()
 	}, function() {
-	    typetip.hide()
+	    //typetip.hide()
 	})
 	
 	setupVisualightButtons();
@@ -101,22 +101,18 @@ $(document).ready(function(){
 			$('#bulbs.dropdown-menu li a').click(function(){
 				//alert($(this).data('name'));
 				
-				currBulbId = $(this).data('id');
-				currBulbName = $(this).data('name');
-				currBulbType = 'bulb';
-				
 				//set initial colors 
 				var color = $(this).data('color');
 				//console.log(color);
 				if(color){
 					var colors = color.split(',');
 					var h = rgbToHsl(colors[0],colors[1],colors[2]);
-					//var colorPicker = $.farbtastic("#picker");
-					//colorPicker.setHSL([h.h,h.s,h.l]);
+					var colorPicker = $.farbtastic("#picker");
+					colorPicker.setHSL([h.h,h.s,h.l]);
 				}else{
 					var h = rgbToHsl(255,255,255);
-					//var colorPicker = $.farbtastic("#picker");
-					//colorPicker.setHSL([h.h,h.s,h.l]);
+					var colorPicker = $.farbtastic("#picker");
+					colorPicker.setHSL([h.h,h.s,h.l]);
 				}
 				
 				//var newBri = map_range(h.l,0.0,.8,0,1);
@@ -131,7 +127,9 @@ $(document).ready(function(){
 				};
 				
 				
-
+				currBulbId = $(this).data('id');
+				currBulbName = $(this).data('name');
+				currBulbType = 'bulb';
 				$('h1.intro').hide()
 				//set header to bulb name
 				$('div#options form :text').val(currBulbName);

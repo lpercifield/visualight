@@ -68,7 +68,6 @@ div.navbar div.container {
   width: 305px;
   padding: 40px;
   margin: 0 auto;
-  background: #fdfdfd;
 }
 #country-list {
   width: 280px;
@@ -85,6 +84,9 @@ div.navbar div.container {
 }
 #account-form-container h1 {
   font-size: 28px;
+}
+.white {
+  background-color: #fdfdfd;
 }
 .modal-single-input {
   width: 452px;
@@ -149,6 +151,16 @@ div.navbar div.container {
 .modal-alert {
   width: 310px;
   margin: -200px 0 0 -150px;
+}
+#duration,
+#frequency,
+#type {
+  margin: 40px 0 0 0;
+}
+div#alerts label {
+  margin: 20px 0 0 0;
+  font-weight: bold;
+  color: #020202;
 }
 div.btn-group[data-toggle=buttons-radio] input[type=radio] {
   display: block;
