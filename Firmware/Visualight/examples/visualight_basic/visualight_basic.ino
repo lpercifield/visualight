@@ -26,7 +26,7 @@ Visualight visualight;
 void setup(){  
   
   // visualight.setup("server_address", PORT); 
-  visualight.setup("visualight.org", 5001);  
+  visualight.setup("54.204.16.233", 5001);  
 }
 
 void loop(){
