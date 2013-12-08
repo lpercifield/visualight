@@ -4564,7 +4564,7 @@ Source: RS Component / Phycomp</description>
 <pinref part="R4" gate="G$1" pin="1"/>
 </segment>
 </net>
-<net name="BLUE" class="1">
+<net name="_RED" class="1">
 <segment>
 <label x="55.88" y="-10.16" size="1.778" layer="95"/>
 <pinref part="Q4" gate="G$1" pin="G"/>
@@ -4579,7 +4579,7 @@ Source: RS Component / Phycomp</description>
 <wire x1="-17.78" y1="48.26" x2="-12.7" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="RED" class="1">
+<net name="_GREEN" class="1">
 <segment>
 <label x="55.88" y="25.4" size="1.778" layer="95"/>
 <pinref part="Q3" gate="G$1" pin="G"/>
@@ -4594,7 +4594,7 @@ Source: RS Component / Phycomp</description>
 <wire x1="-17.78" y1="38.1" x2="-12.7" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GREEN" class="1">
+<net name="_BLUE" class="1">
 <segment>
 <label x="55.88" y="58.42" size="1.778" layer="95"/>
 <pinref part="Q2" gate="G$1" pin="G"/>
@@ -4623,7 +4623,7 @@ Source: RS Component / Phycomp</description>
 <wire x1="50.8" y1="0" x2="63.5" y2="0" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="RED_DRIVER" class="0">
 <segment>
 <wire x1="30.48" y1="30.48" x2="20.32" y2="30.48" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="30.48" x2="30.48" y2="0" width="0.1524" layer="91"/>
@@ -4632,7 +4632,7 @@ Source: RS Component / Phycomp</description>
 <pinref part="U$1" gate="G$1" pin="RC"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="BLUE_DRIVER" class="0">
 <segment>
 <wire x1="30.48" y1="40.64" x2="20.32" y2="40.64" width="0.1524" layer="91"/>
 <wire x1="30.48" y1="40.64" x2="30.48" y2="68.58" width="0.1524" layer="91"/>
@@ -4641,7 +4641,7 @@ Source: RS Component / Phycomp</description>
 <pinref part="U$1" gate="G$1" pin="BC"/>
 </segment>
 </net>
-<net name="N$2" class="0">
+<net name="GREEN_DRIVER" class="0">
 <segment>
 <wire x1="20.32" y1="35.56" x2="38.1" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="Q3" gate="G$1" pin="D"/>
@@ -4655,21 +4655,21 @@ Source: RS Component / Phycomp</description>
 <wire x1="48.26" y1="35.56" x2="60.96" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GREEN_OUT" class="1">
+<net name="RED_PWM_IN" class="1">
 <segment>
 <wire x1="-33.02" y1="48.26" x2="-27.94" y2="48.26" width="0.1524" layer="91"/>
 <pinref part="PL1" gate="-2" pin="S"/>
 <pinref part="RN1" gate="B" pin="1"/>
 </segment>
 </net>
-<net name="RED_OUT" class="1">
+<net name="BLUE_PWM_IN" class="1">
 <segment>
 <wire x1="-33.02" y1="43.18" x2="-27.94" y2="43.18" width="0.1524" layer="91"/>
 <pinref part="PL1" gate="-3" pin="S"/>
 <pinref part="RN1" gate="C" pin="1"/>
 </segment>
 </net>
-<net name="BLUE_OUT" class="1">
+<net name="GREEN_PWM_IN" class="1">
 <segment>
 <wire x1="-33.02" y1="38.1" x2="-27.94" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="PL1" gate="-4" pin="S"/>
@@ -4682,7 +4682,7 @@ Source: RS Component / Phycomp</description>
 <wire x1="15.24" y1="22.86" x2="10.16" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="WHITE_PWM_IN" class="0">
 <segment>
 <pinref part="PL1" gate="-1" pin="S"/>
 <wire x1="-33.02" y1="53.34" x2="-27.94" y2="53.34" width="0.1524" layer="91"/>
@@ -4696,7 +4696,7 @@ Source: RS Component / Phycomp</description>
 <wire x1="50.8" y1="109.22" x2="63.5" y2="109.22" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$13" class="0">
+<net name="WHITE_DRIVER" class="0">
 <segment>
 <wire x1="25.4" y1="109.22" x2="40.64" y2="109.22" width="0.1524" layer="91"/>
 <pinref part="Q1" gate="G$1" pin="D"/>

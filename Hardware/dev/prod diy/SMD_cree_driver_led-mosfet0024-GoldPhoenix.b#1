@@ -126,12 +126,13 @@ LED</text>
 <text x="30.48" y="19.812" size="1.016" layer="21" font="vector" ratio="10" distance="93" rot="R90">visualight.org</text>
 <text x="30.734" y="19.812" size="1.27" layer="16" font="vector" ratio="20" rot="MR0">V 0.24</text>
 <text x="15.748" y="31.75" size="0.889" layer="21" font="vector" rot="SR180">white</text>
-<text x="15.748" y="29.718" size="0.889" layer="21" font="vector" rot="SR180">green</text>
-<text x="15.748" y="27.686" size="0.889" layer="21" font="vector" rot="SR180">red</text>
-<text x="15.748" y="25.654" size="0.889" layer="21" font="vector" rot="SR180">blue</text>
+<text x="15.748" y="25.4" size="0.889" layer="21" font="vector" rot="SR180">green</text>
+<text x="15.748" y="29.718" size="0.889" layer="21" font="vector" rot="SR180">red</text>
+<text x="15.748" y="27.686" size="0.889" layer="21" font="vector" rot="SR180">blue</text>
 <text x="15.748" y="23.622" size="0.889" layer="21" font="vector" rot="SR180">vcc</text>
 <text x="15.748" y="21.59" size="0.889" layer="21" font="vector" rot="SR180">gnd</text>
 <text x="22.352" y="25.654" size="1.016" layer="21" font="vector" rot="SR90">v0.24</text>
+<wire x1="11.43" y1="53.076" x2="11.43" y2="19.05" width="0" layer="20"/>
 </plain>
 <libraries>
 <library name="on-semiconductor">
@@ -1754,7 +1755,7 @@ design rules under a new name.</description>
 <wire x1="21.844" y1="48.768" x2="21.8694" y2="48.7934" width="0.8128" layer="1"/>
 <wire x1="21.8694" y1="48.7934" x2="21.8694" y2="49.53" width="0.8128" layer="1"/>
 </signal>
-<signal name="GREEN_OUT" class="1">
+<signal name="RED_PWM_IN" class="1">
 <contactref element="PL1" pad="2"/>
 <contactref element="RN1" pad="2"/>
 <wire x1="17.04" y1="29.416" x2="17.574" y2="29.416" width="0.4064" layer="1"/>
@@ -1762,7 +1763,7 @@ design rules under a new name.</description>
 <wire x1="18.288" y1="28.702" x2="19.079" y2="28.702" width="0.4064" layer="1"/>
 <wire x1="19.079" y1="28.702" x2="19.187" y2="28.594" width="0.4064" layer="1"/>
 </signal>
-<signal name="RED_OUT" class="1">
+<signal name="BLUE_PWM_IN" class="1">
 <contactref element="PL1" pad="3"/>
 <contactref element="RN1" pad="3"/>
 <wire x1="17.04" y1="27.416" x2="18.018" y2="27.416" width="0.4064" layer="1"/>
@@ -1770,7 +1771,7 @@ design rules under a new name.</description>
 <wire x1="18.288" y1="27.686" x2="19.079" y2="27.686" width="0.4064" layer="1"/>
 <wire x1="19.079" y1="27.686" x2="19.187" y2="27.794" width="0.4064" layer="1"/>
 </signal>
-<signal name="BLUE_OUT" class="1">
+<signal name="GREEN_PWM_IN" class="1">
 <contactref element="PL1" pad="4"/>
 <contactref element="RN1" pad="4"/>
 <wire x1="17.04" y1="25.416" x2="17.609" y2="25.416" width="0.4064" layer="1"/>
@@ -1779,7 +1780,7 @@ design rules under a new name.</description>
 <signal name="THERM">
 <contactref element="U$1" pad="P$1"/>
 </signal>
-<signal name="N$5">
+<signal name="WHITE_PWM_IN">
 <contactref element="PL1" pad="1"/>
 <contactref element="RN1" pad="1"/>
 <wire x1="19.187" y1="29.394" x2="19.062" y2="29.394" width="0.4064" layer="1"/>
