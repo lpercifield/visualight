@@ -24,7 +24,8 @@
     "stylus": "~0.31.0",
     "connect-mongo": "~0.4.0",
     "mongodb": "~1.2.7",
-    "validator": "~0.4.28"
+    "validator": "~0.4.28",
+    "colors": "0.x"
   },
   "private": true,
   "name": "node-login",
