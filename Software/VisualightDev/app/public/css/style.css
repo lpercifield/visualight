@@ -36,33 +36,79 @@ div.navbar div.container {
 .farbtastic {
   margin: 0 auto !important;
 }
-#login-container {
-  width: 340px;
-  margin: 160px auto;
+#login-page {
+  width: 960px;
+  margin: 0 auto;
 }
-#login-container label {
-  margin: 15px 0 5px 5px;
+#login-page #login-nav {
+  padding: 10px 0 20px 0;
 }
-#login-container button {
+#login-page #login-nav img {
+  width: 400px;
+}
+#login-page #video-container {
+  float: left;
+}
+#login-page #login-container {
+  margin: 0;
+  margin-left: 20px;
+  float: left;
+}
+#login-page #login-container form {
+  width: 300px;
+}
+#login-page #login-container label {
+  margin: 10px 0 5px 0;
+}
+#login-page #login-container button {
   width: 150px;
   padding: 6px 40px 6px 40px;
   float: left;
   margin-top: 15px;
 }
-#login-container .checkbox {
+#login-page #login-container .checkbox {
   margin: 23px 0 0 180px;
 }
-#login-container .btm-links {
+#login-page #login-container .btm-links {
   text-align: center;
   margin-top: 10px;
+  padding-bottom: 18px;
 }
-#login-container #create-account {
+#login-page #login-container #create-account {
   float: right;
   margin-right: 13px;
 }
-#login-container #forgot-password {
+#login-page #login-container #forgot-password {
   float: left;
   margin-left: 10px;
+}
+#login-page #about-text {
+  padding: 20px 0;
+  margin-bottom: 20px;
+  clear: both;
+}
+#login-page #about-text p {
+  font-size: 22px;
+  line-height: 140%;
+  font-weight: bold;
+  padding: 0 40px;
+}
+#login-footer {
+  float: left;
+  clear: both;
+  width: 100%;
+  padding: 20px 0;
+  background-color: #000;
+}
+#login-footer ul {
+  width: 300px;
+  margin: 0 auto;
+}
+#login-footer li {
+  float: left;
+  list-style: none;
+  width: 100px;
+  font-size: 18px;
 }
 #account-form-container {
   width: 305px;

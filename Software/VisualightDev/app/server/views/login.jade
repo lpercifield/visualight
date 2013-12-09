@@ -1,23 +1,36 @@
+#login-page
+    #login-nav
+        img(src='/img/visualight_logo_long.png')
 
-#login-container
-    form( method="post")#login-form.well.span4
-        h1 Welcome to Visualight!
-        p.subheading Please Login To Your Account
-        label Username 
-        input(type="text", name="user", id='user-tf').span4.required
-        label Password
-        input(type="password", name="pass", id='pass-tf').span4.required
-        button(type="submit")#btn-login.btn.btn-primary
-            i.icon-lock.icon-white
-            | Sign in
-        label#remember-me.checkbox Remember Me
-            input(type="checkbox", checked='checked')
-        div.clear-fix
-        hr
-        div.btm-links
-            a(href='#')#forgot-password Forgot Your Password? 
-            a(href='/signup')#create-account Create An Account
-    
+    #video-container
+        <iframe src="//player.vimeo.com/video/81052964?title=0&amp;byline=0&amp;portrait=0&amp;color=ffd24f" width="600" height="338" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+    #login-container
+        form( method="post")#login-form.well
+            h1 Have a Visualight?
+            p.subheading Please Login To Your Account
+            label Username 
+            input(type="text", name="user", id='user-tf').required
+            label Password
+            input(type="password", name="pass", id='pass-tf').required
+            button(type="submit")#btn-login.btn.btn-primary
+                i.icon-lock.icon-white
+                | Sign in
+            label#remember-me.checkbox Remember Me
+                input(type="checkbox", checked='checked')
+            div.clear-fix
+            hr
+            div.btm-links
+                a(href='#')#forgot-password Forgot Your Password? 
+                a(href='/signup')#create-account Create An Account
+    #about-text.well
+        p Visualight is a DIY networked lighting solution. Control your lights from anywhere in the world over any internet connection. Unlike other internet-enabled lightbulbs, Visualight is completely open-source. How you use it is up to you!
+
+#login-footer
+    ul
+        li: a(href='https://squareup.com/market/visualight') Shop
+        li: a(href='https://github.com/lpercifield/visualight/wiki') Wiki
+
 include modals/alert
 include modals/lost-password
 
