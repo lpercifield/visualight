@@ -311,6 +311,13 @@ $(document).ready(function(){
 	      
       })
       
+      $('button#save').click(function(e){
+	      if(!confirm('Are you sure you want to set this color as the startup color?')) return;
+	      
+	      state.alert={duration: 0, frequency: 0, type:2};
+	      sendAPICall(state);
+      })
+      
       $('button#update').click(function(e){
 	      
 	      var $parents = $(this).parents('form');
