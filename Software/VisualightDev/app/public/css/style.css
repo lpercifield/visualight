@@ -40,25 +40,94 @@ div.navbar div.container {
   width: 960px;
   margin: 0 auto;
 }
+@media screen and (max-device-width:960px), (max-width:960px) {
+  #login-page {
+    width: 100%;
+    margin: 0 0;
+  }
+}
 #login-page #login-nav {
   padding: 10px 0 20px 0;
 }
 #login-page #login-nav img {
   width: 400px;
 }
+@media screen and (max-device-width:960px), (max-width:960px) {
+  #login-page #login-nav img {
+    width: 400px;
+  }
+}
 #login-page #video-container {
   float: left;
+  width: 600px;
+}
+@media screen and (max-width:960px) {
+  #login-page #video-container {
+    margin: 0 auto;
+    float: none;
+  }
+}
+@media screen and (max-device-width: 960px), (max-width:600px) {
+  #login-page #video-container {
+    display: none;
+  }
+}
+#login-page #video-link {
+  display: none;
+  float: left;
+  font-color: #000;
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+}
+@media screen and (max-device-width: 960px), (max-width:600px) {
+  #login-page #video-link {
+    display: inline;
+  }
 }
 #login-page #login-container {
   margin: 0;
   margin-left: 20px;
   float: left;
 }
+@media screen and (max-width:960px) {
+  #login-page #login-container {
+    width: 600px;
+    float: none;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-device-width: 960px), (max-width:600px) {
+  #login-page #login-container {
+    width: 100%;
+    margin-left: 0;
+    padding-bottom: 10px;
+    padding-top: 40px;
+  }
+}
 #login-page #login-container form {
   width: 300px;
+  padding-bottom: 36px;
+}
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container form {
+    width: auto;
+  }
 }
 #login-page #login-container label {
   margin: 10px 0 5px 0;
+}
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container label {
+    float: left;
+    clear: both;
+  }
+}
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container input {
+    float: left;
+    clear: both;
+  }
 }
 #login-page #login-container button {
   width: 150px;
@@ -66,13 +135,34 @@ div.navbar div.container {
   float: left;
   margin-top: 15px;
 }
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container button {
+    clear: both;
+  }
+}
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container label#remember-me {
+    float: left;
+    clear: none;
+  }
+}
 #login-page #login-container .checkbox {
   margin: 23px 0 0 180px;
-}
-#login-page #login-container .btm-links {
   text-align: center;
   margin-top: 10px;
   padding-bottom: 18px;
+}
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container .checkbox {
+    text-align: left;
+    margin-left: 0;
+  }
+}
+@media screen and (max-device-width: 960px), (max-width:960px) {
+  #login-page #login-container .checkbox input[type="checkbox"] {
+    text-align: left;
+    margin-left: 0;
+  }
 }
 #login-page #login-container #create-account {
   float: right;
