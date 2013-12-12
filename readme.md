@@ -6,13 +6,13 @@ More information: Visualight.org
 
 Current Firmware Dev: 1.1 (RC GREEN) library
 	
-	####Notes:
-		* Consolidated debug
-		* processButton in reconnect loop
-		* Special character support in SSIDs
+####Notes:
+* Consolidated debug
+* processButton in reconnect loop
+* Special character support in SSIDs
 
-	#####Features:
-		* Show color (version) of firmware when you do a reset
-	
+#####Features:
+* Show color (version) of firmware when you do a reset
+
 
 
