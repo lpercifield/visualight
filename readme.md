@@ -1,10 +1,13 @@
-###**Visualight Firmware**
+###**Visualight Hardware and Firmware**
 ####**Release Candidate GREEN**
 
 Current Firmware Version: 1.1 (RC GREEN) library
-
 More information: [Visualight.org][1]
-Wiki can be found [here][2]
+
+* Arduino Library can be found in Firmware > Visualight
+* Wiki can be found [here][2]
+
+------
 	
 ####Features:
 * Show color (version) of firmware when you do a reset
