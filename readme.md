@@ -1,8 +1,6 @@
-Visualight Wifi Lightbulb
+###**Visualight FIRMWARE**
 
-More information: Visualight.org
-
-###**FIRMWARE**
+More information: [Visualight.org][1]
 
 Current Firmware Dev: 1.1 (RC GREEN) library
 	
@@ -16,3 +14,4 @@ Current Firmware Dev: 1.1 (RC GREEN) library
 
 
 
+[1]:http://visualight.org
