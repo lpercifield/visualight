@@ -1,4 +1,5 @@
-###**Visualight Firmware Release Candidate GREEN**
+###**Visualight Firmware**
+####**Release Candidate GREEN**
 
 Current Firmware Version: 1.1 (RC GREEN) library
 
