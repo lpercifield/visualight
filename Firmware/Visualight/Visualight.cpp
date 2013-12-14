@@ -14,7 +14,7 @@
 These LEDs show various connection statuses and routines.
 They are disabled in Visualights by default, but have no 
 effect on the behavior of the WiFly module. */  
-#define DEBUG_WIFLY_LEDS 0 //SET TO 0 for standard operation
+//#define DEBUG_WIFLY_LEDS 0 //SET TO 0 for standard operation
 
 /* define Serial prints based on DEBUG declaration */
 #if DEBUG
@@ -116,12 +116,12 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	VPRINTLN(wifly.getIP(buf, sizeof(buf)));
 	VPRINTLN(F("Ready"));
 
-  #if DEBUG_WIFLY_LEDS == 0 //if we're NOT DEBUG
-    /*** DISABLE WiFly GREEN and RED LEDs ***/
-    wifly.setIOFunc(5); // requires a save and reboot after.
-    wifly.save();
-    wifly.reboot();
-  #endif
+  // #if DEBUG_WIFLY_LEDS == 0 //if we're NOT DEBUG
+  //   /*** DISABLE WiFly GREEN and RED LEDs ***/
+  //   wifly.setIOFunc(5); // requires a save and reboot after.
+  //   wifly.save();
+  //   wifly.reboot();
+  // #endif
 
 	if(isServer){
 		/* Create AP*/
@@ -174,6 +174,8 @@ boolean Visualight::factoryRestore(){
 
     setAlert(0, 90000, 1, 0, 255, 0, 0);
 
+    // setWiFlyLeds(1); // 1 = enable, 0 = disable green and red (GPIO 4 and 6)
+
     return true;
   } else {
     VPRINTLN(F("Failed to factoryRestore wifly"));
@@ -200,7 +202,7 @@ void Visualight::configureWifi(){
 
   wifly.save();
   wifly.reboot();
-  }
+}
 
 
 void Visualight::wifiReset(){
@@ -218,6 +220,7 @@ void Visualight::wifiReset(){
 void Visualight::joinWifi(){
   VPRINTLN(F("-JOINWIFI-"));
   /* Setup the WiFly to connect to a wifi network */
+  processButton(); //check button for reset
 
   VPRINT("network: ");
   VPRINTLN(network);
@@ -278,7 +281,8 @@ void Visualight::joinWifi(){
       }
       reconnectCount++;
       if(reconnectCount > 2){
-        update();
+        update(); // sets light to server mode after wifi fail 3x
+                  // most likely bad WiFi credentials/security
       }
       else joinWifi();
     }
@@ -289,7 +293,7 @@ void Visualight::joinWifi(){
       EEPROM.write(0, 0); 
       alerting = false;
       isServer = false;
-      fadeOn();
+      fadeOn(); // turn on LEDs to startColor (in EEPROM, white from factoryRestore)
     }
     if(!connectToServer()){
       reconnectCount++;
@@ -313,8 +317,14 @@ boolean Visualight::connectToServer(){
   VPRINTLN(F("-CONNECTTOSERVER-"));
   // wifly.reboot();
   // delay(1000);
+  processButton(); //check for reset press
+
   if(reconnectCount > 4){
+
     VPRINTLN(F("rebooting wifly..."));
+    // set debug LEDs to ON
+
+    wifly.save();
     wifly.reboot();
     delay(1000);
     reconnectCount = 0;
@@ -400,8 +410,8 @@ void Visualight::processClient(){
 					saveStartColor(red,green,blue,white);
         } 
 
-        else if(_blinkType == 3){
-          VPRINTLN(F("BLINKTYPE 3"));
+        else if(_blinkType == 3){ // reset WiFi, become a server
+          //this is sent from server when a bulb is deleted from a Visualight account.
           wifiReset(); //set isServer = true, turn on AP mode
         }
 
@@ -428,6 +438,21 @@ void Visualight::processButton(){
   }
 }
 
+// toggle mask from WiFly functionality
+void Visualight::setWiFlyLeds(int mode){
+    // requires a save and reboot after.
+    // pp.62 of RN-171 manual has more info
+  if(mode > 0) { // enable LEDs
+    wifly.setIOFunc(0); 
+
+  }
+  else {        // disable green and red (4 and 6) 
+    wifly.setIOFunc(5); 
+  }
+    wifly.save();
+    wifly.reboot();
+}
+  
 // simple set all LEDs to this color
 void Visualight::colorLED(int red, int green, int blue, int white){
   analogWrite(redLED, red);

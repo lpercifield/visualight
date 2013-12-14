@@ -59,6 +59,7 @@ class Visualight {
 		void setVerbose(boolean set);
 		void saveStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
 		void setColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
+		void setWiFlyLeds(int mode);
 		boolean factoryRestore();
 
 		/* Change these to match your WiFi network */
@@ -85,6 +86,9 @@ class Visualight {
 		void sendHeartbeat();
 		void alert();
 		void setAlert(int blinkType, long durationTime, int frequency, int r, int g, int b, int w);
+
+
+
 		boolean alerting;
 		long alertBeginTimeStamp;
 		uint16_t blinkState; //counts from 0 - 100
