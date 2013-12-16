@@ -55,11 +55,11 @@ class Visualight {
 		Visualight();
 		WiFly wifly; //just in case we want to access this from the sketch...
 		void update();
-		void setup(char* _URL, uint16_t _PORT);
+		void setup(char* _URL, uint16_t _PORT, uint8_t _wiflyLedFlag);
 		void setVerbose(boolean set);
 		void saveStartColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
 		void setColor(uint8_t _r, uint8_t _g, uint8_t _b, uint8_t _w);
-		void setWiFlyLeds(int mode);
+		void setWiFlyLeds(int mode, boolean reboot);
 		boolean factoryRestore();
 
 		/* Change these to match your WiFi network */
@@ -74,8 +74,10 @@ class Visualight {
 		void sendMac();
 		void joinWifi();
 		void wifiReset();
+		void wiflyHardReset();
 		void configureWifi();
 		void processServer();
+		void urldecode(char *dst, char *src);
 		void processClient();
 		boolean connectToServer();
 		void processButton(); //needs to be static for attachInterrupt()
@@ -87,8 +89,6 @@ class Visualight {
 		void alert();
 		void setAlert(int blinkType, long durationTime, int frequency, int r, int g, int b, int w);
 
-
-
 		boolean alerting;
 		long alertBeginTimeStamp;
 		uint16_t blinkState; //counts from 0 - 100
@@ -98,6 +98,8 @@ class Visualight {
 		
 		char network[64];
 		char password[64];
+		char decodeBuffer[65];
+		
 		char security[2];
 		boolean isServer;
 		char MAC[18];
@@ -118,12 +120,12 @@ class Visualight {
 		int _Ablue;
 		int _Awhite;
 
-
 		int _frequency;
 		int _blinkType;
 		long _durationTime;
 
 		boolean _debug;
+		uint8_t wiflyLedFlag;
 
 		volatile uint8_t resetButtonState;
 		int resetTime;

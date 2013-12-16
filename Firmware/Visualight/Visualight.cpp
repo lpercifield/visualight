@@ -10,12 +10,6 @@
  monitor to be opened before executing any code. */
 #define DEBUG 0 //SET TO 0 for normal operation
 
-/* SET TO 1 TO ENABLE THE GREEN AND RED LEDS ON THE WIFLY UNIT
-These LEDs show various connection statuses and routines.
-They are disabled in Visualights by default, but have no 
-effect on the behavior of the WiFly module. */  
-//#define DEBUG_WIFLY_LEDS 0 //SET TO 0 for standard operation
-
 /* define Serial prints based on DEBUG declaration */
 #if DEBUG
   #define VPRINT(item) Serial.print(item)
@@ -71,8 +65,11 @@ void Visualight::update(){
     if(alerting && (millis() % 5)==0) alert();
 }
 
-void Visualight::setup(char* _URL, uint16_t _PORT){
+void Visualight::setup(char* _URL, uint16_t _PORT, uint8_t _wiflyLedFlag){
   VPRINTLN(F("-SETUP-"));
+
+  wiflyLedFlag = _wiflyLedFlag;
+
   URL = _URL;
   PORT = _PORT;
 	//colorLED(255,255,255);
@@ -116,17 +113,11 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	VPRINTLN(wifly.getIP(buf, sizeof(buf)));
 	VPRINTLN(F("Ready"));
 
-  // #if DEBUG_WIFLY_LEDS == 0 //if we're NOT DEBUG
-  //   /*** DISABLE WiFly GREEN and RED LEDs ***/
-  //   wifly.setIOFunc(5); // requires a save and reboot after.
-  //   wifly.save();
-  //   wifly.reboot();
-  // #endif
-
 	if(isServer){
 		/* Create AP*/
 		VPRINTLN(F("Creating AP"));
     setAlert(0, 600000, 1, 0, 0, 255, 0); // Set a server timeout of 10 minutes
+    setWiFlyLeds(1, true);
 		VPRINTLN(F("Create server"));
 		wifly.setSoftAP();
 		EEPROM.write(0, 1);
@@ -134,6 +125,11 @@ void Visualight::setup(char* _URL, uint16_t _PORT){
 	else{
 		VPRINTLN(F("Already Configured"));
 		//isServer = false;
+    if(wiflyLedFlag == 0){
+      setWiFlyLeds(0, true); //disable wifly LEDs, reboot
+    }else {
+      setWiFlyLeds(1, true); //enable wifly LEDs for debug, reboot
+    }
 		if(!connectToServer()){
       reconnectCount++;
     }
@@ -208,12 +204,13 @@ void Visualight::configureWifi(){
 void Visualight::wifiReset(){
   wifly.close();
   VPRINTLN(F("-WIFIRESET-"));
-  //colorLED(0,0,255,0);
-  setAlert(0, 600000, 1, 0, 0, 255, 0);
+  colorLED(0,255,0,0); // THIS IS RELEASE DEPENDENT MAKE BETTER!!
   isServer = true;
   EEPROM.write(0, 1);
+  setWiFlyLeds(1, false); //turn on, reboot
   wifly.reboot();
   wifly.setSoftAP();
+  setAlert(0, 600000, 1, 0, 0, 255, 0);
 }
 
 
@@ -258,8 +255,8 @@ void Visualight::joinWifi(){
   }
   
   wifly.setJoin(WIFLY_WLAN_JOIN_AUTO);
-  wifly.save();
-  //wifly.finishCommand();
+  wifly.save(); //saving in setWiFlyLeds
+  setWiFlyLeds(wiflyLedFlag, false);
   wifly.reboot();
 
   if(!wifly.isAssociated()){ //-- not currently on a wifi network
@@ -281,7 +278,8 @@ void Visualight::joinWifi(){
       }
       reconnectCount++;
       if(reconnectCount > 2){
-        update(); // sets light to server mode after wifi fail 3x
+        reconnectCount = 0;
+        wifiReset(); // sets light to server mode after wifi fail 3x
                   // most likely bad WiFi credentials/security
       }
       else joinWifi();
@@ -323,9 +321,10 @@ boolean Visualight::connectToServer(){
 
     VPRINTLN(F("rebooting wifly..."));
     // set debug LEDs to ON
-
-    wifly.save();
+    setWiFlyLeds(1, false);
+    //wifly.save();
     wifly.reboot();
+    //wiflyHardReset();
     delay(1000);
     reconnectCount = 0;
   }
@@ -383,8 +382,9 @@ void Visualight::processClient(){
 
     if (available < 0) {
       VPRINT(F("reconnect from available()"));
+      reconnectCount++;
       if(!connectToServer()){
-        reconnectCount++;
+        //reconnectCount++;
       }
     }
     else if(available > 0){
@@ -439,9 +439,10 @@ void Visualight::processButton(){
 }
 
 // toggle mask from WiFly functionality
-void Visualight::setWiFlyLeds(int mode){
+void Visualight::setWiFlyLeds(int mode, boolean reboot){
     // requires a save and reboot after.
     // pp.62 of RN-171 manual has more info
+
   if(mode > 0) { // enable LEDs
     wifly.setIOFunc(0); 
 
@@ -449,8 +450,10 @@ void Visualight::setWiFlyLeds(int mode){
   else {        // disable green and red (4 and 6) 
     wifly.setIOFunc(5); 
   }
-    wifly.save();
+  wifly.save();
+  if(reboot){
     wifly.reboot();
+  }
 }
   
 // simple set all LEDs to this color
@@ -609,14 +612,23 @@ void Visualight::processServer() {
 
         if (wifly.match(F("net="))) { /* Get posted field value */
           //Serial.println(buf);
+          memset(decodeBuffer, 0, 65);
 
-          wifly.getsTerm(network, sizeof(network),'&');
+          wifly.getsTerm(decodeBuffer, sizeof(decodeBuffer),'&');
+
+          urldecode(network, decodeBuffer);
+
           replaceAll(network,"+","$");
           VPRINTLN(F("Got network: "));
           VPRINTLN(network);
 
             if (wifly.match(F("pas="))) {
-              wifly.getsTerm(password, sizeof(password),'&');
+              memset(decodeBuffer, 0, 65);
+
+              wifly.getsTerm(decodeBuffer, sizeof(decodeBuffer),'&');
+
+              urldecode(password, decodeBuffer);
+
               replaceAll(password,"+","$");
               //wifly.gets(security, 1); //no need for sizeof() -- it's a 1 or 2
               VPRINTLN(F("Got password: "));
@@ -650,6 +662,45 @@ void Visualight::processServer() {
     }
   }
 }
+
+
+void Visualight::wiflyHardReset(){
+  VPRINTLN(F("-WIFI HARD RESET-"));
+  digitalWrite(resetPin, LOW);
+  delay(500);
+  digitalWrite(resetPin, HIGH);
+  delay(500);
+}
+
+void Visualight::urldecode(char *dst, char *src) {
+
+  char a, b;
+  while (*src) {
+    if ((*src == '%') &&
+      ((a = src[1]) && (b = src[2])) &&
+      (isxdigit(a) && isxdigit(b))) {
+      if (a >= 'a')
+        a -= 'a'-'A';
+      if (a >= 'A')
+        a -= ('A' - 10);
+      else
+        a -= '0';
+      if (b >= 'a')
+        b -= 'a'-'A';
+      if (b >= 'A')
+        b -= ('A' - 10);
+      else
+        b -= '0';
+      *dst++ = 16*a+b;
+      src+=3;
+    } 
+    else {
+      *dst++ = *src++;
+    }
+  }
+  *dst++ = '\0';
+}
+
 
 void Visualight::sendMac() {
   /* Send the header direclty with print */
