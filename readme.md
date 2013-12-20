@@ -1,4 +1,6 @@
 ###**Visualight Hardware and Firmware**
+Server code is available from this repo
+
 ####**Release Candidate GREEN**
 
 Current Firmware Version: 1.1 (RC GREEN) library
@@ -20,3 +22,4 @@ More information: [Visualight.org][1]
 
 [1]:http://visualight.org
 [2]:https://github.com/lpercifield/visualight/wiki
+[3]:https://github.com/lpercifield/Visualight_Server
